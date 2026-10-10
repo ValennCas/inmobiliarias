@@ -41,12 +41,22 @@
                 exit();
             }
 
-            $token= $this->token->generarToken();
+            $token_generado= $this->generarToken();
+            $guardarToken= $this->login->guardarToken($usuario["id_usuario"], $token_generado["token"], $token_generado["fecha_expiracion"]);
+            if(!$guardarToken){
+                http_response_code(500);
+                echo json_encode(["error" => "Credenciales invalidas"]);
+                exit();
+            }
             http_response_code(200);
-            echo json_encode(["token" => $token, "id_usuario" => $obtener_cuerpo["id_usuario"], "id_inmobiliaria" => $obtener_cuerpo["id_inmobiliaria"]]);
+            echo json_encode(["token" => $token_generado["token"], "id_usuario" => $usuario["id_usuario"], "id_inmobiliaria" => $usuario["id_inmobiliaria"]]);
             exit();
         }
 
-        
+        public function generarToken(){
+            $token= bin2hex(random_bytes(32));
+            $fecha_expiracion= date("Y-m-d H:i:", strtotime("+4 hours"));
+            return ["token" => $token, "fecha_expiracion" => $fecha_expiracion];
+        }
     }
 ?>
