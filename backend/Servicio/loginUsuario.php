@@ -55,8 +55,10 @@
 
         public function generarToken(){
             $token= bin2hex(random_bytes(32));
-            $fecha_expiracion= date("Y-m-d H:i:", strtotime("+4 hours"));
-            return ["token" => $token, "fecha_expiracion" => $fecha_expiracion];
+            $token_hash = hash('sha256', $token);
+            $fecha_expiracion= new DateTime();
+            $fecha_expiracion=> modify("+4 hours");
+            return ["token" => $token_hash, "fecha_expiracion" => $fecha_expiracion];
         }
     }
 ?>

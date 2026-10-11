@@ -1,6 +1,6 @@
 <?php
     try{
-        $conexion = new PDO("mysql:host = localhost; dbname = inmobiliaria; charset = utf8mb4",
+        $conexion = new PDO("mysql:host=localhost;dbname=inmobiliaria;charset=utf8mb4",
             "root",
             ""
         );
