@@ -28,8 +28,23 @@
             }
 
             $hashear_token = hash("sha256", $token_partes[1]);
-            $obtener_token = $this->seguridad->validarToken($hashear_token);
-            
+            $obtener_autorizacion = $this->seguridad->validarToken($hashear_token);
+
+            if($obtener_autorizacion == false){
+                http_response_code(401);
+                echo json_encode(["error" => "Acceso no autorizado"]);
+                exit();
+            }
+
+            $fecha_actual = new DateTime();
+            $fecha_expiracion = new DateTime($obtener_autorizacion["fecha_expiracion"]);
+
+            if($fecha_expiracion < $fecha_actual){
+                http_response_code(401);
+                echo json_encode(["error" => "Acceso no autorizado"]);
+                exit();
+            }
+            return $obtener_autorizacion["id_usuario"];
         }
     }
 ?>

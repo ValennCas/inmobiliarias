@@ -22,6 +22,4 @@
             return $insertar->execute([":email" => $email, ":password" => $password, ":nombre_usuario" => $nombre_usuario, ":apellido_usuario" => $apellido_usuario]);
         } 
     }
-    
-    
 ?>
