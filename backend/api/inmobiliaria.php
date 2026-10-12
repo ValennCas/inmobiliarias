@@ -8,7 +8,7 @@
             $this->conexion = $conexion;
         }
 
-        public function insertarInmobiliaria($id_usuario, $nombre, $email, $area_telefono, $telefono, $provincia, $ciudad, $calle, $altura){
+        public function crearInmobiliaria($id_usuario, $nombre, $email, $area_telefono, $telefono, $provincia, $ciudad, $calle, $altura){
             try{
                 $this->conexion->beginTransaction();
 
@@ -21,9 +21,11 @@
                 $id_inmobiliaria = $this->conexion->lastInsertId();
 
                 $asociarUsuario = $this->conexion->prepare('UPDATE usuario SET id_inmobiliaria = :id_inmobiliaria WHERE id_usuario = :id_usuario');
-
+                $asociarUsuario->execute([":id_inmobiliaria" => $id_inmobiliaria, ":id_usuario" => $id_usuario]);
                 $this->conexion->commit();
-                return $id_inmobiliaria;
+                
+                $obtener_inmobiliaria = $this->consultarInmobiliaria($id_inmobiliaria);
+                return $obtener_inmobiliaria;      
             }
             catch (PDOException $error){
                 $this->conexion->rollBack();
@@ -42,17 +44,30 @@
                 $actualizarDireccion->execute([":provincia" => $provincia, ":ciudad" => $ciudad, ":calle" => $calle, ":altura" => $altura, ":id_direccion" => $id_direccion, ":id_inmobiliaria" => $id_inmobiliaria]);
                 
                 $this->conexion->commit();
-                
-                $consulta = $this->conexion->prepare('SELECT i.id_inmobiliaria, i.nombre, i.email, i.area_telefono, i.telefono, d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura
-                    FROM inmobiliaria AS i JOIN direccion AS d WHERE i.id_inmobiliaria = :id_inmobiliaria');
-                $consulta->execute([':id_inmobiliaria' => $id_inmobiliaria]);
-                
-                return $consulta->fetch(PDO::FETCH_ASSOC);
+
+                $obtener_inmobiliaria = $this->consultarInmobiliaria($id_inmobiliaria);
+                return $obtener_inmobiliaria;                
             }
             catch (PDOException $error){
                 $this->conexion->rollBack();
                 throw $error;
             }
+        }
+
+        public function consultarInmobiliaria($id_inmobiliaria){
+            $consulta = $this->conexion->prepare('SELECT i.id_inmobiliaria, i.nombre, i.email, i.area_telefono, i.telefono, d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura
+                FROM inmobiliaria AS i JOIN direccion AS d ON i.id_direccion = d.id_direccion WHERE i.id_inmobiliaria = :id_inmobiliaria');
+            $consulta->execute([':id_inmobiliaria' => $id_inmobiliaria]);
+            
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+
+        public function obtenerInmobiliariaUsuario($id_usuario){
+            $consulta = $this->conexion->prepare('SELECT id_inmobiliaria FROM usuario WHERE id_usuario = :id_usuario');
+            $consulta->execute([":id_usuario" => $id_usuario]);
+            $resultado = $consulta->fetch(FETCH_ASSOC);
+            
+            return $resultado["id_inmobiliaria"];
         }
     }
 ?>

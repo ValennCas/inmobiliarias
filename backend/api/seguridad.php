@@ -13,5 +13,10 @@
             $consulta->execute([":token" => $token]);
             return $consulta->fetch(PDO::FETCH_ASSOC);
         }
+
+        public function eliminarToken($id_usuario){
+            $consulta = $this->conexion->prepare('DELETE FROM token WHERE id_usuario = :id_usuario');
+            return $consulta->execute([":id_usuario" => $id_usuario]);
+        }
     }
 ?>

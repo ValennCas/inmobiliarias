@@ -5,8 +5,8 @@
     class LoginUsuario{
         private Login $login;
 
-        public function __construct(Login $login){
-            $this->login = $login;
+        public function __construct(PDO $conexion){
+            $this->login = new Login($conexion);
         }
 
         public function loguearUsuario(){
@@ -20,6 +20,13 @@
                 echo json_encode(["error" => "Metodo no permitido"]);
                 exit();
             }
+
+            if(is_array($obtener_cuerpo)){
+                http_response_code(400);
+                echo json_encode(["error" => "Faltan completar datos"]);
+                exit();
+            }
+
             if(!isset($obtener_cuerpo["usuario"]) || !isset($obtener_cuerpo["password"])){
                 http_response_code(400);
                 echo json_encode(["error" => "Los campos estan incompletos"]);

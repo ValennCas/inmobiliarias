@@ -46,5 +46,6 @@
             }
             return $obtener_autorizacion["id_usuario"];
         }
+
     }
 ?>
