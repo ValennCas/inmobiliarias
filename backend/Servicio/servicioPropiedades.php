@@ -16,6 +16,9 @@
                     throw new Exception("Falta completar el campo $campo", 400);
                 }
             }
+            if(!filter_var($datos["altura"], FILTER_VALIDATE_INT) || $datos["altura"] <= 0){
+                throw new Exception("La altura debe ser un numero entero mayor a 0", 400);
+            }
             if(!isset($datos["precio"]) || !is_numeric($datos["precio"]) || $datos["precio"] <= 0){
                 throw new Exception("El precio debe ser un numero mayor a 0", 400);
             }
