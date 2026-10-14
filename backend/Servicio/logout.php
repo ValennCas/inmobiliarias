@@ -1,30 +1,22 @@
 <?php
-    require_once '../api/seguridad.php';
-    require_once 'seguridad.php';
+    require_once __DIR__ . '/../api/seguridad.php';
 
     class Logout{
         private Seguridad $seguridad;
-        private SeguridadServicio $seguridadServicio;
 
         public function __construct(PDO $conexion){
             $this->seguridad = new Seguridad($conexion);
-            $this->seguridadServicio = new SeguridadServicio($this->seguridad);
         }
 
-         public function cerrarSesion(){
-
-         $id_usuario = $this->seguridadServicio->verificarToken();
+        public function cerrarSesion($id_usuario){
             try{
                 $this->seguridad->eliminarToken($id_usuario);
-
-                http_response_code(200);
-                echo json_encode(["mensaje" => "Sesion cerrado correctamente"]);
-                exit();
+                return [
+                    "mensaje" => "Sesion cerrada correctamente"
+                ];
             }
             catch(PDOException $error){
-                http_response_code(500);
-                echo json_encode(["error" => "No se pudo cerrar la sesion"]);
-                exit();
+                throw new Exception("No se pudo cerrar la sesion", 500);
             }
         }
     }

@@ -1,6 +1,4 @@
 <?php
-    require_once 'conexion.php';
-
     class Inmobiliaria{
         private PDO $conexion;
 
@@ -33,15 +31,15 @@
             } 
         }
 
-        public function actualizarInmobiliaria($id_inmobiliaria, $nombre, $email, $area_telefono, $telefono, $id_direccion, $provincia, $ciudad, $calle, $altura){
+        public function actualizarInmobiliaria($id_inmobiliaria, $nombre, $email, $area_telefono, $telefono, $provincia, $ciudad, $calle, $altura){
             try{
                 $this->conexion->beginTransaction();
                 $actualizarInmobiliaria = $this->conexion->prepare('UPDATE inmobiliaria SET nombre = :nombre, email = :email, area_telefono = :area_telefono, telefono = :telefono WHERE id_inmobiliaria = :id_inmobiliaria');
                 $actualizarInmobiliaria->execute([":nombre" => $nombre, ":email" => $email, ":area_telefono" => $area_telefono, ":telefono" => $telefono, ":id_inmobiliaria" => $id_inmobiliaria]);
                 
                 $actualizarDireccion = $this->conexion->prepare('UPDATE direccion as d JOIN inmobiliaria AS i ON i.id_direccion = d.id_direccion
-                    SET d.provincia = :provincia, d.ciudad = :ciudad, d.calle = :calle, d.altura = :altura WHERE d.id_direccion = :id_direccion AND i.id_inmobiliaria = :id_inmobiliaria');
-                $actualizarDireccion->execute([":provincia" => $provincia, ":ciudad" => $ciudad, ":calle" => $calle, ":altura" => $altura, ":id_direccion" => $id_direccion, ":id_inmobiliaria" => $id_inmobiliaria]);
+                    SET d.provincia = :provincia, d.ciudad = :ciudad, d.calle = :calle, d.altura = :altura WHERE i.id_inmobiliaria = :id_inmobiliaria');
+                $actualizarDireccion->execute([":provincia" => $provincia, ":ciudad" => $ciudad, ":calle" => $calle, ":altura" => $altura, ":id_inmobiliaria" => $id_inmobiliaria]);
                 
                 $this->conexion->commit();
 
@@ -65,8 +63,12 @@
         public function obtenerInmobiliariaUsuario($id_usuario){
             $consulta = $this->conexion->prepare('SELECT id_inmobiliaria FROM usuario WHERE id_usuario = :id_usuario');
             $consulta->execute([":id_usuario" => $id_usuario]);
-            $resultado = $consulta->fetch(FETCH_ASSOC);
-            
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+
+            if($resultado === false){
+                return null;
+            }
+        
             return $resultado["id_inmobiliaria"];
         }
     }

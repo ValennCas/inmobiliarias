@@ -1,6 +1,5 @@
 <?php
-    require_once '../api/seguridad.php';
-    require_once '../api/conexion.php';
+    require_once __DIR__ . '/../api/seguridad.php';
 
     class SeguridadServicio{
         private Seguridad $seguridad;
@@ -9,43 +8,21 @@
             $this->seguridad = $seguridad;
         }
 
-        public function verificarToken(){
-            $headers = getallheaders();
-
-            if(!isset($headers["Authorization"])){
-                http_response_code(401);
-                echo json_encode(["error" => "Acceso no autorizado"]);
-                exit();
-            }
-
-            $autorizacion = $headers["Authorization"];
-            $token_partes = explode(" ", $autorizacion);
-
-            if(count($token_partes) != 2 || $token_partes[0] !== "Bearer"){
-                http_response_code(401);
-                echo json_encode(["error" => "Acceso no autorizado"]);
-                exit();
-            }
-
-            $hashear_token = hash("sha256", $token_partes[1]);
-            $obtener_autorizacion = $this->seguridad->validarToken($hashear_token);
+        public function verificarToken($token_hash){
+            $obtener_autorizacion = $this->seguridad->validarToken($token_hash);
 
             if($obtener_autorizacion == false){
-                http_response_code(401);
-                echo json_encode(["error" => "Acceso no autorizado"]);
-                exit();
+                throw new Exception("Token invalido", 401);
             }
 
             $fecha_actual = new DateTime();
             $fecha_expiracion = new DateTime($obtener_autorizacion["fecha_expiracion"]);
 
             if($fecha_expiracion < $fecha_actual){
-                http_response_code(401);
-                echo json_encode(["error" => "Acceso no autorizado"]);
-                exit();
+                throw new Exception("Token vencido", 401);
             }
+
             return $obtener_autorizacion["id_usuario"];
         }
-
     }
 ?>

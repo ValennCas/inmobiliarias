@@ -1,147 +1,81 @@
 <?php
-    require_once '../api/conexion.php';
-    require_once '../api/inmobiliaria.php';
-    require_once 'seguridad.php';
+    require_once __DIR__ . '/../api/inmobiliaria.php';
 
     class ServicioInmobiliaria{
         private Inmobiliaria $inmobiliaria;
-        private SeguridadServicio $seguridad;
 
-        public function __construct(PDO $conexion){
-            $this->inmobiliaria = new Inmobiliaria($conexion);
-            $seguridad = new Seguridad($conexion);
-            $this->seguridad = new SeguridadServicio($seguridad);
+        public function __construct(Inmobiliaria $inmobiliaria){
+            $this->inmobiliaria = $inmobiliaria;
         }
 
-        public function crearInmobiliaria(){
-            header("Content-Type: application/json; charset=utf-8");
-            $metodo = $_SERVER["REQUEST_METHOD"];
-            if($metodo == "POST"){
-                $obtener_datos = json_decode(file_get_contents('php://input'), true);
-            }
-            else{
-                http_response_code(405);
-                echo json_encode(["error" => "Metodo no permitido"]);
-                exit();
+        public function crearInmobiliaria($id_usuario, $obtener_datos){
+            if($id_usuario === null || $id_usuario <= 0){
+                throw new Exception("El id del usuario es invalido", 400);
             }
 
-            $validarDatos = $this->validarDatos($obtener_datos);
-
-            if (!$validarDatos){
-                    http_response_code(400);
-                    echo json_encode(["error" => "Datos invalidos o vacios, intente nuevamente!"]);
-                    exit();
-                }
-            
-            $id_usuario = $this->seguridad->verificarToken();
+            $this->validarDatos($obtener_datos);
             $id_inmobiliaria = $this->inmobiliaria->obtenerInmobiliariaUsuario($id_usuario);
 
             if($id_inmobiliaria !== null){
-                http_response_code(409);
-                echo json_encode(["error" => "No se puede agregar mas de una inmobiliaria."]);
-                exit();
+                throw new Exception("No se puede agregar mas de una inmobiliaria", 400);
             }
-            
+
             try{
-                $inmobiliaria = $this->inmobiliaria->crearInmobiliaria($id_usuario, $obtener_datos["nombre"], $obtener_datos["email"], $obtener_datos["area_telefono"],
-                                    $obtener_datos["telefono"], $obtener_datos["provincia"], $obtener_datos["ciudad"], $obtener_datos["calle"], $obtener_datos["altura"]);    
-
-                http_response_code(201);
-                echo json_encode(["mensaje" => "Inmobiliaria agregada con exito", "inmobiliaria" => $inmobiliaria]);
-                exit();
-            }            
-            catch(PDOException $error){
-                http_response_code(500);
-                echo json_encode(["error" => "No se pudo agregar la inmobiliaria, intente nuevamente!"]);
-                exit();
-            }      
-        }
-
-        public function actualizarInmobiliaria(){
-            header("Content-Type: application/json; charset=utf-8");
-            $metodo = $_SERVER["REQUEST_METHOD"];
-            
-            if($metodo == "PUT"){
-                $obtener_datos = json_decode(file_get_contents("php://input"), true);
-            }
-            else{
-                http_response_code(405);
-                echo json_encode(["error" => "Metodo no permitido"]);
-                exit();
-            }
-            $validarDatos = $this->validarDatos($obtener_datos);
-                                                
-            if (!$validarDatos){
-                    http_response_code(400);
-                    echo json_encode(["error" => "Datos invalidos o vacios, intente nuevamente!"]);
-                    exit();
-            }
-
-            $id_usuario = $this->seguridad->verificarToken();
-            $id_inmobiliaria = $this->inmobiliaria->obtenerInmobiliariaUsuario($id_usuario);
-
-            if ($id_inmobiliaria === null){
-                http_response_code(404);
-                echo json_encode(["error" => "No se encontro una inmobiliaria asociada"]);
-                exit();
-            }
-            
-            try{
-                $inmobiliaria = $this->inmobiliaria->actualizarInmobiliaria($id_inmobiliaria, $obtener_datos["nombre"], $obtener_datos["email"], $obtener_datos["area_telefono"], $obtener_datos["telefono"],
-                                                $obtener_datos["provincia"], $obtener_datos["ciudad"], $obtener_datos["calle"], $obtener_datos["altura"]);
-                http_response_code(200);
-                echo json_encode(["mensaje" => "Datos actualizados con exito", "inmobiliaria" => $inmobiliaria]);
-                exit();
+                return $this->inmobiliaria->crearInmobiliaria($id_usuario, $obtener_datos["nombre"], $obtener_datos["email"], $obtener_datos["area_telefono"], $obtener_datos["telefono"], $obtener_datos["provincia"], $obtener_datos["ciudad"], $obtener_datos["calle"], $obtener_datos["altura"]);
             }
             catch(PDOException $error){
-                http_response_code(500);
-                echo json_encode(["error" => "No se pudo actualizar los datos, intente nuevamente!"]);  
-                exit();              
+                throw new Exception("No se pudo agregar la inmobiliaria, intente nuevamente!", 500);
             }
-                               
         }
 
-        public function buscarInmobiliaria(){
-            header("Content-Type: application/json; charset=utf-8");
-            $metodo = $_SERVER["REQUEST_METHOD"];
-
-            if($metodo !== "GET"){
-                http_response_code(405);
-                echo json_encode(["error" => "Metodo no permitido"]);
-                exit();
+        public function actualizarInmobiliaria($id_usuario, $obtener_datos){
+            if($id_usuario === null || $id_usuario <= 0){
+                throw new Exception("El id del usuario es invalido", 400);
             }
 
-            $id_usuario = $this->seguridad->verificarToken();
+            $this->validarDatos($obtener_datos);
             $id_inmobiliaria = $this->inmobiliaria->obtenerInmobiliariaUsuario($id_usuario);
-            
+
             if($id_inmobiliaria === null){
-                http_response_code(404);
-                echo json_encode(["error" => "No se encontro una inmobiliaria asociada"]);
-                exit();
+                throw new Exception("No se encontro una inmobiliaria asociada", 404);
             }
 
-            $inmobiliaria = $this->inmobiliaria->consultarInmobiliaria($id_inmobiliaria);
-            http_response_code(200);
-            echo json_encode(["inmobiliaria" => $inmobiliaria]);
-            exit();
+            try{
+                $inmobiliaria = $this->inmobiliaria->actualizarInmobiliaria($id_inmobiliaria, $obtener_datos["nombre"], $obtener_datos["email"], $obtener_datos["area_telefono"], $obtener_datos["telefono"], $obtener_datos["provincia"], $obtener_datos["ciudad"], $obtener_datos["calle"], $obtener_datos["altura"]);
+
+                return [
+                    "mensaje" => "Datos actualizados con exito",
+                    "inmobiliaria" => $inmobiliaria
+                ];
+            }
+            catch(PDOException $error){
+                throw new Exception("No se pudo actualizar los datos, intente nuevamente!", 500);
+            }
         }
 
-        public function validarDatos($obtener_datos){
-            if(!is_array($obtener_datos)){
-                return false;
+        public function buscarInmobiliaria($id_usuario, $id_inmobiliaria = null){
+            if($id_usuario === null || $id_usuario <= 0){
+                throw new Exception("El id del usuario es invalido", 400);
             }
-            if (!isset($obtener_datos["nombre"]) || trim($obtener_datos["nombre"]) === ""
-                || !isset($obtener_datos["email"]) || trim($obtener_datos["email"]) === ""
-                || !filter_var($obtener_datos["email"], FILTER_VALIDATE_EMAIL)
-                || !isset($obtener_datos["area_telefono"]) || trim($obtener_datos["area_telefono"]) === ""
-                || !isset($obtener_datos["telefono"]) || trim($obtener_datos["telefono"]) === ""
-                || !isset($obtener_datos["provincia"]) || trim($obtener_datos["provincia"]) === ""
-                || !isset($obtener_datos["ciudad"]) || trim($obtener_datos["ciudad"]) === ""
-                || !isset($obtener_datos["calle"]) || trim($obtener_datos["calle"]) === ""
-                || !isset($obtener_datos["altura"]) || trim($obtener_datos["altura"]) === ""){
-                    return false;
+
+            $id_inmobiliaria_usuario = $this->inmobiliaria->obtenerInmobiliariaUsuario($id_usuario);
+
+            if($id_inmobiliaria_usuario === null){
+                throw new Exception("No se encontro una inmobiliaria asociada", 404);
+            }
+
+            if($id_inmobiliaria !== null && $id_inmobiliaria_usuario != $id_inmobiliaria){
+                throw new Exception("No tiene permiso para consultar esta inmobiliaria", 403);
+            }
+            return $this->inmobiliaria->consultarInmobiliaria($id_inmobiliaria_usuario);
+        }
+
+        private function validarDatos($datos){
+            foreach(["nombre", "email", "area_telefono", "telefono", "provincia", "ciudad", "calle", "altura"] as $campo){
+                if(!isset($datos[$campo]) || trim((string) $datos[$campo]) === ""){
+                    throw new Exception("Falta completar el campo $campo", 400);
                 }
-            return true; 
+            }
         }
     }
 ?>

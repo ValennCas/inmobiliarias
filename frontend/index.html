@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio-Habita</title>
+    <link rel="stylesheet" href="/frontend/css/estiloIndex.css">
+</head>
+<body>
+    <header class = "barraSuperior">
+        <h1 class = "nombreApp">Habita</h1>
+        <nav>
+            <button class = "btnLogin" type = "button">Iniciar Sesión</button>
+        </nav>
+    </header>
+
+    <section id="contenedorLogin" class="loginOculto">
+        <div class = "ventanaLogin">
+            <button type="button" class="cerrarLogin">×</button>
+            <form id = "formLogin" method="POST">
+                <h2>Inicio Sesión</h2>
+
+                <label for = "usuario">Nombre o Usuario</label>
+                <input type = "text" id = "usuario" name = "usuario" required>
+
+                <label for = "password">Contraseña</label>
+                <input type = "password" id = "password" name = "password" required>
+                
+                <p id="mensajeLogin"></p>
+                <button type = "submit">Ingresar</button>
+                <p class="cambiarContraseñaBtn"><a href="#" id = "contrasenia">Cambiar contraseña</a></p>
+            </form>
+        </div>
+    </section>
+
+    <button class = "filtros">Filtros</button>
+
+    <section id = "contenedorFiltros" class = "filtrosOcultos">
+        <form id = "formFiltros">
+            <label for="inmobiliaria">Inmobiliaria</label>
+            <select id="inmobiliaria">
+                <option value="">Todas</option>
+            </select>
+
+            <label for="provincia">Provincia</label>
+            <select id="provincia">
+                <option value="">Todas</option>
+            </select>
+
+            <label for="ciudad">Ciudad</label>
+            <select id="ciudad">
+                <option value="">Todas</option>
+            </select>
+
+            <button type = "button">Aplicar Filtro</button>
+            <button type = "button" id="btnLimpiar">Limpiar Filtro</button>
+        </form>
+    </section>
+
+    <main>
+        <h2>Propiedades disponibles</h2>
+        <section id="listaPropiedades"></section>
+    </main>
+
+    <script src = "/frontend/javascript/appIndex.js"></script>
+</body>
+</html>

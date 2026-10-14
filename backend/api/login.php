@@ -1,7 +1,5 @@
 <?php
-    require_once 'conexion.php';
-
-    class Login{
+     class Login{
         private PDO $conexion;
 
         public function __construct(PDO $conexion){
