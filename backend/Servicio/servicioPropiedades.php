@@ -51,6 +51,40 @@
             return $this->propiedades->listarPropiedades($id_inmobiliaria);
         }
 
+        public function listarEstados(){
+            return $this->propiedades->listarEstados();
+        }
+
+        public function filtrarPropiedades($parametros){
+            $filtros = [];
+
+            foreach(["ciudad", "provincia"] as $campo){
+                $valor = trim($parametros[$campo] ?? "");
+                $filtros[$campo] = $valor === "" ? null : $valor;
+            }
+
+            foreach(["precio_min", "precio_max"] as $campo){
+                $valor = $parametros[$campo] ?? "";
+                if($valor !== "" && (!is_numeric($valor) || $valor < 0)){
+                    throw new Exception("El filtro $campo debe ser un numero mayor o igual a 0", 400);
+                }
+                $filtros[$campo] = $valor === "" ? null : $valor;
+            }
+            if($filtros["precio_min"] !== null && $filtros["precio_max"] !== null && $filtros["precio_min"] > $filtros["precio_max"]){
+                throw new Exception("El precio minimo no puede ser mayor al maximo", 400);
+            }
+
+            foreach(["id_estado_propiedad", "id_inmobiliaria"] as $campo){
+                $valor = $parametros[$campo] ?? "";
+                if($valor !== "" && !filter_var($valor, FILTER_VALIDATE_INT)){
+                    throw new Exception("El filtro $campo es invalido", 400);
+                }
+                $filtros[$campo] = $valor === "" ? null : $valor;
+            }
+
+            return $this->propiedades->filtrarPropiedades($filtros);
+        }
+
         public function obtenerPropiedad($id){
             return $this->existePropiedad($id);
         }
