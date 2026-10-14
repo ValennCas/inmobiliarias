@@ -1,5 +1,6 @@
 <?php
     // Punto de entrada: http://localhost/inmobiliarias/backend/controller/propiedadesController.php
+    require_once __DIR__ . '/../config/cors.php';
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/propiedades.php';
     require_once __DIR__ . '/../Servicio/servicioPropiedades.php';
@@ -20,24 +21,11 @@
         }
 
         public function atender(){
-            header("Content-Type: application/json; charset=utf-8");
-
-            $origen = $_SERVER["HTTP_ORIGIN"] ?? "";
-            $origenes_permitidos = ["http://127.0.0.1:5500", "http://localhost:5500"];
-            if(in_array($origen, $origenes_permitidos, true)){
-                header("Access-Control-Allow-Origin: $origen");
-                header("Vary: Origin");
-            }
-            header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-            header("Access-Control-Allow-Headers: Content-Type");
-
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id = $_GET["id_propiedad"] ?? null;
 
             try{
                 switch($metodo){
-                    case "OPTIONS":
-                        $this->responder(200);
                     case "GET":
                         if($id !== null){
                             $this->responder(200, $this->servicio->obtenerPropiedad($id));
