@@ -138,6 +138,42 @@ body{
     font-size: 14px;
 }
 
+.cargandoLogin{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.oculto{
+    display: none;
+}
+
+.spinner{
+    width: 20px;
+    height: 20px;
+    border: 3px solid #ddd;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+}
+
+@keyframes girar{
+    from{
+        transform: rotate(0deg);
+    }
+
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+#btnEnviarLogin:disabled{
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 /*FILTROS*/
 .filtros{
     margin-top: 20px;

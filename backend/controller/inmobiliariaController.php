@@ -3,13 +3,14 @@
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/inmobiliaria.php';
     require_once __DIR__ . '/../api/seguridad.php';
+    require_once __DIR__ . '/../Servicio/seguridad.php';
     require_once __DIR__ . '/../Servicio/servicioInmobiliaria.php';
 
     class InmobiliariaController{
         private ServicioInmobiliaria $servicio;
-        private Seguridad $seguridad;
+        private SeguridadServicio $seguridad;
 
-        public function __construct(ServicioInmobiliaria $servicio, Seguridad $seguridad){
+        public function __construct(ServicioInmobiliaria $servicio, SeguridadServicio $seguridad){
             $this->servicio = $servicio;
             $this->seguridad = $seguridad;
         }
@@ -25,7 +26,7 @@
         public function atender(){
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id_inmobiliaria = $_GET["id_inmobiliaria"] ?? null;
-            $id_usuario = $_GET["id_usuario"] ?? null;
+            $id_usuario = (int)$_GET["id_usuario"] ?? null;
             $token = $_GET["token"] ?? null;
             
             try{
@@ -41,7 +42,7 @@
 
                 $id_usuario_token = $this->seguridad->verificarToken($token_hash);
                 
-                if($id_usuario_token !== $_GET["id_usuario"]){
+                if($id_usuario_token !== $id_usuario){
                     throw new Exception("Token no enviado", 401);
                 }
 
@@ -71,6 +72,6 @@
         }
     }
 
-    $controller = new InmobiliariaController(new ServicioInmobiliaria(new Inmobiliaria($conexion)), new Seguridad($conexion));
+    $controller = new InmobiliariaController(new ServicioInmobiliaria(new Inmobiliaria($conexion)), new SeguridadServicio(new Seguridad($conexion)));
     $controller->atender();
 ?>

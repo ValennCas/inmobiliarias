@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habita - Inicio</title>
+    <link rel="stylesheet" href="css/estiloInicio.css">
+</head>
+
+<body>
+    <header class="barraSuperior">
+        <h1>Habita</h1>
+        <button type="button" id="btnCerrarSesion">Cerrar sesión</button>
+    </header>
+
+    <main class="contenedorPrincipal">
+        <section class="bienvenida">
+            <h2>Panel de administración</h2>
+            <p>Gestioná tu inmobiliaria desde un solo lugar.</p>
+        </section>
+
+        <section id="sinInmobiliaria" class="sinInmobiliaria">
+            <h3>Tu cuenta todavía no tiene una inmobiliaria registrada</h3>
+            <p>Para comenzar a gestionar propiedades, primero tenés que agregar tu inmobiliaria.</p>
+            <button type="button" id="btnCrearInmobiliaria">Agregar inmobiliaria</button>
+        </section>
+
+        <section id="inmobiliariaventana" class="ocultarVentana">
+            <div class="ventanaRegistroInmobiliaria">
+                <h2>Agregar inmobiliaria</h2>
+
+                <form id="formInmobiliaria">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="email">Correo electrónico</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="area_telefono">Código de área</label>
+                    <input type="text" id="area_telefono" name="area_telefono" maxlength="10" required>
+
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" id="telefono" name="telefono" maxlength="10" required>
+
+                    <label for="provincia">Provincia</label>
+                    <select id="provincia" name="provincia" required>
+                        <option value="">Seleccionar provincia</option>
+                    </select>
+
+                    <label for="ciudad">Ciudad</label>
+                    <select id="ciudad" name="ciudad" required>
+                        <option value="">Seleccionar ciudad</option>
+                    </select>
+
+                    <label for="calle">Calle</label>
+                    <input type="text" id="calle" name="calle" required>
+
+                    <label for="altura">Altura</label>
+                    <input type="number" id="altura" name="altura" required>
+
+                    <p id="mensajeInmobiliaria"></p>
+
+                    <div class="botonesFormulario">
+                        <button type="submit" id="btnGuardarInmobiliaria">Guardar</button>
+                        <button type="button" id="btnCancelarInmobiliaria">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="misInmobiliarias">
+            <h2>Mis inmobiliarias</h2>
+            <div id="listaInmobiliarias"></div>
+        </section>
+    </main>
+    <!-- CARGA CENTRAL -->
+    <div id="cargandoPantalla" class="cargandoPantalla oculto">
+        <div class="spinnerGrande"></div>
+        <p>Cargando...</p>
+    </div>
+    <script src="javascript/apiUbicaciones.js"></script>
+    <script src="javascript/appIncio.js"></script>
+</body>
+</html>
