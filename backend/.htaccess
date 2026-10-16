@@ -1,0 +1,4 @@
+# Los archivos .env* no se pueden descargar desde el navegador
+<FilesMatch "^\.env">
+    Require all denied
+</FilesMatch>

@@ -1,0 +1,3 @@
+backend/config/config.php
+backend/avisos.log
+backend/.env.local
