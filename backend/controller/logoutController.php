@@ -2,13 +2,14 @@
     require_once __DIR__ . '/../config/cors.php';
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/seguridad.php';
+    require_once __DIR__ . '/../config/autenticacion.php';
     require_once __DIR__ . '/../Servicio/logout.php';
 
     class LogoutController{
         private Logout $servicio;
-        private Seguridad $seguridad;
+        private SeguridadServicio $seguridad;
 
-        public function __construct(Logout $servicio, Seguridad $seguridad){
+        public function __construct(Logout $servicio, SeguridadServicio $seguridad){
             $this->servicio = $servicio;
             $this->seguridad = $seguridad;
         }
@@ -27,21 +28,7 @@
             $token = $_GET["token"] ?? null;
 
             try{
-                $headers = getallheaders();
-                $authorization = $headers["Authorization"] ?? null;
-
-                if($authorization === null || !str_starts_with($authorization, "Bearer ")){
-                    throw new Exception("Token no enviado", 401);
-                }
-
-                $token = substr($authorization, 7);
-                $token_hash = hash("sha256", $token);
-
-                $id_usuario_token = $this->seguridad->verificarToken($token_hash);
-                
-                if($id_usuario_token !== $_GET["id_usuario"]){
-                    throw new Exception("Token no enviado", 401);
-                }
+                obtenerIdUsuarioAutenticado($this->seguridad, (int) $id_usuario);
 
                 switch($metodo){
                     case "DELETE":
@@ -59,6 +46,6 @@
         }
     }
 
-    $controller = new LogoutController(new Logout($conexion), new Seguridad($conexion));
+    $controller = new LogoutController(new Logout($conexion), new SeguridadServicio(new Seguridad($conexion)));
     $controller->atender();
 ?>

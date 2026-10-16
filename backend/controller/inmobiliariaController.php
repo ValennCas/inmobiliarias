@@ -3,6 +3,7 @@
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/inmobiliaria.php';
     require_once __DIR__ . '/../api/seguridad.php';
+    require_once __DIR__ . '/../config/autenticacion.php';
     require_once __DIR__ . '/../Servicio/seguridad.php';
     require_once __DIR__ . '/../Servicio/servicioInmobiliaria.php';
 
@@ -26,25 +27,11 @@
         public function atender(){
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id_inmobiliaria = $_GET["id_inmobiliaria"] ?? null;
-            $id_usuario = (int)$_GET["id_usuario"] ?? null;
+            $id_usuario = (int) ($_GET["id_usuario"] ?? 0);
             $token = $_GET["token"] ?? null;
             
             try{
-                $headers = getallheaders();
-                $authorization = $headers["Authorization"] ?? null;
-
-                if($authorization === null || !str_starts_with($authorization, "Bearer ")){
-                    throw new Exception("Token no enviado", 401);
-                }
-
-                $token = substr($authorization, 7);
-                $token_hash = hash("sha256", $token);
-
-                $id_usuario_token = $this->seguridad->verificarToken($token_hash);
-                
-                if($id_usuario_token !== $id_usuario){
-                    throw new Exception("Token no enviado", 401);
-                }
+                obtenerIdUsuarioAutenticado($this->seguridad, (int) $id_usuario);
 
                 switch($metodo){
                     case "POST":
