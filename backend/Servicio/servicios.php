@@ -10,7 +10,7 @@
 
     // Envia un correo por SMTP usando la casilla de MAIL_DSN
     // Devuelve true si salio (o si quedo anotado en modo simulacion) y false si fallo
-    function enviarCorreo($destinatario, $asunto, $html){
+    function enviarCorreo($destinatario, $asunto, $html, $responderA = null){
         $destinatario = limpiarHeader($destinatario);
         $asunto = limpiarHeader($asunto);
 
@@ -34,8 +34,13 @@
             return false;
         }
 
+        // Si se indica un email para responder, quien recibe el correo contesta directo a esa persona
+        $responderA = limpiarHeader($responderA);
+        $headerResponderA = filter_var($responderA, FILTER_VALIDATE_EMAIL) ? "Reply-To: <" . $responderA . ">\r\n" : "";
+
         $mensaje = "From: =?UTF-8?B?" . base64_encode(limpiarHeader(entorno("MAIL_NOMBRE", "Inmobiliarias"))) . "?= <" . $remitente . ">\r\n"
                  . "To: <" . $destinatario . ">\r\n"
+                 . $headerResponderA
                  . "Subject: =?UTF-8?B?" . base64_encode($asunto) . "?=\r\n"
                  . "Date: " . date("r") . "\r\n"
                  . "Message-ID: <" . bin2hex(random_bytes(12)) . "@" . $dsn["host"] . ">\r\n"
