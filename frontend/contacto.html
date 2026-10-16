@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto-Habita</title>
+    <link rel="stylesheet" href="css/estiloContacto.css">
+</head>
+<body>
+    <header class="barraSuperior">
+        <h1 class="nombreApp">Habita</h1>
+        <nav>
+            <a class="btnVolver" href="index.html">Volver a las propiedades</a>
+        </nav>
+    </header>
+
+    <main class="contenedorContacto">
+        <section id="resumenPropiedad" class="resumenPropiedad oculto">
+            <h2>Consulta por esta propiedad</h2>
+            <p id="resumenDireccion" class="resumenDireccion"></p>
+            <p id="resumenDescripcion"></p>
+            <p id="resumenPrecio" class="resumenPrecio"></p>
+            <p class="resumenInmobiliaria">Inmobiliaria: <strong id="resumenInmobiliaria"></strong></p>
+        </section>
+
+        <p id="mensajeEstado" class="mensajeEstado">Cargando propiedad...</p>
+
+        <form id="formContacto" class="oculto" novalidate>
+            <label for="contacto">Forma de contacto</label>
+            <input type="text" id="contacto" name="contacto" maxlength="100"
+                   placeholder="Tu email o tu teléfono" required>
+
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" name="descripcion" maxlength="1000" rows="6"
+                      placeholder="Contale a la inmobiliaria qué te interesa saber" required></textarea>
+            <span id="contador" class="contador">0 / 1000</span>
+
+            <p id="mensajeContacto"></p>
+
+            <button type="submit" id="btnEnviarContacto">Enviar consulta</button>
+        </form>
+    </main>
+
+    <script src="javascript/appContacto.js"></script>
+</body>
+</html>
