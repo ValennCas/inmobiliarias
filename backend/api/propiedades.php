@@ -84,6 +84,45 @@
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        public function listarEstados(){
+            $consulta = $this->conexion->query('SELECT id_estado_propiedad, estado FROM estado_propiedad ORDER BY id_estado_propiedad');
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // Todos los filtros son opcionales (null = no filtra). ciudad y provincia buscan por coincidencia parcial.
+        public function filtrarPropiedades($filtros){
+            $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
+                           p.id_estado_propiedad, e.estado,
+                           d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura,
+                           ip.id_inmobiliaria
+                    FROM propiedad p
+                    INNER JOIN direccion d ON d.id_direccion = p.id_direccion
+                    INNER JOIN estado_propiedad e ON e.id_estado_propiedad = p.id_estado_propiedad
+                    INNER JOIN inmobiliaria_propiedad ip ON ip.id_propiedad = p.id_propiedad
+                    WHERE (:ciudad IS NULL OR d.ciudad LIKE :ciudad2)
+                    AND (:provincia IS NULL OR d.provincia LIKE :provincia2)
+                    AND (:precio_min IS NULL OR p.precio >= :precio_min2)
+                    AND (:precio_max IS NULL OR p.precio <= :precio_max2)
+                    AND (:id_estado_propiedad IS NULL OR p.id_estado_propiedad = :id_estado_propiedad2)
+                    AND (:id_inmobiliaria IS NULL OR ip.id_inmobiliaria = :id_inmobiliaria2)
+                    ORDER BY p.id_propiedad DESC');
+            $consulta->execute([
+                ":ciudad" => $filtros["ciudad"],
+                ":ciudad2" => $filtros["ciudad"] === null ? null : "%" . $filtros["ciudad"] . "%",
+                ":provincia" => $filtros["provincia"],
+                ":provincia2" => $filtros["provincia"] === null ? null : "%" . $filtros["provincia"] . "%",
+                ":precio_min" => $filtros["precio_min"],
+                ":precio_min2" => $filtros["precio_min"],
+                ":precio_max" => $filtros["precio_max"],
+                ":precio_max2" => $filtros["precio_max"],
+                ":id_estado_propiedad" => $filtros["id_estado_propiedad"],
+                ":id_estado_propiedad2" => $filtros["id_estado_propiedad"],
+                ":id_inmobiliaria" => $filtros["id_inmobiliaria"],
+                ":id_inmobiliaria2" => $filtros["id_inmobiliaria"]
+            ]);
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function buscarPropiedad($id_propiedad){
             $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
                            p.id_estado_propiedad, e.estado,
