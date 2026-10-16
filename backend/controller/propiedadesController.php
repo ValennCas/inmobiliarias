@@ -4,12 +4,15 @@
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/propiedades.php';
     require_once __DIR__ . '/../Servicio/servicioPropiedades.php';
+    require_once __DIR__ . '/../config/autenticacion.php';
 
     class PropiedadesController{
         private ServicioPropiedades $servicio;
+        private SeguridadServicio $seguridad;
 
-        public function __construct(ServicioPropiedades $servicio){
+        public function __construct(ServicioPropiedades $servicio, SeguridadServicio $seguridad){
             $this->servicio = $servicio;
+            $this->seguridad = $seguridad;
         }
 
         private function responder($codigo, $cuerpo = null){
@@ -25,6 +28,11 @@
             $id = $_GET["id_propiedad"] ?? null;
 
             try{
+                // Ver propiedades es publico; crear, modificar y borrar requieren token del usuario
+                if($metodo !== "GET"){
+                    obtenerIdUsuarioAutenticado($this->seguridad, (int) ($_GET["id_usuario"] ?? 0));
+                }
+
                 switch($metodo){
                     case "GET":
                         if($id !== null){
@@ -53,6 +61,6 @@
         }
     }
 
-    $controller = new PropiedadesController(new ServicioPropiedades(new Propiedades($conexion)));
+    $controller = new PropiedadesController(new ServicioPropiedades(new Propiedades($conexion)), new SeguridadServicio(new Seguridad($conexion)));
     $controller->atender();
 ?>

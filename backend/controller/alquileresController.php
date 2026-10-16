@@ -4,12 +4,15 @@
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/alquileres.php';
     require_once __DIR__ . '/../Servicio/servicioAlquileres.php';
+    require_once __DIR__ . '/../config/autenticacion.php';
 
     class AlquileresController{
         private ServicioAlquileres $servicio;
+        private SeguridadServicio $seguridad;
 
-        public function __construct(ServicioAlquileres $servicio){
+        public function __construct(ServicioAlquileres $servicio, SeguridadServicio $seguridad){
             $this->servicio = $servicio;
+            $this->seguridad = $seguridad;
         }
 
         private function responder($codigo, $cuerpo = null){
@@ -25,6 +28,8 @@
             $id = $_GET["id_alquiler"] ?? null;
 
             try{
+                obtenerIdUsuarioAutenticado($this->seguridad, (int) ($_GET["id_usuario"] ?? 0));
+
                 switch($metodo){
                     case "GET":
                         if($id !== null){
@@ -53,6 +58,6 @@
         }
     }
 
-    $controller = new AlquileresController(new ServicioAlquileres(new Alquileres($conexion)));
+    $controller = new AlquileresController(new ServicioAlquileres(new Alquileres($conexion)), new SeguridadServicio(new Seguridad($conexion)));
     $controller->atender();
 ?>
