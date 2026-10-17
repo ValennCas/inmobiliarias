@@ -28,7 +28,6 @@
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id_inmobiliaria = $_GET["id_inmobiliaria"] ?? null;
             $id_usuario = (int) ($_GET["id_usuario"] ?? 0);
-            $token = $_GET["token"] ?? null;
             
             try{
                 obtenerIdUsuarioAutenticado($this->seguridad, (int) $id_usuario);

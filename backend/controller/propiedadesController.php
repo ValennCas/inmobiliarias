@@ -26,6 +26,7 @@
         public function atender(){
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id = $_GET["id_propiedad"] ?? null;
+            $fotos = $_FILES["fotos"] ?? null;
 
             try{
                 // Ver propiedades es publico; crear, modificar y borrar requieren token del usuario
@@ -40,12 +41,20 @@
                         }
                         $this->responder(200, $this->servicio->listarPropiedades($_GET["id_inmobiliaria"] ?? null));
                     case "POST":
-                        $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
-                        $this->responder(201, $this->servicio->crearPropiedad($cuerpo));
+                        if(isset($_GET["accion"]) && $_GET["accion"] === "fotos"){
+                            $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
+                            $this->responder(201, $this->servicio->crearPropiedad($cuerpo, $fotos));
+                        }
+                        $cuerpo = $_POST;
+                        $this->responder(201, $this->servicio->crearPropiedad($cuerpo, $fotos));
                     case "PUT":
                         $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
                         $this->responder(200, $this->servicio->modificarPropiedad($id, $cuerpo));
                     case "DELETE":
+                        if(isset($_GET["id_foto"])){
+                            $this->servicio->borrarFoto($id, $_GET["id_foto"]);
+                            $this->responder(204);
+                        }
                         $this->servicio->borrarPropiedad($id);
                         $this->responder(204);
                     default:

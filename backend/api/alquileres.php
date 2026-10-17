@@ -57,14 +57,21 @@
         public function listarAlquileres($id_inquilino = null, $id_inmobiliaria = null){
             $consulta = $this->conexion->prepare('SELECT a.id_alquiler, a.precio, a.fecha_inicio, a.fecha_fin,
                                                         a.id_inquilino, i.nombre AS nombre_inquilino, i.apellido AS apellido_inquilino,
-                                                        ip.id_inmobiliaria, ip.id_propiedad, p.descripcion,
-                                                        d.provincia, d.ciudad, d.calle, d.altura
+                                                        ip.id_inmobiliaria, ip.id_propiedad, p.titulo, p.descripcion,
+                                                        d.provincia, d.ciudad, d.calle, d.altura,
+                                                        (SELECT pf.ruta_foto
+                                                            FROM propiedad_foto pf
+                                                            WHERE pf.id_propiedad = p.id_propiedad
+                                                            ORDER BY pf.orden ASC
+                                                            LIMIT 1) AS foto
                                                 FROM alquiler a
                                                 INNER JOIN inquilino i ON i.id_inquilino = a.id_inquilino
                                                 INNER JOIN inmobiliaria_propiedad ip ON ip.id_inmobiliaria_propiedad = a.id_inmobiliaria_propiedad
                                                 INNER JOIN propiedad p ON p.id_propiedad = ip.id_propiedad
                                                 INNER JOIN direccion d ON d.id_direccion = p.id_direccion
-                                                WHERE (:id_inquilino IS NULL OR a.id_inquilino = :id_inquilino2)
+                                                INNER JOIN estado_propiedad ep ON ep.id_estado_propiedad = p.id_estado_propiedad
+                                                WHERE ep.estado = "ALQUILADO"
+                                                AND (:id_inquilino IS NULL OR a.id_inquilino = :id_inquilino2)
                                                 AND (:id_inmobiliaria IS NULL OR ip.id_inmobiliaria = :id_inmobiliaria2)');
             $consulta->execute([
                 ":id_inquilino" => $id_inquilino,
@@ -78,8 +85,16 @@
         public function buscarAlquiler($id_alquiler){
             $consulta = $this->conexion->prepare('SELECT a.id_alquiler, a.precio, a.fecha_inicio, a.fecha_fin,
                                                         a.id_inquilino, i.nombre AS nombre_inquilino, i.apellido AS apellido_inquilino,
-                                                        ip.id_inmobiliaria, ip.id_propiedad, p.descripcion,
-                                                        d.provincia, d.ciudad, d.calle, d.altura
+                                                        i.email AS email_inquilino,
+                                                        i.area_telefono AS area_telefono_inquilino,
+                                                        i.telefono AS telefono_inquilino,
+                                                        ip.id_inmobiliaria, ip.id_propiedad, p.titulo, p.descripcion,
+                                                        d.provincia, d.ciudad, d.calle, d.altura,
+                                                        (SELECT pf.ruta_foto
+                                                            FROM propiedad_foto pf
+                                                            WHERE pf.id_propiedad = p.id_propiedad
+                                                            ORDER BY pf.orden ASC
+                                                            LIMIT 1) AS foto
                                                 FROM alquiler a
                                                 INNER JOIN inquilino i ON i.id_inquilino = a.id_inquilino
                                                 INNER JOIN inmobiliaria_propiedad ip ON ip.id_inmobiliaria_propiedad = a.id_inmobiliaria_propiedad

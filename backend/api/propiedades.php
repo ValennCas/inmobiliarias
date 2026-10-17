@@ -32,11 +32,12 @@
                 ]);
                 $id_direccion = (int) $this->conexion->lastInsertId();
 
-                $propiedad = $this->conexion->prepare('INSERT INTO propiedad(id_direccion, id_estado_propiedad, descripcion, precio)
-                                                    VALUES(:id_direccion, :id_estado_propiedad, :descripcion, :precio)');
+                $propiedad = $this->conexion->prepare('INSERT INTO propiedad(id_direccion, id_estado_propiedad, titulo, descripcion, precio)
+                                                    VALUES(:id_direccion, :id_estado_propiedad, :titulo, :descripcion, :precio)');
                 $propiedad->execute([
                     ":id_direccion" => $id_direccion,
                     ":id_estado_propiedad" => $datos["id_estado_propiedad"],
+                    ":titulo" => $datos["titulo"],
                     ":descripcion" => $datos["descripcion"],
                     ":precio" => $datos["precio"]
                 ]);
@@ -60,7 +61,7 @@
 
         public function listarPropiedades($id_inmobiliaria = null){
             if($id_inmobiliaria !== null){
-                $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
+                $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.titulo, p.precio,
                            p.id_estado_propiedad, e.estado,
                            d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura,
                            ip.id_inmobiliaria
@@ -72,7 +73,7 @@
                 $consulta->execute([":id_inmobiliaria" => $id_inmobiliaria]);
             }
             else{
-                $consulta = $this->conexion->query('SELECT p.id_propiedad, p.descripcion, p.precio,
+                $consulta = $this->conexion->query('SELECT p.id_propiedad, p.descripcion, p.titulo, p.precio,
                            p.id_estado_propiedad, e.estado,
                            d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura,
                            ip.id_inmobiliaria
@@ -124,7 +125,7 @@
         }
 
         public function buscarPropiedad($id_propiedad){
-            $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
+            $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.titulo, p.precio,
                            p.id_estado_propiedad, e.estado,
                            d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura,
                            ip.id_inmobiliaria
@@ -153,10 +154,11 @@
                 ]);
 
                 $propiedad = $this->conexion->prepare('UPDATE propiedad
-                                                    SET id_estado_propiedad = :id_estado_propiedad, descripcion = :descripcion, precio = :precio
+                                                    SET id_estado_propiedad = :id_estado_propiedad, titulo = :titulo, descripcion = :descripcion, precio = :precio
                                                     WHERE id_propiedad = :id_propiedad');
                 $propiedad->execute([
                     ":id_estado_propiedad" => $datos["id_estado_propiedad"],
+                    ":titulo" => $datos["titulo"],
                     ":descripcion" => $datos["descripcion"],
                     ":precio" => $datos["precio"],
                     ":id_propiedad" => $id_propiedad
@@ -193,6 +195,52 @@
                 $this->conexion->rollBack();
                 throw $error;
             }
+        }
+        
+        /*INSERTAR FOTO DE UNA PROPIEDAD*/
+        public function insertarFoto($id_propiedad, $ruta_foto, $orden){
+            $consulta = $this->conexion->prepare('INSERT INTO propiedad_foto(id_propiedad, ruta_foto, orden)
+                                                VALUES(:id_propiedad, :ruta_foto, :orden)');
+            $consulta->execute([
+                ":id_propiedad" => $id_propiedad,
+                ":ruta_foto" => $ruta_foto,
+                ":orden" => $orden
+            ]);
+        }
+
+        /*OBTENER FOTOS DE UNA PROPIEDAD*/
+        public function obtenerFotos($id_propiedad){
+            $consulta = $this->conexion->prepare('SELECT id_foto, ruta_foto, orden
+                                                FROM propiedad_foto
+                                                WHERE id_propiedad = :id_propiedad
+                                                ORDER BY orden');
+            $consulta->execute([":id_propiedad" => $id_propiedad]);
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        /*CONTAR FOTOS DE UNA PROPIEDAD*/
+        public function contarFotos($id_propiedad){
+            $consulta = $this->conexion->prepare('SELECT COUNT(*) AS cantidad
+                                                FROM propiedad_foto
+                                                WHERE id_propiedad = :id_propiedad');
+            $consulta->execute([":id_propiedad" => $id_propiedad]);
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+            return (int) $resultado["cantidad"];
+        }
+
+        /*OBTENER UNA FOTO*/
+        public function buscarFoto($id_foto){
+            $consulta = $this->conexion->prepare('SELECT id_foto, id_propiedad, ruta_foto, orden
+                                                FROM propiedad_foto
+                                                WHERE id_foto = :id_foto');
+            $consulta->execute([":id_foto" => $id_foto]);
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+
+        /*ELIMINAR FOTO*/
+        public function eliminarFoto($id_foto){
+            $consulta = $this->conexion->prepare('DELETE FROM propiedad_foto WHERE id_foto = :id_foto');
+            $consulta->execute([":id_foto" => $id_foto]);
         }
     }
 ?>
