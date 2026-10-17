@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habita - Inquilinos</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/formulario.css">
+    <link rel="stylesheet" href="css/componenteInterfaz.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animacion.css">
+</head>
+<body>
+    <!-- MENU LATERAL PC -->
+    <aside class="menuLateral">
+        <!-- DATOS DE LA INMOBILIARIA -->
+        <div class="datosMenuInmobiliaria">
+            <div class="datosInmobiliariaMenu">
+                <h2 id="nombreInmobiliaria"></h2>
+                <p id="emailInmobiliaria"></p>
+            </div>
+            <div class="accionesInmobiliariaMenu">
+                <button type="button" id="btnVerInmobiliaria" class="btnVerInmobiliaria" title="Ver datos">👁</button>
+                <button type="button" id="btnEditarInmobiliaria" class="btnEditarInmobiliaria" title="Editar inmobiliaria">✎</button>
+            </div>
+        </div>
+        <!-- NAVEGACION PRINCIPAL -->
+        <nav class="navegacionLateral">
+            <button type="button" class="opcionMenu" id="btnPropiedades"><span>Propiedades</span><span class="flechaMenu">→</span></button>
+            <button type="button" class="opcionMenu" id="btnAlquileres"><span>Alquileres</span><span class="flechaMenu">→</span></button>
+            <button type="button" class="opcionMenu activa" id="btnInquilinos"><span>Inquilinos</span><span class="flechaMenu">→</span></button>
+            <button type="button" class="opcionMenu" id="btnMisDatos"><span>Mis datos</span><span class="flechaMenu">→</span></button>
+            <button type="button" class="opcionMenu" id="btnCambiarContrasenia"><span>Cambiar contraseña</span><span class="flechaMenu">→</span></button>
+        </nav>
+        <!-- VOLVER Y CERRAR SESION -->
+        <div class="accionesMenu">
+            <button type="button" id="btnVolverInmobiliarias">Volver</button>
+            <button type="button" id="btnCerrarSesion">Cerrar sesión</button>
+        </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenidoPrincipal">
+        <!-- ENCABEZADO DE INQUILINOS -->
+        <section class="encabezadoPropiedades">
+            <div>
+                <h1>Inquilinos</h1>
+                <p>Administrá los inquilinos y sus propiedades asignadas.</p>
+            </div>
+            <button type="button" id="btnAgregarInquilino">Crear inquilino</button>
+        </section>
+        <!-- MENSAJE CUANDO NO HAY INQUILINOS -->
+        <section id="sinInquilinos" class="sinPropiedades oculto"><p>No hay inquilinos registrados.</p></section>
+        <!-- LISTADO DE INQUILINOS -->
+        <section id="listaInquilinos" class="listaInquilinos"></section>
+    </main>
+
+    <!-- MENU INFERIOR CELULAR -->
+    <nav class="menuInferior">
+        <button type="button" id="btnPropiedadesMobile">Propiedades</button>
+        <button type="button" id="btnAlquileresMobile">Alquileres</button>
+        <button type="button" id="btnInquilinosMobile" class="activo">Inquilinos</button>
+        <button type="button" id="btnVolverMobile">Volver</button>
+        <button type="button" id="btnMenuMobile">☰</button>
+    </nav>
+
+    <!-- SUBMENU CELULAR -->
+    <section id="submenuMobile" class="submenuMobile oculto">
+        <button type="button" id="btnEditarInmobiliariaMobile">Editar inmobiliaria</button>
+        <button type="button" id="btnMisDatosMobile">Mis datos</button>
+        <button type="button" id="btnCambiarContraseniaMobile">Cambiar contraseña</button>
+        <button type="button" id="btnCerrarSesionMobile">Cerrar sesión</button>
+    </section>
+
+    <!-- CREAR INQUILINO -->
+    <section id="ventanaAgregarInquilino" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarAgregarInquilino">×</button>
+            <h2>Crear inquilino</h2>
+            <form id="formAgregarInquilino">
+                <label for="nombreInquilino">Nombre</label>
+                <input type="text" id="nombreInquilino" name="nombre" maxlength="100" required>
+
+                <label for="apellidoInquilino">Apellido</label>
+                <input type="text" id="apellidoInquilino" name="apellido" maxlength="100" required>
+
+                <label for="emailInquilino">Email</label>
+                <input type="email" id="emailInquilino" name="email" maxlength="150" required>
+
+                <label for="areaTelefonoInquilino">Código de área</label>
+                <input type="text" id="areaTelefonoInquilino" name="area_telefono" maxlength="10" required>
+
+                <label for="telefonoInquilino">Teléfono</label>
+                <input type="text" id="telefonoInquilino" name="telefono" maxlength="20" required>
+
+                <!-- PROPIEDAD DISPONIBLE PARA ALQUILER -->
+                <label for="propiedadInquilino">Propiedad</label>
+                <select id="propiedadInquilino" name="id_inmobiliaria_propiedad" required>
+                    <option value="">Seleccionar propiedad</option>
+                </select>
+
+                <!-- PRECIO DEL ALQUILER -->
+                <label for="precioAlquiler">Precio del alquiler</label>
+                <input type="number" id="precioAlquiler" name="precio" min="0" step="0.01" required>
+
+                <!-- FECHA DE INICIO -->
+                <label for="fechaInicioAlquiler">Fecha de inicio</label>
+                <input type="date" id="fechaInicioAlquiler" name="fecha_inicio" required>
+
+                <!-- FECHA DE FIN CALCULADA -->
+                <label for="fechaFinAlquiler">Fecha de finalización</label>
+                <input type="date" id="fechaFinAlquiler" name="fecha_fin" required>
+
+                <p id="mensajeAgregarInquilino"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarInquilino">Guardar</button>
+                    <button type="button" id="btnCancelarAgregarInquilino">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- VISUALIZAR INQUILINO -->
+    <section id="ventanaVerInquilino" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarVerInquilino">×</button>
+            <h2>Datos del inquilino</h2>
+
+            <!-- DATOS PERSONALES -->
+            <div class="detalleUsuario">
+                <p><strong>Nombre:</strong> <span id="verNombreInquilino"></span></p>
+                <p><strong>Apellido:</strong> <span id="verApellidoInquilino"></span></p>
+                <p><strong>Email:</strong> <span id="verEmailInquilino"></span></p>
+                <p><strong>Teléfono:</strong> <span id="verTelefonoInquilino"></span></p>
+            </div>
+
+            <!-- DATOS DE LA PROPIEDAD ALQUILADA -->
+            <div class="detallePropiedadInquilino">
+                <h3>Datos de la propiedad</h3>
+
+                <div class="gridDetallePropiedad">
+                    <p><strong>Título:</strong> <span id="verTituloPropiedadInquilino"></span></p>
+                    <p><strong>Dirección:</strong> <span id="verDireccionPropiedadInquilino"></span></p>
+                    <p><strong>Ciudad:</strong> <span id="verCiudadPropiedadInquilino"></span></p>
+                    <p><strong>Provincia:</strong> <span id="verProvinciaPropiedadInquilino"></span></p>
+                </div>
+
+                <div class="detalleAlquilerInquilino">
+                    <h3>Datos del alquiler</h3>
+
+                    <div class="gridDetalleAlquiler">
+                        <p><strong>Precio:</strong> $<span id="verPrecioPropiedadInquilino"></span></p>
+                        <p><strong>Fecha de inicio:</strong> <span id="verFechaInicioInquilino"></span></p>
+                        <p><strong>Fecha de fin:</strong> <span id="verFechaFinInquilino"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDITAR INQUILINO -->
+    <section id="ventanaEditarInquilino" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarEditarInquilino">×</button>
+            <h2>Editar inquilino</h2>
+
+            <form id="formEditarInquilino">
+                <input type="hidden" id="editarIdInquilino">
+
+                <label for="editarNombreInquilino">Nombre</label>
+                <input type="text" id="editarNombreInquilino" maxlength="100" required>
+
+                <label for="editarApellidoInquilino">Apellido</label>
+                <input type="text" id="editarApellidoInquilino" maxlength="100" required>
+
+                <label for="editarEmailInquilino">Email</label>
+                <input type="email" id="editarEmailInquilino" maxlength="150" required>
+
+                <label for="editarAreaTelefonoInquilino">Código de área</label>
+                <input type="text" id="editarAreaTelefonoInquilino" maxlength="10" required>
+
+                <label for="editarTelefonoInquilino">Teléfono</label>
+                <input type="text" id="editarTelefonoInquilino" maxlength="20" required>
+
+                <p id="mensajeEditarInquilino"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarCambiosInquilino">Guardar cambios</button>
+                    <button type="button" id="btnCancelarEditarInquilino">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- CONFIRMAR ELIMINACION DEL INQUILINO -->
+    <section id="ventanaEliminarInquilino" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoConfirmacion">
+            <h2>Eliminar inquilino</h2>
+            <p>¿Seguro que desea eliminar este inquilino?</p>
+            <p>La propiedad asociada volverá a quedar disponible para alquiler.</p>
+            <input type="hidden" id="idInquilinoEliminar">
+
+            <div class="botonesConfirmacion">
+                <button type="button" id="btnConfirmarEliminarInquilino">Eliminar</button>
+                <button type="button" id="btnCancelarEliminarInquilino">Cancelar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CARGA REUTILIZABLE -->
+    <div id="cargandoPantalla" class="cargandoPantalla oculto">
+        <div class="spinnerGrande"></div>
+        <p>Cargando...</p>
+    </div>
+
+    <!-- RESULTADO REUTILIZABLE -->
+    <section id="ventanaResultado" class="ventanaResultado ocultarVentana">
+        <div class="contenidoResultado">
+            <div id="iconoResultado" class="iconoResultado">✓</div>
+            <h2 id="tituloResultado">Operación realizada</h2>
+            <p id="textoResultado"></p>
+        </div>
+    </section>
+
+    <!-- MENSAJE FLOTANTE -->
+    <div id="mensajeFlotante" class="mensajeFlotante oculto"><p id="textoMensajeFlotante"></p></div>
+
+    <!-- ARCHIVOS JAVASCRIPT -->
+    <script src="javascript/animacion.js"></script>
+    <script src="javascript/appInquilino.js"></script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+/*FORMULARIOS*/
+#formAgregarPropiedad,
+#formEditarPropiedad,
+#formEditarInmobiliaria,
+#formEditarMisDatos,
+#formAgregarInquilino,
+#formEditarInquilino,
+#formCambiarEstado{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/*LABELS*/
+#formAgregarPropiedad label,
+#formEditarPropiedad label,
+#formEditarInmobiliaria label,
+#formEditarMisDatos label,
+#formAgregarInquilino label,
+#formEditarInquilino label,
+#formCambiarEstado label{
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+
+/*INPUTS SELECTS Y TEXTAREA*/
+#formAgregarPropiedad input,
+#formAgregarPropiedad select,
+#formAgregarPropiedad textarea,
+#formEditarPropiedad input,
+#formEditarPropiedad select,
+#formEditarPropiedad textarea,
+#formEditarInmobiliaria input,
+#formEditarInmobiliaria select,
+#formEditarMisDatos input,
+#formAgregarInquilino input,
+#formAgregarInquilino select,
+#formEditarInquilino input,
+#formCambiarEstado select{
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #C9D5D0;
+    border-radius: 6px;
+    background-color: white;
+    color: #222;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+}
+
+/*TEXTAREA*/
+#formAgregarPropiedad textarea,
+#formEditarPropiedad textarea{
+    resize: vertical;
+}
+
+/*FOCUS DE CAMPOS*/
+#formAgregarPropiedad input:focus,
+#formAgregarPropiedad select:focus,
+#formAgregarPropiedad textarea:focus,
+#formEditarPropiedad input:focus,
+#formEditarPropiedad select:focus,
+#formEditarPropiedad textarea:focus,
+#formEditarInmobiliaria input:focus,
+#formEditarInmobiliaria select:focus,
+#formEditarMisDatos input:focus,
+#formAgregarInquilino input:focus,
+#formAgregarInquilino select:focus,
+#formEditarInquilino input:focus,
+#formCambiarEstado select:focus{
+    outline: none;
+    border-color: #6F8F95;
+    box-shadow: 0 0 4px rgba(111, 143, 149, 0.25);
+}
+
+/*TEXTO DE AYUDA*/
+#formAgregarPropiedad small,
+#formEditarPropiedad small{
+    color: #777;
+    font-size: 13px;
+}
+
+/*BOTONES DE EDITAR INMOBILIARIA*/
+#btnGuardarEditarInmobiliaria, #btnGuardarEditarUsuario{
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8FAE9D;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#btnGuardarEditarInmobiliaria:hover, #btnGuardarEditarUsuario:hover{
+    background-color: #789685;
+}
+
+#btnCancelarEditarInmobiliaria, #btnCancelarEditarUsuario{
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #E3EAE7;
+    color: #43545A;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#btnCancelarEditarInmobiliaria:hover, #btnCancelarEditarUsuario:hover{
+    background-color: #D5E0DC;
+}
+
+/*QUITAR FLECHAS INPUT NUMBER*/
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/*BOTONES FORMULARIO*/
+.botonesFormulario{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/*BOTONES GUARDAR PROPIEDAD*/
+#btnGuardarPropiedad,
+#btnGuardarCambiosPropiedad,
+#btnGuardarEditarInmobiliaria,
+#btnGuardarEditarUsuario,
+#btnGuardarInquilino,
+#btnGuardarCambiosInquilino,
+#btnGuardarEstado{
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8FAE9D;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#btnGuardarPropiedad:hover,
+#btnGuardarCambiosPropiedad:hover,
+#btnGuardarEditarInmobiliaria:hover,
+#btnGuardarEditarUsuario:hover,
+#btnGuardarInquilino:hover,
+#btnGuardarCambiosInquilino:hover,
+#btnGuardarEstado:hover{
+    background-color: #789685;
+}
+
+/*BOTONES CANCELAR PROPIEDAD*/
+#btnCancelarAgregar,
+#btnCancelarEditar,
+#btnCancelarEditarInmobiliaria,
+#btnCancelarEditarUsuario,
+#btnCancelarAgregarInquilino,
+#btnCancelarEditarInquilino,
+#btnCancelarCambiarEstado{
+    padding: 11px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #E3EAE7;
+    color: #43545A;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#btnCancelarAgregar:hover,
+#btnCancelarEditar:hover,
+#btnCancelarEditarInmobiliaria:hover,
+#btnCancelarEditarUsuario:hover,
+#btnCancelarAgregarInquilino:hover,
+#btnCancelarEditarInquilino:hover,
+#btnCancelarCambiarEstado:hover{
+    background-color: #D5E0DC;
+}

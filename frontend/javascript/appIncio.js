@@ -5,12 +5,30 @@ const id_usuario = localStorage.getItem("id_usuario");
 
 /*VALIDAR SESION*/
 if(!token || !id_usuario){
-    window.location.href = "index.html";
+    window.location.replace("index.html");
 }
 
+window.addEventListener("pageshow", function(evento){
+    const navegacion = performance.getEntriesByType("navigation")[0];
+    if(evento.persisted || navegacion?.type === "back_forward"){
+        localStorage.clear();
+        window.location.replace("index.html");
+        return;
+    }
+    const tokenActual = localStorage.getItem("token");
+    const idUsuarioActual = localStorage.getItem("id_usuario");
+
+    if(!tokenActual || !idUsuarioActual){
+        window.location.replace("index.html");
+    }
+});
+
 /*ELEMENTOS*/
+const btnCerrarSesion = document.querySelector("#btnCerrarSesion");
+
 const sinInmobiliaria = document.querySelector("#sinInmobiliaria");
 const btnCrearInmobiliaria = document.querySelector("#btnCrearInmobiliaria");
+const btnAgregarInmobiliaria = document.querySelector("#btnAgregarInmobiliaria");
 const inmobiliariaVentana = document.querySelector("#inmobiliariaventana");
 const formInmobiliaria = document.querySelector("#formInmobiliaria");
 const provinciaSelect = document.querySelector("#provincia");
@@ -26,6 +44,12 @@ provinciaSelect.addEventListener("change", function(){
     cargarCiudades(provinciaSelect.value, ciudadSelect);
 });
 
+/*CERRAR SESION*/
+btnCerrarSesion.addEventListener("click", function(){
+    localStorage.clear();
+    window.location.replace("index.html");
+})
+
 /*MOSTRAR CARGA*/
 function mostrarCarga(){
     cargandoPantalla.classList.remove("oculto");
@@ -37,10 +61,18 @@ function ocultarCarga(){
 }
 
 /*ABRIR VENTANA*/
-btnCrearInmobiliaria.addEventListener("click", function(){
+function abrirFormularioInmobiliaria(){
     mensajeInmobiliaria.textContent = "";
     inmobiliariaVentana.classList.remove("ocultarVentana");
-});
+}
+
+if(btnCrearInmobiliaria){
+    btnCrearInmobiliaria.addEventListener("click", abrirFormularioInmobiliaria);
+}
+
+if(btnAgregarInmobiliaria){
+    btnAgregarInmobiliaria.addEventListener("click", abrirFormularioInmobiliaria);
+}
 
 /*CANCELAR FORMULARIO*/
 btnCancelarInmobiliaria.addEventListener("click", function(){
@@ -73,12 +105,11 @@ async function cargarInmobiliarias(){
 
         const datos = await res.json();
         listaInmobiliarias.innerHTML = "";
-        //if(res.status === 401){
-        //    localStorage.clear();
-        //    window.location.href = "index.html";
-        //    return;
-        //}
-        console.log(datos);
+        if(res.status === 401){
+            localStorage.clear();
+            window.location.href = "index.html";
+            return;
+        }
 
         if(res.status === 404){
             mostrarSinInmobiliarias();
@@ -160,7 +191,6 @@ function mostrarInmobiliarias(datos){
     agregarEventosInmobiliarias();
 }
 
-
 /*INGRESAR A UNA INMOBILIARIA*/
 function agregarEventosInmobiliarias(){
     const botones = document.querySelectorAll(".btnIngresarInmobiliaria");
@@ -172,7 +202,6 @@ function agregarEventosInmobiliarias(){
         });
     });
 }
-
 
 /*REGISTRAR INMOBILIARIA*/
 formInmobiliaria.addEventListener("submit", async function(evento){

@@ -1,0 +1,143 @@
+/*LOADER GENERAL*/
+.cargandoPantalla{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    background-color: rgba(255, 255, 255, 0.78);
+    z-index: 2000;
+}
+
+.cargandoPantalla.oculto{
+    display: none;
+}
+
+.spinnerGrande{
+    width: 48px;
+    height: 48px;
+    border: 5px solid #D9E1DD;
+    border-top: 5px solid #6F8F95;
+    border-radius: 50%;
+    animation: girar 0.8s linear infinite;
+}
+
+.cargandoPantalla p{
+    color: #333;
+    font-size: 16px;
+}
+
+@keyframes girar{
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+/*MENSAJE FLOTANTE*/
+.mensajeFlotante{
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    width: calc(100% - 40px);
+    max-width: 450px;
+    padding: 14px 18px;
+    transform: translateX(-50%);
+    background-color: white;
+    border: 1px solid #D9E1DD;
+    border-radius: 8px;
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    z-index: 2100;
+}
+
+.mensajeFlotante.oculto{
+    display: none;
+}
+
+.mensajeFlotante.exito{
+    border-left: 5px solid #789685;
+}
+
+.mensajeFlotante.error{
+    border-left: 5px solid #C76666;
+}
+
+#textoMensajeFlotante{
+    color: #333;
+    font-size: 15px;
+}
+
+/*VENTANA DE RESULTADO REUTILIZABLE*/
+.ventanaResultado{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 2500;
+}
+
+.ventanaResultado.ocultarVentana{
+    display: none;
+}
+
+.contenidoResultado{
+    width: 100%;
+    max-width: 420px;
+    padding: 35px 25px;
+    background-color: white;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
+    animation: aparecerResultado 0.25s ease;
+}
+
+.iconoResultado{
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: #8FAE9D;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+#tituloResultado{
+    margin-bottom: 12px;
+    color: #222;
+    font-size: 24px;
+}
+
+#textoResultado{
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+@keyframes aparecerResultado{
+    from{
+        opacity: 0;
+        transform: scale(0.90);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+    }
+}

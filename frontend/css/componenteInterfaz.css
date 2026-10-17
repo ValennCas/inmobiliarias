@@ -1,0 +1,726 @@
+/*VENTANAS FLOTANTES*/
+.ventanaFlotante{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: rgba(0, 0, 0, 0.45);
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.ventanaFlotante.ocultarVentana{
+    display: none;
+}
+
+/*CONTENIDO DE VENTANAS*/
+.contenidoVentana{
+    position: relative;
+    width: 100%;
+    max-width: 750px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 28px 20px;
+    background-color: white;
+    border: 1px solid #D9E1DD;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+/*TITULO DE VENTANAS*/
+.contenidoVentana h2{
+    margin-bottom: 30px;
+    color: #222;
+    font-size: 24px;
+}
+
+/*BOTON CERRAR VENTANA*/
+.cerrarVentana{
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background-color: #6F8F95;
+    color: white;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.cerrarVentana:hover{
+    background-color: #5D797F;
+}
+
+/*VENTANA DE CONFIRMACION*/
+.contenidoConfirmacion{
+    width: 100%;
+    max-width: 450px;
+    margin-top: 120px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.contenidoConfirmacion h2{
+    margin-bottom: 15px;
+    color: #222;
+    font-size: 25px;
+}
+
+.contenidoConfirmacion p{
+    margin-bottom: 25px;
+    color: #666;
+    font-size: 16px;
+}
+
+/*BOTONES CONFIRMACION*/
+.botonesConfirmacion{
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#btnConfirmarEliminar,
+#btnConfirmarEliminarInquilino{
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #C76666;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#btnConfirmarEliminar:hover,
+#btnConfirmarEliminarInquilino:hover{
+    background-color: #AC5151;
+}
+
+#btnCancelarEliminar,
+#btnCancelarEliminarInquilino{
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #E3EAE7;
+    color: #43545A;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#btnCancelarEliminar:hover,
+#btnCancelarEliminarInquilino:hover{
+    background-color: #D5E0DC;
+}
+
+/*VER PROPIEDAD*/
+.verPropiedad{
+    max-width: 900px;
+}
+
+.verPropiedad h2{
+    padding-right: 45px;
+    margin-bottom: 25px;
+    color: #222;
+    font-size: 28px;
+}
+
+/*CARRUSEL DE PROPIEDAD*/
+.carruselPropiedad{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.contenedorFotoPropiedad{
+    width: 100%;
+    max-width: 650px;
+}
+
+#fotoPropiedad{
+    width: 100%;
+    height: 400px;
+    display: block;
+    object-fit: contain;
+    background-color: #F3F5F4;
+    border-radius: 10px;
+}
+
+.flechaCarrusel{
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: #6F8F95;
+    color: white;
+    cursor: pointer;
+    font-size: 28px;
+}
+
+.flechaCarrusel:hover{
+    background-color: #5D797F;
+}
+
+#contadorFotos{
+    margin: 12px 0 20px 0;
+    color: #666;
+    text-align: center;
+    font-size: 14px;
+}
+
+/*DATOS DE PROPIEDAD*/
+.detallePropiedad{
+    padding-top: 20px;
+    border-top: 1px solid #D9E1DD;
+}
+
+.detallePropiedad p{
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.detallePropiedad strong{
+    color: #222;
+}
+
+/*VER DATOS INMOBILIARIA*/
+.detalleInmobiliaria{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding-top: 20px;
+    border-top: 1px solid #D9E1DD;
+}
+
+.detalleInmobiliaria p{
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.detalleInmobiliaria strong{
+    color: #222;
+}
+
+/*FOTOS ACTUALES EN EDITAR PROPIEDAD*/
+.fotosActuales{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 10px;
+}
+
+/*CONTENEDOR DE CADA FOTO*/
+.fotoEditable{
+    position: relative;
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    border: 1px solid #D9E1DD;
+    border-radius: 8px;
+    background-color: #F3F5F4;
+}
+
+/*IMAGEN ACTUAL*/
+.fotoEditable img{
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/*BOTON ELIMINAR FOTO*/
+.btnEliminarFoto{
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255,255,255,0.92);
+    color: #C76666;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/*FOTO MARCADA PARA ELIMINAR*/
+.fotoMarcadaEliminar{
+    opacity: 0.40;
+}
+
+/*MIS DATOS*/
+.detalleUsuario{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-top: 1px solid #D9E1DD;
+    border-bottom: 1px solid #D9E1DD;
+}
+
+.detalleUsuario p{
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.detalleUsuario strong{
+    color: #222;
+}
+
+/*BOTON EDITAR MIS DATOS*/
+#btnEditarMisDatos{
+    padding: 11px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #8FAE9D;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#btnEditarMisDatos:hover{
+    background-color: #789685;
+}
+
+/*MENSAJE CUANDO NO HAY ELEMENTOS*/
+.sinPropiedades{
+    width: 100%;
+    padding: 30px 20px;
+    background-color: white;
+    border: 1px solid #D9E1DD;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.sinPropiedades p{
+    color: #666;
+    font-size: 17px;
+}
+
+/*SEPARACION SOLO EN ALQUILERES*/
+#sinAlquileres{
+    margin-top: 30px;
+}
+
+/*LISTADOS*/
+.listaPropiedades{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.listaAlquileres,
+.listaInquilinos{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/*TARJETAS GENERALES*/
+.tarjetaPropiedad,
+.tarjetaAlquiler,
+.tarjetaInquilino{
+    position: relative;
+    width: 100%;
+    background-color: white;
+    border: 1px solid #D9E1DD;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/*TARJETA PROPIEDAD*/
+.tarjetaPropiedad{
+    max-width: 950px;
+    min-height: 250px;
+    display: flex;
+    align-items: stretch;
+    gap: 25px;
+    padding: 20px;
+}
+
+/*TARJETA ALQUILER*/
+.tarjetaAlquiler{
+    width: 100%;
+    max-width: 1100px;
+    min-height: 220px;
+    display: flex;
+    align-items: stretch;
+    gap: 25px;
+    padding: 20px;
+}
+
+/*TARJETA INQUILINO*/
+.tarjetaInquilino{
+    max-width: 950px;
+    padding: 22px;
+}
+
+/*IMAGENES DE TARJETAS*/
+.imagenPropiedad,
+.imagenAlquiler{
+    object-fit: cover;
+    border-radius: 10px;
+    background-color: #E3EAE7;
+}
+
+/*IMAGEN PROPIEDAD*/
+.imagenPropiedad{
+    width: 360px;
+    min-width: 360px;
+    height: 220px;
+}
+
+/*IMAGEN ALQUILER*/
+.imagenAlquiler{
+    width: 300px;
+    min-width: 300px;
+    height: 180px;
+}
+
+/*ALQUILER SIN IMAGEN*/
+.sinImagenAlquiler{
+    width: 300px;
+    min-width: 300px;
+    height: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E3EAE7;
+    border-radius: 10px;
+    color: #666;
+}
+
+/*CONTENIDO TARJETAS*/
+.contenidoPropiedad,
+.contenidoAlquiler{
+    flex: 1;
+    min-width: 0;
+}
+
+/*CONTENIDO PROPIEDAD*/
+.contenidoPropiedad{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.contenidoPropiedad h3,
+.cabeceraTarjetaAlquiler h3,
+.contenidoInquilino h3{
+    margin: 0;
+    color: #222;
+}
+
+.contenidoPropiedad h3,
+.cabeceraTarjetaAlquiler h3{
+    font-size: 24px;
+}
+
+.contenidoInquilino h3{
+    margin-bottom: 10px;
+    font-size: 22px;
+}
+
+.contenidoPropiedad h3{
+    margin-bottom: 10px;
+}
+
+.contenidoPropiedad p{
+    margin: 5px 0;
+    color: #555;
+}
+
+.contenidoInquilino p{
+    margin-top: 6px;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/*DATOS PROPIEDAD*/
+.datosPropiedad{
+    padding: 20px;
+}
+
+.datosPropiedad h3{
+    margin-bottom: 12px;
+    color: #222;
+    font-size: 22px;
+}
+
+.datosPropiedad p{
+    margin-top: 6px;
+    color: #666;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+/*CABECERA ALQUILER*/
+.cabeceraTarjetaAlquiler{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+/*FECHAS ALQUILER*/
+.fechasAlquiler{
+    display: flex;
+    gap: 25px;
+    margin-top: 10px;
+}
+
+/*ESTADO*/
+.estadoPropiedad{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 6px 10px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.disponible{
+    background-color: #DDEEE3;
+    color: #3F6B50;
+}
+
+.noDisponible{
+    background-color: #F4DDDD;
+    color: #9B4C4C;
+}
+
+/*ACCIONES DE TARJETAS*/
+.accionesAlquiler,
+.accionesInquilino{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 18px;
+}
+
+.accionesPropiedad{
+    padding: 0 20px 20px 20px;
+}
+
+.accionesPropiedad button,
+.accionesAlquiler button,
+.accionesInquilino button{
+    width: auto;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/*BOTON VER*/
+.btnVerPropiedad,
+.btnVerAlquiler,
+.btnVerInquilino{
+    background-color: #6F8F95;
+    color: white;
+}
+
+.btnVerPropiedad:hover,
+.btnVerAlquiler:hover,
+.btnVerInquilino:hover{
+    background-color: #5D797F;
+}
+
+/*BOTON EDITAR O CAMBIAR ESTADO*/
+.btnEditarPropiedad,
+.btnCambiarEstadoAlquiler,
+.btnEditarInquilino{
+    background-color: #8FAE9D;
+    color: white;
+}
+
+.btnEditarPropiedad:hover,
+.btnCambiarEstadoAlquiler:hover,
+.btnEditarInquilino:hover{
+    background-color: #789685;
+}
+
+/*BOTON ELIMINAR*/
+.btnEliminarPropiedad,
+.btnEliminarInquilino{
+    background-color: #C76666;
+    color: white;
+}
+
+.btnEliminarPropiedad:hover,
+.btnEliminarInquilino:hover{
+    background-color: #AC5151;
+}
+
+/*VENTANAS VER INQUILINO Y VER ALQUILER*/
+#ventanaVerInquilino .contenidoVentana,
+#ventanaVerAlquiler .contenidoVentana{
+    max-width: 800px;
+}
+
+/*DATOS PERSONALES*/
+#ventanaVerInquilino .detalleUsuario,
+#ventanaVerAlquiler .detalleUsuario{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 30px;
+    padding: 20px;
+    margin-bottom: 25px;
+    background-color: #F7F9F8;
+    border: 1px solid #D9E1DD;
+    border-radius: 10px;
+}
+
+#ventanaVerInquilino .detalleUsuario p,
+#ventanaVerAlquiler .detalleUsuario p{
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+}
+
+#ventanaVerInquilino .detalleUsuario strong,
+#ventanaVerAlquiler .detalleUsuario strong{
+    color: #222;
+}
+
+/*DATOS DE LA PROPIEDAD*/
+.detallePropiedadInquilino{
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #F7F9F8;
+    border: 1px solid #D9E1DD;
+    border-radius: 10px;
+}
+
+.detallePropiedadInquilino h3{
+    margin-bottom: 18px;
+    color: #43545A;
+    font-size: 20px;
+}
+
+.gridDetallePropiedad{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 30px;
+}
+
+.gridDetallePropiedad p{
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.gridDetallePropiedad strong{
+    color: #222;
+}
+
+/*DATOS DEL ALQUILER*/
+.detalleAlquilerInquilino{
+    margin-top: 22px;
+    padding-top: 20px;
+    border-top: 1px solid #D9E1DD;
+}
+
+.detalleAlquilerInquilino h3{
+    margin-bottom: 18px;
+    color: #43545A;
+    font-size: 20px;
+}
+
+.gridDetalleAlquiler{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px 30px;
+}
+
+.gridDetalleAlquiler p{
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.gridDetalleAlquiler strong{
+    color: #222;
+}
+
+/*VENTANA CAMBIAR ESTADO*/
+#ventanaCambiarEstado .contenidoVentana{
+    max-width: 650px;
+}
+
+#ventanaCambiarEstado .botonesFormulario{
+    margin-top: 5px;
+}
+
+/*DATOS DE TARJETA ALQUILER*/
+.datosAlquiler{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.datosAlquiler p{
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.4;
+}
+
+.datosAlquiler strong{
+    color: #222;
+}
+
+.contenidoAlquiler{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/*IMAGEN EN VER ALQUILER*/
+.imagenVerAlquiler{
+    width: 100%;
+    height: 280px;
+    display: block;
+    object-fit: cover;
+    margin-bottom: 20px;
+    background-color: #F3F5F4;
+    border-radius: 10px;
+}
+
+/*SEPARACION TITULO INQUILINO*/
+.tituloDatosInquilino{
+    margin-top: 25px;
+    margin-bottom: 12px;
+    color: #43545A;
+    font-size: 20px;
+}

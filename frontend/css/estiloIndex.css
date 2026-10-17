@@ -6,7 +6,7 @@
 
 body{
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #F3F5F4;
     color: #222;
 }
 
@@ -18,11 +18,12 @@ body{
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #d9e1dd;
 }
 
 .nombreApp{
     font-size: 24px;
+    color: #222;
 }
 
 .btnLogin{
@@ -31,10 +32,12 @@ body{
     border-radius: 6px;
     cursor: pointer;
     font-size: 14px;
+    background-color: #8FAE9D;
+    color: white;
 }
 
 .btnLogin:hover{
-    background-color: rgb(250, 240, 189);
+    background-color: #789685;
 }
 
 /*LOGIN VENTANA*/
@@ -63,7 +66,7 @@ body{
     padding: 35px 25px 30px 25px;
     background-color: white;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
     transform: translateY(25px);
 }
 
@@ -75,10 +78,14 @@ body{
     height: 32px;
     border: none;
     border-radius: 50%;
-    background-color: rgb(224, 55, 55);
+    background-color: #6F8F95;
     color: white;
     cursor: pointer;
     font-size: 22px;
+}
+
+.cerrarLogin:hover{
+    background-color: #5D797F;
 }
 
 #formLogin{
@@ -90,6 +97,7 @@ body{
 #formLogin h2{
     text-align: center;
     margin-bottom: 10px;
+    color: #222;
 }
 
 #formLogin label{
@@ -100,15 +108,15 @@ body{
 #formLogin input{
     width: 100%;
     padding: 12px;
-    border: 1px solid #ccc;
+    border: 1px solid #cfd8d4;
     border-radius: 6px;
     font-size: 16px;
 }
 
 #formLogin input:focus{
     outline: none;
-    border-color: #555;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    border-color: #6F8F95;
+    box-shadow: 0 0 4px rgba(111, 143, 149, 0.25);
 }
 
 #formLogin button{
@@ -119,21 +127,23 @@ body{
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
+    background-color: #8FAE9D;
+    color: white;
 }
 
 #formLogin button:hover{
-    background-color: rgb(250, 240, 189);
+    background-color: #789685;
 }
 
 /*LOGIN*/
 .mensajeError{
-    color: red;
+    color: #b24c4c;
     text-align: center;
     font-size: 14px;
 }
 
 .mensajeExito{
-    color: green;
+    color: #5e7f68;
     text-align: center;
     font-size: 14px;
 }
@@ -154,7 +164,7 @@ body{
     width: 20px;
     height: 20px;
     border: 3px solid #ddd;
-    border-top: 3px solid #333;
+    border-top: 3px solid #6F8F95;
     border-radius: 50%;
     animation: girar 0.8s linear infinite;
 }
@@ -183,6 +193,12 @@ body{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    background-color: #6F8F95;
+    color: white;
+}
+
+.filtros:hover{
+    background-color: #5D797F;
 }
 
 .filtrosOcultos{
@@ -211,9 +227,14 @@ body{
 #formFiltros select{
     width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #cfd8d4;
     border-radius: 6px;
     background-color: white;
+}
+
+#formFiltros select:focus{
+    outline: none;
+    border-color: #6F8F95;
 }
 
 #formFiltros button{
@@ -221,6 +242,12 @@ body{
     border: none;
     border-radius: 6px;
     cursor: pointer;
+    background-color: #8FAE9D;
+    color: white;
+}
+
+#formFiltros button:hover{
+    background-color: #789685;
 }
 
 main{
@@ -229,6 +256,7 @@ main{
 
 main h2{
     margin-bottom: 20px;
+    color: #222;
 }
 
 /*PROPIEDADES*/
@@ -242,7 +270,8 @@ main h2{
     background-color: white;
     padding: 15px;
     border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dde4e1;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 .propiedad img{
@@ -254,6 +283,7 @@ main h2{
 
 .propiedad p{
     margin-top: 5px;
+    color: #555;
 }
 
 /*TABLET*/

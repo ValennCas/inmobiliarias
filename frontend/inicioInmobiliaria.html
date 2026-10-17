@@ -38,10 +38,10 @@
                     <input type="email" id="email" name="email" required>
 
                     <label for="area_telefono">Código de área</label>
-                    <input type="text" id="area_telefono" name="area_telefono" maxlength="10" required>
+                    <input type="number" id="area_telefono" name="area_telefono" maxlength="10" inputmode="numeric" required>
 
                     <label for="telefono">Teléfono</label>
-                    <input type="text" id="telefono" name="telefono" maxlength="10" required>
+                    <input type="number" id="telefono" name="telefono" maxlength="10" inputmode="numeric" required>
 
                     <label for="provincia">Provincia</label>
                     <select id="provincia" name="provincia" required>
@@ -70,7 +70,10 @@
         </section>
 
         <section class="misInmobiliarias">
-            <h2>Mis inmobiliarias</h2>
+            <div class="encabezadoInmobiliarias">
+                <h2>Mis inmobiliarias</h2>
+                <button type="button" id="btnAgregarInmobiliaria">Agregar inmobiliaria</button>
+            </div>
             <div id="listaInmobiliarias"></div>
         </section>
     </main>

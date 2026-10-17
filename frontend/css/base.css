@@ -1,0 +1,21 @@
+/*CONFIGURACION GENERAL*/
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background-color: #F3F5F4;
+    color: #222;
+}
+
+/*CLASES PARA OCULTAR ELEMENTOS*/
+.oculto{
+    display: none;
+}
+
+.ocultarVentana{
+    display: none;
+}

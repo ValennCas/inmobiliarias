@@ -1,0 +1,466 @@
+/*TABLET*/
+@media(min-width: 600px){
+    .contenidoPrincipal{
+        padding: 35px 30px 100px 30px;
+    }
+
+    .encabezadoPropiedades,
+    .encabezadoAlquileres{
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .encabezadoPropiedades h1,
+    .encabezadoAlquileres h1{
+        font-size: 34px;
+    }
+
+    .encabezadoPropiedades p,
+    .encabezadoAlquileres p{
+        font-size: 18px;
+    }
+
+    #btnAgregarPropiedad,
+    #btnAgregarInquilino{
+        font-size: 16px;
+        padding: 12px 18px;
+    }
+
+    .listaPropiedades{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .listaAlquileres{
+        width: 100%;
+    }
+
+    .botonesFormulario{
+        flex-direction: row;
+    }
+
+    .vistaPreviaFotos,
+    .fotosActuales{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .botonesConfirmacion{
+        flex-direction: row;
+        justify-content: center;
+    }
+
+    #fotoPropiedad{
+        height: 350px;
+    }
+}
+
+
+/*TARJETAS EN CELULAR*/
+@media(max-width: 768px){
+    .tarjetaPropiedad{
+        flex-direction: column;
+        max-width: 100%;
+    }
+
+    .imagenPropiedad{
+        width: 100%;
+        min-width: 100%;
+        height: 220px;
+    }
+
+    .estadoPropiedad{
+        top: 12px;
+        right: 12px;
+    }
+
+    .tarjetaAlquiler{
+        flex-direction: column;
+    }
+
+    .imagenAlquiler,
+    .sinImagenAlquiler{
+        width: 100%;
+        min-width: 100%;
+        height: 220px;
+    }
+
+    .fechasAlquiler{
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .accionesAlquiler{
+        flex-direction: column;
+    }
+
+    .accionesAlquiler button{
+        width: 100%;
+    }
+
+    .accionesInquilino{
+        flex-direction: column;
+    }
+
+    .accionesInquilino button{
+        width: 100%;
+    }
+
+    .fotosActuales{
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .fotoEditable{
+        height: 120px;
+    }
+
+    #ventanaVerInquilino .detalleUsuario,
+    .gridDetallePropiedad,
+    .gridDetalleAlquiler{
+        grid-template-columns: 1fr;
+    }
+
+    .accionesInquilino{
+        flex-direction: column;
+    }
+
+    .accionesInquilino button{
+        width: 100%;
+    }
+}
+
+
+/*PANTALLA COMPUTADORA*/
+@media(min-width: 900px){
+    body{
+        min-height: 100vh;
+    }
+
+    /*MENU LATERAL*/
+    .menuLateral{
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: white;
+        border-right: 1px solid #D9E1DD;
+        z-index: 800;
+    }
+
+    /*DATOS INMOBILIARIA EN MENU*/
+    .datosMenuInmobiliaria{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 28px 22px;
+        border-bottom: 1px solid #D9E1DD;
+    }
+
+    .datosInmobiliariaMenu{
+        flex: 1;
+        min-width: 0;
+    }
+
+    .datosInmobiliariaMenu h2{
+        margin-bottom: 7px;
+        color: #222;
+        font-size: 21px;
+        word-break: break-word;
+    }
+
+    .datosInmobiliariaMenu p{
+        color: #666;
+        font-size: 13px;
+        word-break: break-word;
+    }
+
+    .accionesInmobiliariaMenu{
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btnVerInmobiliaria,
+    .btnEditarInmobiliaria{
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 18px;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .btnVerInmobiliaria{
+        background-color: #E3EAE7;
+        color: #5D797F;
+    }
+
+    .btnVerInmobiliaria:hover{
+        background-color: #D5E0DC;
+        transform: scale(1.08);
+    }
+
+    .btnEditarInmobiliaria{
+        background-color: #8FAE9D;
+        color: white;
+    }
+
+    .btnEditarInmobiliaria:hover{
+        background-color: #789685;
+        transform: scale(1.08);
+    }
+
+    /*NAVEGACION LATERAL*/
+    .navegacionLateral{
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        padding: 25px 15px;
+    }
+
+    .opcionMenu{
+        width: 100%;
+        padding: 14px 13px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: none;
+        border-radius: 7px;
+        background-color: transparent;
+        color: #43545A;
+        cursor: pointer;
+        text-align: left;
+        font-size: 15px;
+    }
+
+    .opcionMenu:hover{
+        background-color: #EDF2F0;
+    }
+
+    .opcionMenu.activa{
+        background-color: #DDE9E3;
+        color: #43545A;
+        font-weight: bold;
+    }
+
+    .flechaMenu{
+        font-size: 18px;
+    }
+
+    /*ACCIONES INFERIORES DEL MENU*/
+    .accionesMenu{
+        margin-top: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 15px;
+        border-top: 1px solid #D9E1DD;
+    }
+
+    .accionesMenu button{
+        width: 100%;
+        padding: 11px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+    #btnVolverInmobiliarias{
+        background-color: #E3EAE7;
+        color: #43545A;
+    }
+
+    #btnVolverInmobiliarias:hover{
+        background-color: #D5E0DC;
+    }
+
+    #btnCerrarSesion{
+        background-color: #6F8F95;
+        color: white;
+    }
+
+    #btnCerrarSesion:hover{
+        background-color: #5D797F;
+    }
+
+    /*CONTENIDO PRINCIPAL PC*/
+    .contenidoPrincipal{
+        width: auto;
+        margin-left: 280px;
+        padding: 45px 50px;
+    }
+
+    /*ENCABEZADOS PC*/
+    .encabezadoPropiedades,
+    .encabezadoAlquileres{
+        margin-bottom: 35px;
+    }
+
+    /*OCULTAR MENU MOBILE EN PC*/
+    .menuInferior{
+        display: none;
+    }
+
+    .submenuMobile{
+        display: none;
+    }
+
+    /*LISTADOS PC*/
+    .listaPropiedades{
+        grid-template-columns: 1fr;
+    }
+
+    .listaAlquileres{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /*VENTANAS PC*/
+    .contenidoVentana{
+        padding: 35px 30px;
+    }
+
+    /*FORMULARIOS EN DOS COLUMNAS*/
+    #formAgregarPropiedad,
+    #formEditarPropiedad,
+    #formEditarInmobiliaria,
+    #formEditarMisDatos,
+    #formAgregarInquilino,
+    #formEditarInquilino{
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px 20px;
+    }
+
+    /*ELEMENTOS QUE OCUPAN LAS DOS COLUMNAS*/
+    #formAgregarPropiedad textarea,
+    #formEditarPropiedad textarea,
+    #formAgregarPropiedad small,
+    #formEditarPropiedad small,
+    .vistaPreviaFotos,
+    .fotosActuales,
+    #mensajeAgregarPropiedad,
+    #mensajeEditarPropiedad,
+    .botonesFormulario,
+    #mensajeEditarInmobiliaria,
+    #formEditarInmobiliaria .botonesFormulario{
+        grid-column: span 2;
+    }
+
+    #mensajeEditarUsuario,
+    #mensajeAgregarInquilino,
+    #mensajeEditarInquilino,
+    #formEditarMisDatos .botonesFormulario,
+    #formAgregarInquilino .botonesFormulario,
+    #formEditarInquilino .botonesFormulario{
+        grid-column: span 2;
+    }
+
+    /*TITULO EDITAR INMOBILIARIA*/
+    #ventanaEditarInmobiliaria .contenidoVentana h2{
+        margin-bottom: 30px;
+    }
+
+    /*FOTOS EDITAR PROPIEDAD*/
+    .fotosActuales{
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .fotoEditable{
+        height: 150px;
+    }
+
+    /*FOTOS PREVIAS*/
+    .vistaPreviaFotos{
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    /*FOTO VER PROPIEDAD*/
+    #fotoPropiedad{
+        height: 430px;
+    }
+
+    /*DETALLE INMOBILIARIA*/
+    .detalleInmobiliaria{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px 30px;
+    }
+
+    /*DETALLE USUARIO*/
+    .detalleUsuario{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px 30px;
+    }
+
+    .detalleUsuario p:last-child{
+        grid-column: span 2;
+    }
+
+    /*DATOS PROPIEDAD DEL INQUILINO*/
+    .gridDetallePropiedad, .gridDetalleAlquiler{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 30px;
+    }
+
+    /*DATOS ALQUILER DEL INQUILINO*/
+    .gridDetalleAlquiler{
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px 30px;
+    }
+}
+
+
+/*PANTALLA GRANDE*/
+@media(min-width: 1200px){
+    .menuLateral{
+        width: 300px;
+    }
+
+    .contenidoPrincipal{
+        margin-left: 300px;
+        padding: 50px 60px;
+    }
+
+    .encabezadoPropiedades h1,
+    .encabezadoAlquileres h1{
+        font-size: 38px;
+    }
+
+    .encabezadoPropiedades,
+    .encabezadoAlquileres{
+        margin-bottom: 40px;
+    }
+
+    .listaPropiedades{
+        grid-template-columns: 1fr;
+    }
+
+    .listaAlquileres{
+        width: 100%;
+    }
+
+    .tarjetaPropiedad img{
+        height: 240px;
+    }
+
+    .contenidoVentana{
+        max-width: 820px;
+    }
+
+    .verPropiedad{
+        max-width: 1000px;
+    }
+}

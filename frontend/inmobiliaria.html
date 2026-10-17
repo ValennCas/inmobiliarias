@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habita - Propiedades</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/formulario.css">
+    <link rel="stylesheet" href="css/componenteInterfaz.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animacion.css">
+</head>
+
+<body>
+    <!-- MENU LATERAL PC -->
+    <aside class="menuLateral">
+        <div class="datosMenuInmobiliaria">
+            <div class="datosInmobiliariaMenu">
+                <h2 id="nombreInmobiliaria"></h2>
+                <p id="emailInmobiliaria"></p>
+            </div>
+            <div class="accionesInmobiliariaMenu">
+                <button type="button" id="btnVerInmobiliaria" class="btnVerInmobiliaria" title="Ver datos">👁</button>
+                <button type="button" id="btnEditarInmobiliaria" class="btnEditarInmobiliaria" title="Editar inmobiliaria">✎</button>
+            </div>
+        </div>
+
+        <nav class="navegacionLateral">
+            <button type="button" class="opcionMenu activa" id="btnPropiedades">
+                <span>Propiedades</span>
+                <span class="flechaMenu">→</span>
+            </button>
+
+            <button type="button" class="opcionMenu" id="btnAlquileres">
+                <span>Alquileres</span>
+                <span class="flechaMenu">→</span>
+            </button>
+
+            <button type="button" class="opcionMenu" id="btnInquilinos">
+                <span>Inquilinos</span>
+                <span class="flechaMenu">→</span>
+            </button>
+
+            <button type="button" class="opcionMenu" id="btnMisDatos">
+                <span>Mis datos</span>
+                <span class="flechaMenu">→</span>
+            </button>
+
+            <button type="button" class="opcionMenu" id="btnCambiarContrasenia">
+                <span>Cambiar contraseña</span>
+                <span class="flechaMenu">→</span>
+            </button>
+        </nav>
+        <div class="accionesMenu">
+            <button type="button" id="btnVolverInmobiliarias">Volver</button>
+            <button type="button" id="btnCerrarSesion">Cerrar sesión</button>
+        </div>
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenidoPrincipal">
+        <section class="encabezadoPropiedades">
+            <div>
+                <h1>Propiedades</h1>
+                <p>Administrá las propiedades de tu inmobiliaria.</p>
+            </div>
+            <button type="button" id="btnAgregarPropiedad">Agregar propiedad</button>
+        </section>
+        <section id="sinPropiedades" class="sinPropiedades oculto"><p>No hay propiedades para ver.</p></section>
+        <section id="listaPropiedades" class="listaPropiedades"></section>
+    </main>
+
+
+    <!-- MENU INFERIOR CELULAR -->
+    <nav class="menuInferior">
+        <button type="button" id="btnPropiedadesMobile">Propiedades</button>
+        <button type="button" id="btnAlquileresMobile">Alquileres</button>
+        <button type="button" id="btnInquilinosMobile">Inquilinos</button>
+        <button type="button" id="btnVolverMobile">Volver</button>
+        <button type="button" id="btnMenuMobile">☰</button>
+    </nav>
+
+
+    <!-- SUBMENU CELULAR -->
+    <section id="submenuMobile" class="submenuMobile oculto">
+        <button type="button" id="btnEditarInmobiliariaMobile">Editar inmobiliaria</button>
+        <button type="button" id="btnMisDatosMobile">Mis datos</button>
+        <button type="button" id="btnCambiarContraseniaMobile">Cambiar contraseña</button>
+        <button type="button" id="btnCerrarSesionMobile">Cerrar sesión</button>
+    </section>
+
+
+    <!-- AGREGAR PROPIEDAD -->
+    <section id="ventanaAgregarPropiedad" class="ventanaFlotante ocultarVentana">
+
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarAgregar">×</button>
+            <h2>Agregar propiedad</h2>
+            <form id="formAgregarPropiedad" enctype="multipart/form-data">
+
+                <label for="titulo">Título</label>
+                <input type="text" id="titulo" name="titulo" maxlength="150" required>
+
+                <label for="id_estado_propiedad">Estado</label>
+                <select id="id_estado_propiedad" name="id_estado_propiedad" required>
+                    <option value="">Seleccionar estado</option>
+                    <option value="1">En venta</option>
+                    <option value="2">En alquiler</option>
+                </select>
+
+                <label for="precio">Precio</label>
+                <input type="number" id="precio" name="precio" min="0" required>
+
+                <label for="provincia">Provincia</label>
+                <select id="provincia" name="provincia" required>
+                    <option value="">Seleccionar provincia</option>
+                </select>
+
+                <label for="ciudad">Ciudad</label>
+                <select id="ciudad" name="ciudad" required disabled>
+                    <option value="">Seleccionar ciudad</option>
+                </select>
+
+                <label for="calle">Calle</label>
+                <input type="text" id="calle" name="calle" required>
+
+                <label for="altura">Altura</label>
+                <input type="number" id="altura" name="altura" min="0" required>
+
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" rows="5" maxlength="1000" required></textarea>
+
+                <label for="fotos">Fotos de la propiedad</label>
+                <input type="file" id="fotos" name="fotos[]" accept="image/*" multiple>
+
+                <small>Se pueden cargar hasta 5 imágenes.</small>
+
+                <div id="vistaPreviaFotos" class="vistaPreviaFotos"></div>
+
+                <p id="mensajeAgregarPropiedad"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarPropiedad">Guardar</button>
+                    <button type="button" id="btnCancelarAgregar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- EDITAR PROPIEDAD -->
+    <section id="ventanaEditarPropiedad" class="ventanaFlotante ocultarVentana">
+
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarEditar">×</button>
+            <h2>Editar propiedad</h2>
+
+            <form id="formEditarPropiedad" enctype="multipart/form-data">
+
+                <input type="hidden" id="editar_id_propiedad">
+
+                <label for="editar_titulo">Título</label>
+                <input type="text" id="editar_titulo" maxlength="150" required>
+
+                <label for="editar_estado_propiedad">Operación</label>
+                <select id="editar_estado_propiedad" required>
+                    <option value="">Seleccionar estado</option>
+                    <option value="1">En venta</option>
+                    <option value="2">En alquiler</option>
+                    <option value="3">Alquilado</option>
+                    <option value="4">Vendido</option>
+                </select>
+
+                <label for="editar_precio">Precio</label>
+                <input type="number" id="editar_precio" min="0" required>
+
+                <label for="editar_provincia">Provincia</label>
+                <select id="editar_provincia" required>
+                    <option value="">Seleccionar provincia</option>
+                </select>
+
+                <label for="editar_ciudad">Ciudad</label>
+                <select id="editar_ciudad" required>
+                    <option value="">Seleccionar ciudad</option>
+                </select>
+
+                <label for="editar_calle">Calle</label>
+                <input type="text" id="editar_calle" required>
+
+                <label for="editar_altura">Altura</label>
+                <input type="number" id="editar_altura" min="0" required>
+
+                <label for="editar_descripcion">Descripción</label>
+                <textarea id="editar_descripcion" rows="5" maxlength="1000" required></textarea>
+
+                <label for="editar_fotos">Agregar imágenes</label>
+                <input type="file" id="editar_fotos" accept="image/*" multiple>
+
+                <div id="fotosActuales" class="fotosActuales"></div>
+
+                <p id="mensajeEditarPropiedad"></p>
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarCambiosPropiedad">Guardar cambios</button>
+                    <button type="button" id="btnCancelarEditar">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- VER PROPIEDAD -->
+    <section id="ventanaVerPropiedad" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana verPropiedad">
+            <button type="button" class="cerrarVentana" id="btnCerrarVer">×</button>
+
+            <h2 id="verTituloPropiedad">Propiedad</h2>
+            <div class="carruselPropiedad">
+                <button type="button" id="btnFotoAnterior" class="flechaCarrusel">‹</button>
+                <div class="contenedorFotoPropiedad">
+                    <img id="fotoPropiedad" src="" alt="Imagen de la propiedad">
+                </div>
+                <button type="button" id="btnFotoSiguiente" class="flechaCarrusel">›</button>
+            </div>
+
+            <p id="contadorFotos"></p>
+            <div class="detallePropiedad">
+                <p><strong>Operación:</strong> <span id="verOperacion"></span></p>
+                <p><strong>Precio:</strong> <span id="verPrecio"></span></p>
+                <p><strong>Dirección:</strong> <span id="verDireccion"></span></p>
+                <p><strong>Ciudad:</strong> <span id="verCiudad"></span></p>
+                <p><strong>Provincia:</strong> <span id="verProvincia"></span></p>
+                <p><strong>Descripción:</strong></p>
+                <p id="verDescripcion"></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ELIMINAR PROPIEDAD -->
+    <section id="ventanaEliminarPropiedad" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoConfirmacion">
+            <h2>Eliminar propiedad</h2>
+            <p>¿Desea eliminar esta propiedad?</p>
+
+            <input type="hidden" id="idPropiedadEliminar">
+
+            <div class="botonesConfirmacion">
+                <button type="button" id="btnConfirmarEliminar">Sí, eliminar</button>
+                <button type="button" id="btnCancelarEliminar">No, cancelar</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- VER DATOS INMOBILIARIA -->
+    <section id="ventanaVerInmobiliaria" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarVerInmobiliaria">×</button>
+
+            <h2>Datos de la inmobiliaria</h2>
+            <div class="detalleInmobiliaria">
+                <p><strong>Nombre:</strong> <span id="verNombreInmobiliaria"></span></p>
+                <p><strong>Correo electrónico:</strong> <span id="verEmailInmobiliaria"></span></p>
+                <p><strong>Código de área:</strong> <span id="verAreaInmobiliaria"></span></p>
+                <p><strong>Teléfono:</strong> <span id="verTelefonoInmobiliaria"></span></p>
+                <p><strong>Provincia:</strong> <span id="verProvinciaInmobiliaria"></span></p>
+                <p><strong>Ciudad:</strong> <span id="verCiudadInmobiliaria"></span></p>
+                <p><strong>Calle:</strong> <span id="verCalleInmobiliaria"></span></p>
+                <p><strong>Altura:</strong> <span id="verAlturaInmobiliaria"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- EDITAR INMOBILIARIA -->
+    <section id="ventanaEditarInmobiliaria" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarEditarInmobiliaria">×</button>
+
+            <h2>Editar inmobiliaria</h2>
+
+            <form id="formEditarInmobiliaria">
+                <label for="editarNombreInmobiliaria">Nombre</label>
+                <input type="text" id="editarNombreInmobiliaria" required>
+
+                <label for="editarEmailInmobiliaria">Correo electrónico</label>
+                <input type="email" id="editarEmailInmobiliaria" required>
+
+                <label for="editarAreaInmobiliaria">Código de área</label>
+                <input type="text" id="editarAreaInmobiliaria" maxlength="10" required>
+
+                <label for="editarTelefonoInmobiliaria">Teléfono</label>
+                <input type="text" id="editarTelefonoInmobiliaria" maxlength="10" required>
+
+                <label for="editarProvinciaInmobiliaria">Provincia</label>
+                <select id="editarProvinciaInmobiliaria" required>
+                    <option value="">Seleccionar provincia</option>
+                </select>
+
+                <label for="editarCiudadInmobiliaria">Ciudad</label>
+                <select id="editarCiudadInmobiliaria" required>
+                    <option value="">Seleccionar ciudad</option>
+                </select>
+
+                <label for="editarCalleInmobiliaria">Calle</label>
+                <input type="text" id="editarCalleInmobiliaria" required>
+
+                <label for="editarAlturaInmobiliaria">Altura</label>
+                <input type="number" id="editarAlturaInmobiliaria" required>
+
+                <p id="mensajeEditarInmobiliaria"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarEditarInmobiliaria">Guardar cambios</button>
+                    <button type="button" id="btnCancelarEditarInmobiliaria">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- MIS DATOS -->
+    <section id="ventanaMisDatos" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarMisDatos">×</button>
+            <h2>Mis datos</h2>
+            <div class="detalleUsuario">
+                <p><strong>Nombre:</strong> <span id="datoNombreUsuario"></span></p>
+                <p><strong>Apellido:</strong> <span id="datoApellidoUsuario"></span></p>
+                <p><strong>Correo electronico:</strong> <span id="datoEmailUsuario"></span></p>
+            </div>
+            <div class="botonesFormulario">
+                <button type="button" id="btnEditarMisDatos">Editar datos</button>
+            </div>
+        </div>
+    </section>
+
+    <!--EDITAR DATOS DEL USUARIO-->
+    <section id="ventanaEditarMisDatos" class="ventanaFlotante ocultarVentana">
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarEditarMisDatos">×</button>
+
+            <h2>Editar mis datos</h2>
+            <form id="formEditarMisDatos">
+
+                <label for="editarNombreUsuario">Nombre</label>
+                <input type="text" id="editarNombreUsuario" required>
+
+                <label for="editarApellidoUsuario">Apellido</label>
+                <input type="text" id="editarApellidoUsuario" required>
+
+                <label for="editarEmailUsuario">Correo electronico</label>
+                <input type="email" id="editarEmailUsuario" required>
+
+                <p id="mensajeEditarUsuario"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarEditarUsuario">Guardar cambios</button>
+                    <button type="button" id="btnCancelarEditarUsuario">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+
+    <!-- CARGA REUTILIZABLE -->
+    <div id="cargandoPantalla" class="cargandoPantalla oculto">
+        <div class="spinnerGrande"></div>
+        <p>Cargando...</p>
+    </div>
+
+    <!-- RESULTADO REUTILIZABLE -->
+    <section id="ventanaResultado" class="ventanaResultado ocultarVentana">
+        <div class="contenidoResultado">
+            <div id="iconoResultado" class="iconoResultado">✓</div>
+            <h2 id="tituloResultado">Operación realizada</h2>
+            <p id="textoResultado"></p>
+        </div>
+    </section>
+
+    <!-- MENSAJE FLOTANTE -->
+    <div id="mensajeFlotante" class="mensajeFlotante oculto">
+        <p id="textoMensajeFlotante"></p>
+    </div>
+
+    <script src="javascript/apiUbicaciones.js"></script>
+    <script src="javascript/animacion.js"></script>
+    <script src="javascript/appInmobiliaria.js"></script>
+</body>
+</html>

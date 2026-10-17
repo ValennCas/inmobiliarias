@@ -84,11 +84,7 @@ formLogin.addEventListener("submit", async function(evento){
         localStorage.setItem("id_usuario", datos.id_usuario);
         localStorage.setItem("id_inmobiliaria", datos.id_inmobiliaria);
 
-        if(datos.id_inmobiliaria === null){
-            window.location.href = "inicioInmobiliaria.html";
-        }else{
-            window.location.href = "index.html";
-        }
+        window.location.replace("inicioInmobiliaria.html");
     }catch(error){
         console.error(error);
         msjLogin.textContent = "Ocurrió un error al iniciar sesión";
