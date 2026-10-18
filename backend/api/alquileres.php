@@ -118,24 +118,53 @@
             ]);
         }
 
-        // Borra el alquiler y deja la propiedad en el estado indicado (disponible para alquilar de nuevo)
+        // Borra el alquiler, elimina el inquilino y deja la propiedad en el estado indicado
         public function eliminarAlquiler($id_alquiler, $estado_nuevo){
             $this->conexion->beginTransaction();
             try{
+                $consultaInquilino = $this->conexion->prepare('SELECT id_inquilino
+                                                            FROM alquiler
+                                                            WHERE id_alquiler = :id_alquiler');
+
+                $consultaInquilino->execute([
+                    ":id_alquiler" => $id_alquiler
+                ]);
+                $alquiler = $consultaInquilino->fetch(PDO::FETCH_ASSOC);
+                if($alquiler === false){
+                    throw new Exception("No existe el alquiler", 404);
+                }
+                $id_inquilino = $alquiler["id_inquilino"];
                 $estado = $this->conexion->prepare('UPDATE propiedad p
-                                                    INNER JOIN inmobiliaria_propiedad ip ON ip.id_propiedad = p.id_propiedad
-                                                    INNER JOIN alquiler a ON a.id_inmobiliaria_propiedad = ip.id_inmobiliaria_propiedad
-                                                    SET p.id_estado_propiedad = (SELECT id_estado_propiedad FROM estado_propiedad WHERE estado = :estado)
+                                                    INNER JOIN inmobiliaria_propiedad ip
+                                                        ON ip.id_propiedad = p.id_propiedad
+                                                    INNER JOIN alquiler a
+                                                        ON a.id_inmobiliaria_propiedad = ip.id_inmobiliaria_propiedad
+                                                    SET p.id_estado_propiedad = (
+                                                        SELECT id_estado_propiedad
+                                                        FROM estado_propiedad
+                                                        WHERE estado = :estado
+                                                    )
                                                     WHERE a.id_alquiler = :id_alquiler');
-                $estado->execute([":estado" => $estado_nuevo, ":id_alquiler" => $id_alquiler]);
-
-                $eliminar = $this->conexion->prepare('DELETE FROM alquiler WHERE id_alquiler = :id_alquiler');
-                $eliminar->execute([":id_alquiler" => $id_alquiler]);
-
+                $estado->execute([
+                    ":estado" => $estado_nuevo,
+                    ":id_alquiler" => $id_alquiler
+                ]);
+                $eliminarAlquiler = $this->conexion->prepare('DELETE FROM alquiler
+                                                            WHERE id_alquiler = :id_alquiler');
+                $eliminarAlquiler->execute([
+                    ":id_alquiler" => $id_alquiler
+                ]);
+                $eliminarInquilino = $this->conexion->prepare('DELETE FROM inquilino
+                                                            WHERE id_inquilino = :id_inquilino');
+                $eliminarInquilino->execute([
+                    ":id_inquilino" => $id_inquilino
+                ]);
                 $this->conexion->commit();
             }
-            catch(PDOException $error){
-                $this->conexion->rollBack();
+            catch(Exception $error){
+                if($this->conexion->inTransaction()){
+                    $this->conexion->rollBack();
+                }
                 throw $error;
             }
         }

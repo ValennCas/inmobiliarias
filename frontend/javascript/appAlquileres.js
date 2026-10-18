@@ -1,6 +1,11 @@
-const API_INMOBILIARIA = "http://localhost/inmobiliarias/backend/controller/inmobiliariaController.php";
 const API_ALQUILER = "http://localhost/inmobiliarias/backend/controller/alquileresController.php";
 const URL_BACKEND = "http://localhost/inmobiliarias/backend/";
+
+/*
+    MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA
+    SE MANEJAN DESDE:
+    menuInmobiliaria.js
+*/
 
 /*DATOS DE SESION*/
 const token = localStorage.getItem("token");
@@ -15,6 +20,7 @@ if(!token || !id_usuario || !id_inmobiliaria){
 /*VALIDAR SI SE VOLVIO CON LAS FLECHAS*/
 window.addEventListener("pageshow", function(evento){
     const navegacion = performance.getEntriesByType("navigation")[0];
+
     if(evento.persisted || navegacion?.type === "back_forward"){
         localStorage.clear();
         window.location.replace("index.html");
@@ -28,32 +34,6 @@ window.addEventListener("pageshow", function(evento){
         window.location.replace("index.html");
     }
 });
-
-/*ELEMENTOS DE LA INMOBILIARIA*/
-const nombreInmobiliaria = document.querySelector("#nombreInmobiliaria");
-const emailInmobiliaria = document.querySelector("#emailInmobiliaria");
-const btnEditarInmobiliaria = document.querySelector("#btnEditarInmobiliaria");
-
-/*ELEMENTOS DEL MENU*/
-const btnPropiedades = document.querySelector("#btnPropiedades");
-const btnAlquileres = document.querySelector("#btnAlquileres");
-const btnInquilinos = document.querySelector("#btnInquilinos");
-const btnMisDatos = document.querySelector("#btnMisDatos");
-const btnCambiarContrasenia = document.querySelector("#btnCambiarContrasenia");
-const btnVolverInmobiliarias = document.querySelector("#btnVolverInmobiliarias");
-const btnCerrarSesion = document.querySelector("#btnCerrarSesion");
-
-/*ELEMENTOS DEL MENU CELULAR*/
-const btnPropiedadesMobile = document.querySelector("#btnPropiedadesMobile");
-const btnAlquileresMobile = document.querySelector("#btnAlquileresMobile");
-const btnInquilinosMobile = document.querySelector("#btnInquilinosMobile");
-const btnVolverMobile = document.querySelector("#btnVolverMobile");
-const btnMenuMobile = document.querySelector("#btnMenuMobile");
-const submenuMobile = document.querySelector("#submenuMobile");
-const btnEditarInmobiliariaMobile = document.querySelector("#btnEditarInmobiliariaMobile");
-const btnMisDatosMobile = document.querySelector("#btnMisDatosMobile");
-const btnCambiarContraseniaMobile = document.querySelector("#btnCambiarContraseniaMobile");
-const btnCerrarSesionMobile = document.querySelector("#btnCerrarSesionMobile");
 
 /*ELEMENTOS DEL LISTADO DE ALQUILERES*/
 const listaAlquileres = document.querySelector("#listaAlquileres");
@@ -87,6 +67,8 @@ const nuevoEstadoPropiedad = document.querySelector("#nuevoEstadoPropiedad");
 const mensajeCambiarEstado = document.querySelector("#mensajeCambiarEstado");
 const btnGuardarEstado = document.querySelector("#btnGuardarEstado");
 
+let idAlquilerCambiarEstado = null;
+
 /*VALIDAR RESPUESTA DE SESION*/
 function validarSesionRespuesta(res){
     if(res.status === 401){
@@ -94,118 +76,9 @@ function validarSesionRespuesta(res){
         window.location.replace("index.html");
         return false;
     }
+
     return true;
 }
-
-/*CARGAR DATOS DE LA INMOBILIARIA*/
-async function cargarDatosInmobiliaria(){
-    try{
-        const res = await fetch(
-            `${API_INMOBILIARIA}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}`,
-            {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
-
-        if(!validarSesionRespuesta(res)){
-            return;
-        }
-
-        const datos = await res.json();
-
-        if(!res.ok){
-            nombreInmobiliaria.textContent = "Inmobiliaria";
-            emailInmobiliaria.textContent = "No se pudieron cargar los datos";
-            return;
-        }
-
-        const inmobiliaria = datos.inmobiliaria || datos;
-
-        nombreInmobiliaria.textContent = inmobiliaria.nombre || "Inmobiliaria";
-        emailInmobiliaria.textContent = inmobiliaria.email || "";
-    }catch(error){
-        console.error(error);
-        nombreInmobiliaria.textContent = "Inmobiliaria";
-        emailInmobiliaria.textContent = "No se pudieron cargar los datos";
-    }
-}
-
-/*MENU*/
-btnPropiedades.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnAlquileres.addEventListener("click", function(){
-    window.location.href = "alquileres.html";
-});
-
-btnInquilinos.addEventListener("click", function(){
-    window.location.href = "inquilino.html";
-});
-
-btnVolverInmobiliarias.addEventListener("click", function(){
-    window.location.href = "inicioInmobiliaria.html";
-});
-
-btnCerrarSesion.addEventListener("click", function(){
-    localStorage.clear();
-    window.location.replace("index.html");
-});
-
-btnCambiarContrasenia.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
-});
-
-/*MENU CELULAR*/
-btnPropiedadesMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnAlquileresMobile.addEventListener("click", function(){
-    window.location.href = "alquileres.html";
-});
-
-btnInquilinosMobile.addEventListener("click", function(){
-    window.location.href = "inquilino.html";
-});
-
-btnVolverMobile.addEventListener("click", function(){
-    window.location.href = "inicioInmobiliaria.html";
-});
-
-btnMenuMobile.addEventListener("click", function(){
-    submenuMobile.classList.toggle("oculto");
-});
-
-btnCerrarSesionMobile.addEventListener("click", function(){
-    localStorage.clear();
-    window.location.replace("index.html");
-});
-
-btnCambiarContraseniaMobile.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
-});
-
-/*EDITAR INMOBILIARIA*/
-btnEditarInmobiliaria.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnEditarInmobiliariaMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-/*MIS DATOS*/
-btnMisDatos.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnMisDatosMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
 
 /*FORMATEAR FECHA*/
 function formatearFecha(fecha){
@@ -214,6 +87,7 @@ function formatearFecha(fecha){
     }
 
     const partes = fecha.split("-");
+
     if(partes.length !== 3){
         return fecha;
     }
@@ -341,13 +215,14 @@ function mostrarAlquileres(datos){
 
                 <div class="accionesAlquiler">
                     <button type="button" class="btnVerAlquiler" data-id="${alquiler.id_alquiler}">Visualizar</button>
-                    <button type="button" class="btnCambiarEstadoAlquiler" data-id-propiedad="${alquiler.id_propiedad}">Cambiar estado</button>
+                    <button type="button" class="btnCambiarEstadoAlquiler" data-id-alquiler="${alquiler.id_alquiler}" data-id-propiedad="${alquiler.id_propiedad}">Cambiar estado</button>
                 </div>
             </div>
         `;
 
         listaAlquileres.appendChild(tarjeta);
     });
+
     agregarEventosAlquileres();
 }
 
@@ -364,7 +239,7 @@ function agregarEventosAlquileres(){
 
     botonesCambiarEstado.forEach(function(boton){
         boton.addEventListener("click", function(){
-            abrirCambiarEstado(boton.dataset.idPropiedad);
+            abrirCambiarEstado(boton.dataset.idAlquiler, boton.dataset.idPropiedad);
         });
     });
 }
@@ -372,6 +247,8 @@ function agregarEventosAlquileres(){
 /*VISUALIZAR ALQUILER*/
 async function verAlquiler(id_alquiler){
     try{
+        mostrarCarga();
+
         const res = await fetch(
             `${API_ALQUILER}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}&id_alquiler=${id_alquiler}`,
             {
@@ -381,6 +258,7 @@ async function verAlquiler(id_alquiler){
                 }
             }
         );
+
         if(!validarSesionRespuesta(res)){
             return;
         }
@@ -388,11 +266,12 @@ async function verAlquiler(id_alquiler){
         const datos = await res.json();
 
         if(!res.ok){
-            mostrarMensaje(datos.error || datos.mensaje || "No se pudo cargar el alquiler", "error");
+            mostrarError(datos.error || datos.mensaje || "No se pudo cargar el alquiler");
             return;
         }
 
         const alquiler = datos.alquiler || datos;
+
         verTituloAlquiler.textContent = alquiler.titulo || "Alquiler";
         verDireccionAlquiler.textContent = `${alquiler.calle || ""} ${alquiler.altura || ""}`;
         verCiudadAlquiler.textContent = alquiler.ciudad || "";
@@ -402,8 +281,8 @@ async function verAlquiler(id_alquiler){
         verFechaFin.textContent = formatearFecha(alquiler.fecha_fin);
 
         /*IMAGEN DEL ALQUILER*/
-        if(alquiler.fotos && alquiler.fotos.length > 0){
-            verImagenAlquiler.src = URL_BACKEND + alquiler.fotos[0].ruta_foto;
+        if(alquiler.foto){
+            verImagenAlquiler.src = URL_BACKEND + alquiler.foto;
             verImagenAlquiler.style.display = "block";
         }else{
             verImagenAlquiler.src = "";
@@ -415,10 +294,10 @@ async function verAlquiler(id_alquiler){
         verTelefonoInquilino.textContent = `${alquiler.area_telefono_inquilino || ""} ${alquiler.telefono_inquilino || ""}`.trim();
         verEmailInquilino.textContent = alquiler.email_inquilino || "";
 
-ventanaVerAlquiler.classList.remove("ocultarVentana");
+        ventanaVerAlquiler.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
-        mostrarMensaje("No se pudo conectar con el servidor", "error");
+        mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
     }
@@ -430,7 +309,8 @@ btnCerrarVerAlquiler.addEventListener("click", function(){
 });
 
 /*ABRIR CAMBIAR ESTADO*/
-function abrirCambiarEstado(id_propiedad){
+function abrirCambiarEstado(id_alquiler, id_propiedad){
+    idAlquilerCambiarEstado = id_alquiler;
     idPropiedadCambiarEstado.value = id_propiedad;
     nuevoEstadoPropiedad.value = "";
     mensajeCambiarEstado.textContent = "";
@@ -440,6 +320,7 @@ function abrirCambiarEstado(id_propiedad){
 /*CERRAR CAMBIAR ESTADO*/
 function cerrarCambiarEstado(){
     formCambiarEstado.reset();
+    idAlquilerCambiarEstado = null;
     idPropiedadCambiarEstado.value = "";
     mensajeCambiarEstado.textContent = "";
     ventanaCambiarEstado.classList.add("ocultarVentana");
@@ -447,64 +328,6 @@ function cerrarCambiarEstado(){
 
 btnCerrarCambiarEstado.addEventListener("click", cerrarCambiarEstado);
 btnCancelarCambiarEstado.addEventListener("click", cerrarCambiarEstado);
-
-/*GUARDAR CAMBIO DE ESTADO*/
-formCambiarEstado.addEventListener("submit", async function(evento){
-    evento.preventDefault();
-
-    if(nuevoEstadoPropiedad.value !== "1" && nuevoEstadoPropiedad.value !== "2"){
-        mensajeCambiarEstado.textContent = "Debe seleccionar En venta o En alquiler";
-        mensajeCambiarEstado.className = "mensajeError";
-        return;
-    }
-
-    const datos = {
-        id_propiedad: idPropiedadCambiarEstado.value,
-        id_estado_propiedad: nuevoEstadoPropiedad.value
-    };
-
-    try{
-        mostrarCarga();
-        btnGuardarEstado.disabled = true;
-
-        const res = await fetch(
-            `${API_ALQUILER}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}`,
-            {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify(datos)
-            }
-        );
-
-        if(!validarSesionRespuesta(res)){
-            return;
-        }
-
-        const respuesta = await res.json();
-
-        if(!res.ok){
-            mensajeCambiarEstado.textContent = respuesta.error || respuesta.mensaje || "No se pudo cambiar el estado";
-            mensajeCambiarEstado.className = "mensajeError";
-            return;
-        }
-
-        cerrarCambiarEstado();
-
-        await cargarAlquileres();
-
-        mostrarExito("Estado de la propiedad actualizado correctamente");
-    }catch(error){
-        console.error(error);
-        mensajeCambiarEstado.textContent = "No se pudo conectar con el servidor";
-        mensajeCambiarEstado.className = "mensajeError";
-    }finally{
-        btnGuardarEstado.disabled = false;
-        ocultarCarga();
-    }
-});
 
 /*CERRAR VENTANAS TOCANDO AFUERA*/
 ventanaVerAlquiler.addEventListener("click", function(evento){
@@ -519,6 +342,60 @@ ventanaCambiarEstado.addEventListener("click", function(evento){
     }
 });
 
+/*GUARDAR CAMBIO DE ESTADO*/
+formCambiarEstado.addEventListener("submit", async function(evento){
+    evento.preventDefault();
+
+    if(nuevoEstadoPropiedad.value !== "EN VENTA" && nuevoEstadoPropiedad.value !== "EN ALQUILER"){
+        mensajeCambiarEstado.textContent = "Debe seleccionar En venta o En alquiler";
+        mensajeCambiarEstado.className = "mensajeError";
+        return;
+    }
+
+    const datos = {
+        estado_nuevo: nuevoEstadoPropiedad.value
+    };
+
+    try{
+        mostrarCarga();
+        btnGuardarEstado.disabled = true;
+
+        const res = await fetch(
+            `${API_ALQUILER}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}&id_alquiler=${idAlquilerCambiarEstado}`,
+            {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(datos)
+            }
+        );
+
+        if(!validarSesionRespuesta(res)){
+            return;
+        }
+
+        if(!res.ok){
+            const respuesta = await res.json();
+
+            mensajeCambiarEstado.textContent = respuesta.error || respuesta.mensaje || "No se pudo cambiar el estado";
+            mensajeCambiarEstado.className = "mensajeError";
+            return;
+        }
+
+        cerrarCambiarEstado();
+        await cargarAlquileres();
+        mostrarExito("Estado de la propiedad actualizado correctamente");
+    }catch(error){
+        console.error(error);
+        mensajeCambiarEstado.textContent = "No se pudo conectar con el servidor";
+        mensajeCambiarEstado.className = "mensajeError";
+    }finally{
+        btnGuardarEstado.disabled = false;
+        ocultarCarga();
+    }
+});
+
 /*INICIAR*/
-cargarDatosInmobiliaria();
 cargarAlquileres();

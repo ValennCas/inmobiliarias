@@ -53,8 +53,37 @@
         }
 
         public function eliminarInquilino($id_inquilino){
-            $eliminar = $this->conexion->prepare('DELETE FROM inquilino WHERE id_inquilino = :id_inquilino');
-            $eliminar->execute([":id_inquilino" => $id_inquilino]);
+            try{
+                $this->conexion->beginTransaction();
+                /*DEVOLVER LA PROPIEDAD A EN ALQUILER*/
+                $actualizar = $this->conexion->prepare('UPDATE propiedad p
+                                                        INNER JOIN inmobiliaria_propiedad ip
+                                                            ON ip.id_propiedad = p.id_propiedad
+                                                        INNER JOIN alquiler a
+                                                            ON a.id_inmobiliaria_propiedad = ip.id_inmobiliaria_propiedad
+                                                        INNER JOIN estado_propiedad ep
+                                                            ON ep.estado = "EN ALQUILER"
+                                                        SET p.id_estado_propiedad = ep.id_estado_propiedad
+                                                        WHERE a.id_inquilino = :id_inquilino');
+
+                $actualizar->execute([":id_inquilino" => $id_inquilino]);
+                /*ELIMINAR EL ALQUILER*/
+                $eliminarAlquiler = $this->conexion->prepare('DELETE FROM alquiler
+                                                            WHERE id_inquilino = :id_inquilino');
+                $eliminarAlquiler->execute([":id_inquilino" => $id_inquilino]);
+                /*ELIMINAR EL INQUILINO*/
+                $eliminarInquilino = $this->conexion->prepare('DELETE FROM inquilino
+                                                            WHERE id_inquilino = :id_inquilino');
+                $eliminarInquilino->execute([":id_inquilino" => $id_inquilino]);
+                $this->conexion->commit();
+                return true;
+            }
+            catch(Exception $error){
+                if($this->conexion->inTransaction()){
+                    $this->conexion->rollBack();
+                }
+                throw $error;
+            }
         }
     }
 ?>

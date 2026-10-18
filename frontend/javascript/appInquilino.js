@@ -1,7 +1,12 @@
-const API_INMOBILIARIA = "http://localhost/inmobiliarias/backend/controller/inmobiliariaController.php";
 const API_PROPIEDAD = "http://localhost/inmobiliarias/backend/controller/propiedadesController.php";
 const API_INQUILINO = "http://localhost/inmobiliarias/backend/controller/inquilinosController.php";
 const API_ALQUILER = "http://localhost/inmobiliarias/backend/controller/alquileresController.php";
+
+/*
+    MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA
+    SE MANEJAN DESDE:
+    menuInmobiliaria.js
+*/
 
 /*DATOS DE SESION*/
 const token = localStorage.getItem("token");
@@ -30,33 +35,6 @@ window.addEventListener("pageshow", function(evento){
         window.location.replace("index.html");
     }
 });
-
-/*DATOS DE LA INMOBILIARIA*/
-const nombreInmobiliaria = document.querySelector("#nombreInmobiliaria");
-const emailInmobiliaria = document.querySelector("#emailInmobiliaria");
-const btnVerInmobiliaria = document.querySelector("#btnVerInmobiliaria");
-const btnEditarInmobiliaria = document.querySelector("#btnEditarInmobiliaria");
-
-/*MENU*/
-const btnPropiedades = document.querySelector("#btnPropiedades");
-const btnAlquileres = document.querySelector("#btnAlquileres");
-const btnInquilinos = document.querySelector("#btnInquilinos");
-const btnMisDatos = document.querySelector("#btnMisDatos");
-const btnCambiarContrasenia = document.querySelector("#btnCambiarContrasenia");
-const btnVolverInmobiliarias = document.querySelector("#btnVolverInmobiliarias");
-const btnCerrarSesion = document.querySelector("#btnCerrarSesion");
-
-/*MENU CELULAR*/
-const btnPropiedadesMobile = document.querySelector("#btnPropiedadesMobile");
-const btnAlquileresMobile = document.querySelector("#btnAlquileresMobile");
-const btnInquilinosMobile = document.querySelector("#btnInquilinosMobile");
-const btnVolverMobile = document.querySelector("#btnVolverMobile");
-const btnMenuMobile = document.querySelector("#btnMenuMobile");
-const submenuMobile = document.querySelector("#submenuMobile");
-const btnEditarInmobiliariaMobile = document.querySelector("#btnEditarInmobiliariaMobile");
-const btnMisDatosMobile = document.querySelector("#btnMisDatosMobile");
-const btnCambiarContraseniaMobile = document.querySelector("#btnCambiarContraseniaMobile");
-const btnCerrarSesionMobile = document.querySelector("#btnCerrarSesionMobile");
 
 /*LISTADO DE INQUILINOS*/
 const btnAgregarInquilino = document.querySelector("#btnAgregarInquilino");
@@ -126,116 +104,6 @@ function validarSesionRespuesta(res){
     return true;
 }
 
-/*CARGAR DATOS DE LA INMOBILIARIA*/
-async function cargarDatosInmobiliaria(){
-    try{
-        const res = await fetch(
-            `${API_INMOBILIARIA}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}`,
-            {
-                method: "GET",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                }
-            }
-        );
-
-        if(!validarSesionRespuesta(res)){
-            return;
-        }
-
-        const datos = await res.json();
-
-        if(!res.ok){
-            return;
-        }
-
-        const inmobiliaria = datos.inmobiliaria || datos;
-
-        nombreInmobiliaria.textContent = inmobiliaria.nombre || "Inmobiliaria";
-        emailInmobiliaria.textContent = inmobiliaria.email || "";
-    }catch(error){
-        console.error(error);
-    }
-}
-
-/*MENU*/
-btnPropiedades.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnAlquileres.addEventListener("click", function(){
-    window.location.href = "alquileres.html";
-});
-
-btnInquilinos.addEventListener("click", function(){
-    window.location.href = "inquilino.html";
-});
-
-btnVolverInmobiliarias.addEventListener("click", function(){
-    window.location.href = "inicioInmobiliaria.html";
-});
-
-btnCerrarSesion.addEventListener("click", function(){
-    localStorage.clear();
-    window.location.replace("index.html");
-});
-
-btnCambiarContrasenia.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
-});
-
-/*MENU CELULAR*/
-btnPropiedadesMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnAlquileresMobile.addEventListener("click", function(){
-    window.location.href = "alquileres.html";
-});
-
-btnInquilinosMobile.addEventListener("click", function(){
-    window.location.href = "inquilino.html";
-});
-
-btnVolverMobile.addEventListener("click", function(){
-    window.location.href = "inicioInmobiliaria.html";
-});
-
-btnMenuMobile.addEventListener("click", function(){
-    submenuMobile.classList.toggle("oculto");
-});
-
-btnCerrarSesionMobile.addEventListener("click", function(){
-    localStorage.clear();
-    window.location.replace("index.html");
-});
-
-btnCambiarContraseniaMobile.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
-});
-
-/*DATOS Y EDICION DE INMOBILIARIA*/
-/*btnVerInmobiliaria.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnEditarInmobiliaria.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnEditarInmobiliariaMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});*/
-
-/*MIS DATOS*/
-btnMisDatos.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
-btnMisDatosMobile.addEventListener("click", function(){
-    window.location.href = "inmobiliaria.html";
-});
-
 /*FORMATEAR PRECIO*/
 function formatearPrecio(precio){
     if(precio === null || precio === undefined || precio === ""){
@@ -263,14 +131,13 @@ function formatearFecha(fecha){
 /*VALIDAR FECHAS DEL ALQUILER*/
 fechaInicioAlquiler.addEventListener("change", function(){
     fechaFinAlquiler.min = fechaInicioAlquiler.value;
+
     if(fechaFinAlquiler.value !== "" && fechaFinAlquiler.value <= fechaInicioAlquiler.value){
         fechaFinAlquiler.value = "";
-    }
-
-    if(fechaFinAlquiler.value <= fechaInicioAlquiler.value){
         mensajeAgregarInquilino.textContent = "La fecha de finalización debe ser posterior a la fecha de inicio";
         mensajeAgregarInquilino.className = "mensajeError";
-        return;
+    }else{
+        mensajeAgregarInquilino.textContent = "";
     }
 });
 
@@ -280,7 +147,7 @@ function mostrarSinInquilinos(){
     sinInquilinos.classList.remove("oculto");
 }
 
-/*MOSTRAR ERROR*/
+/*MOSTRAR ERROR EN LISTADO*/
 function mostrarErrorInquilinos(mensaje){
     listaInquilinos.innerHTML = "";
     sinInquilinos.classList.remove("oculto");
@@ -314,11 +181,7 @@ async function cargarInquilinos(){
         }
 
         if(!res.ok){
-            mostrarErrorInquilinos(
-                datos.error ||
-                datos.mensaje ||
-                "No se pudieron cargar los inquilinos"
-            );
+            mostrarErrorInquilinos(datos.error || datos.mensaje || "No se pudieron cargar los inquilinos");
             return;
         }
 
@@ -356,7 +219,6 @@ function mostrarInquilinos(datos){
 
     inquilinos.forEach(function(inquilino){
         const tarjeta = document.createElement("article");
-
         tarjeta.classList.add("tarjetaInquilino");
 
         tarjeta.innerHTML = `
@@ -365,6 +227,7 @@ function mostrarInquilinos(datos){
                 <p>${inquilino.email || ""}</p>
                 <p>${inquilino.area_telefono || ""} ${inquilino.telefono || ""}</p>
                 <p>${inquilino.titulo_propiedad ? "Propiedad: " + inquilino.titulo_propiedad : ""}</p>
+
                 <div class="accionesInquilino">
                     <button type="button" class="btnVerInquilino" data-id="${inquilino.id_inquilino}">Visualizar</button>
                     <button type="button" class="btnEditarInquilino" data-id="${inquilino.id_inquilino}">Editar</button>
@@ -407,8 +270,7 @@ function agregarEventosInquilinos(){
 
 /*CARGAR PROPIEDADES DISPONIBLES PARA ALQUILER*/
 async function cargarPropiedadesDisponibles(){
-    propiedadInquilino.innerHTML =
-        `<option value="">Seleccionar propiedad</option>`;
+    propiedadInquilino.innerHTML = `<option value="">Seleccionar propiedad</option>`;
 
     try{
         mostrarCarga();
@@ -428,14 +290,15 @@ async function cargarPropiedadesDisponibles(){
         }
 
         const datos = await res.json();
+
         if(!res.ok){
-            mensajeAgregarInquilino.textContent =
-                "No se pudieron cargar las propiedades";
+            mensajeAgregarInquilino.textContent = datos.error || datos.mensaje || "No se pudieron cargar las propiedades";
             mensajeAgregarInquilino.className = "mensajeError";
             return;
         }
 
         let propiedades = [];
+
         if(Array.isArray(datos)){
             propiedades = datos;
         }else if(Array.isArray(datos.propiedades)){
@@ -450,10 +313,7 @@ async function cargarPropiedadesDisponibles(){
         propiedades.forEach(function(propiedad){
             const opcion = document.createElement("option");
             opcion.value = propiedad.id_propiedad;
-
-            opcion.textContent =
-                `${propiedad.titulo || "Propiedad"} - ${propiedad.calle || ""} ${propiedad.altura || ""}`;
-
+            opcion.textContent = `${propiedad.titulo || "Propiedad"} - ${propiedad.calle || ""} ${propiedad.altura || ""}`;
             propiedadInquilino.appendChild(opcion);
         });
 
@@ -465,9 +325,7 @@ async function cargarPropiedadesDisponibles(){
         }
     }catch(error){
         console.error(error);
-
-        mensajeAgregarInquilino.textContent =
-            "No se pudieron cargar las propiedades";
+        mensajeAgregarInquilino.textContent = "No se pudieron cargar las propiedades";
         mensajeAgregarInquilino.className = "mensajeError";
     }finally{
         ocultarCarga();
@@ -479,47 +337,28 @@ btnAgregarInquilino.addEventListener("click", async function(){
     mensajeAgregarInquilino.textContent = "";
     formAgregarInquilino.reset();
     ventanaAgregarInquilino.classList.remove("ocultarVentana");
+
     await cargarPropiedadesDisponibles();
 });
 
 /*CERRAR CREAR INQUILINO*/
 function cerrarAgregarInquilino(){
     formAgregarInquilino.reset();
-    propiedadInquilino.innerHTML =
-        `<option value="">Seleccionar propiedad</option>`;
+    propiedadInquilino.innerHTML = `<option value="">Seleccionar propiedad</option>`;
     mensajeAgregarInquilino.textContent = "";
     ventanaAgregarInquilino.classList.add("ocultarVentana");
 }
 
-btnCerrarAgregarInquilino.addEventListener(
-    "click",
-    cerrarAgregarInquilino
-);
-
-btnCancelarAgregarInquilino.addEventListener(
-    "click",
-    cerrarAgregarInquilino
-);
+btnCerrarAgregarInquilino.addEventListener("click", cerrarAgregarInquilino);
+btnCancelarAgregarInquilino.addEventListener("click", cerrarAgregarInquilino);
 
 /*CREAR INQUILINO Y ALQUILER*/
 formAgregarInquilino.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
-    if(nombreInquilino.value.trim() === "" ||
-        apellidoInquilino.value.trim() === "" ||
-        emailInquilino.value.trim() === "" ||
-        areaTelefonoInquilino.value.trim() === "" ||
-        telefonoInquilino.value.trim() === "" ||
-        propiedadInquilino.value === "" ||
-        precioAlquiler.value === "" ||
-        fechaInicioAlquiler.value === "" ||
-        fechaFinAlquiler.value === ""){
-        mensajeAgregarInquilino.textContent =
-            "Faltan completar campos";
-
-        mensajeAgregarInquilino.className =
-            "mensajeError";
-
+    if(nombreInquilino.value.trim() === "" || apellidoInquilino.value.trim() === "" || emailInquilino.value.trim() === "" || areaTelefonoInquilino.value.trim() === "" || telefonoInquilino.value.trim() === "" || propiedadInquilino.value === "" || precioAlquiler.value === "" || fechaInicioAlquiler.value === "" || fechaFinAlquiler.value === ""){
+        mensajeAgregarInquilino.textContent = "Faltan completar campos";
+        mensajeAgregarInquilino.className = "mensajeError";
         return;
     }
 
@@ -561,23 +400,13 @@ formAgregarInquilino.addEventListener("submit", async function(evento){
         const respuestaInquilino = await resInquilino.json();
 
         if(!resInquilino.ok){
-            mensajeAgregarInquilino.textContent =
-                respuestaInquilino.error ||
-                respuestaInquilino.mensaje ||
-                "No se pudo registrar el inquilino";
-
-            mensajeAgregarInquilino.className =
-                "mensajeError";
-
+            mensajeAgregarInquilino.textContent = respuestaInquilino.error || respuestaInquilino.mensaje || "No se pudo registrar el inquilino";
+            mensajeAgregarInquilino.className = "mensajeError";
             return;
         }
 
-        const inquilino =
-            respuestaInquilino.inquilino ||
-            respuestaInquilino;
-
-        const id_inquilino =
-            inquilino.id_inquilino;
+        const inquilino = respuestaInquilino.inquilino || respuestaInquilino;
+        const id_inquilino = inquilino.id_inquilino;
 
         /*DATOS DEL ALQUILER*/
         const datosAlquiler = {
@@ -606,36 +435,21 @@ formAgregarInquilino.addEventListener("submit", async function(evento){
             return;
         }
 
-        const respuestaAlquiler =
-            await resAlquiler.json();
+        const respuestaAlquiler = await resAlquiler.json();
 
         if(!resAlquiler.ok){
-            mensajeAgregarInquilino.textContent =
-                respuestaAlquiler.error ||
-                respuestaAlquiler.mensaje ||
-                "Se creó el inquilino pero no se pudo crear el alquiler";
-
-            mensajeAgregarInquilino.className =
-                "mensajeError";
-
+            mensajeAgregarInquilino.textContent = respuestaAlquiler.error || respuestaAlquiler.mensaje || "Se creó el inquilino pero no se pudo crear el alquiler";
+            mensajeAgregarInquilino.className = "mensajeError";
             return;
         }
 
         cerrarAgregarInquilino();
-
         await cargarInquilinos();
-
-        mostrarExito(
-            "Inquilino y alquiler registrados correctamente"
-        );
+        mostrarExito("Inquilino y alquiler registrados correctamente");
     }catch(error){
         console.error(error);
-
-        mensajeAgregarInquilino.textContent =
-            "No se pudo conectar con el servidor";
-
-        mensajeAgregarInquilino.className =
-            "mensajeError";
+        mensajeAgregarInquilino.textContent = "No se pudo conectar con el servidor";
+        mensajeAgregarInquilino.className = "mensajeError";
     }finally{
         btnGuardarInquilino.disabled = false;
         ocultarCarga();
@@ -665,18 +479,11 @@ async function verInquilino(id_inquilino){
         const datos = await res.json();
 
         if(!res.ok){
-            mostrarMensaje(
-                datos.error ||
-                datos.mensaje ||
-                "No se pudo cargar el inquilino",
-                "error"
-            );
+            mostrarError(datos.error || datos.mensaje || "No se pudo cargar el inquilino");
             return;
         }
 
-        const inquilino =
-            datos.inquilino ||
-            datos;
+        const inquilino = datos.inquilino || datos;
 
         /*DATOS DEL ALQUILER Y LA PROPIEDAD*/
         const resAlquiler = await fetch(
@@ -696,12 +503,7 @@ async function verInquilino(id_inquilino){
         const datosAlquiler = await resAlquiler.json();
 
         if(!resAlquiler.ok){
-            mostrarMensaje(
-                datosAlquiler.error ||
-                datosAlquiler.mensaje ||
-                "No se pudo cargar el alquiler",
-                "error"
-            );
+            mostrarError(datosAlquiler.error || datosAlquiler.mensaje || "No se pudo cargar el alquiler");
             return;
         }
 
@@ -709,13 +511,17 @@ async function verInquilino(id_inquilino){
 
         if(Array.isArray(datosAlquiler) && datosAlquiler.length > 0){
             alquiler = datosAlquiler[0];
+        }else if(datosAlquiler.alquiler){
+            alquiler = datosAlquiler.alquiler;
+        }else if(datosAlquiler.id_alquiler){
+            alquiler = datosAlquiler;
         }
 
         /*DATOS DEL INQUILINO*/
         verNombreInquilino.textContent = inquilino.nombre || "";
         verApellidoInquilino.textContent = inquilino.apellido || "";
         verEmailInquilino.textContent = inquilino.email || "";
-        verTelefonoInquilino.textContent = `${inquilino.area_telefono || ""} ${inquilino.telefono || ""}`;
+        verTelefonoInquilino.textContent = `${inquilino.area_telefono || ""} ${inquilino.telefono || ""}`.trim();
 
         /*DATOS DE LA PROPIEDAD Y ALQUILER*/
         if(alquiler){
@@ -735,15 +541,11 @@ async function verInquilino(id_inquilino){
             verFechaInicioInquilino.textContent = "";
             verFechaFinInquilino.textContent = "";
         }
-        ventanaVerInquilino.classList.remove(
-            "ocultarVentana"
-        );
+
+        ventanaVerInquilino.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
-        mostrarMensaje(
-            "No se pudo conectar con el servidor",
-            "error"
-        );
+        mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
     }
@@ -776,49 +578,24 @@ async function cargarInquilinoEditar(id_inquilino){
         const datos = await res.json();
 
         if(!res.ok){
-            mostrarMensaje(
-                datos.error ||
-                datos.mensaje ||
-                "No se pudo cargar el inquilino",
-                "error"
-            );
+            mostrarError(datos.error || datos.mensaje || "No se pudo cargar el inquilino");
             return;
         }
 
-        const inquilino =
-            datos.inquilino ||
-            datos;
+        const inquilino = datos.inquilino || datos;
 
-        editarIdInquilino.value =
-            inquilino.id_inquilino;
-
-        editarNombreInquilino.value =
-            inquilino.nombre || "";
-
-        editarApellidoInquilino.value =
-            inquilino.apellido || "";
-
-        editarEmailInquilino.value =
-            inquilino.email || "";
-
-        editarAreaTelefonoInquilino.value =
-            inquilino.area_telefono || "";
-
-        editarTelefonoInquilino.value =
-            inquilino.telefono || "";
-
+        editarIdInquilino.value = inquilino.id_inquilino;
+        editarNombreInquilino.value = inquilino.nombre || "";
+        editarApellidoInquilino.value = inquilino.apellido || "";
+        editarEmailInquilino.value = inquilino.email || "";
+        editarAreaTelefonoInquilino.value = inquilino.area_telefono || "";
+        editarTelefonoInquilino.value = inquilino.telefono || "";
         mensajeEditarInquilino.textContent = "";
 
-        ventanaEditarInquilino.classList.remove(
-            "ocultarVentana"
-        );
+        ventanaEditarInquilino.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
-
-        mostrarMensaje(
-            "No se pudo conectar con el servidor",
-            "error"
-        );
+        mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
     }
@@ -829,36 +606,19 @@ function cerrarEditarInquilino(){
     formEditarInquilino.reset();
     editarIdInquilino.value = "";
     mensajeEditarInquilino.textContent = "";
-    ventanaEditarInquilino.classList.add(
-        "ocultarVentana"
-    );
+    ventanaEditarInquilino.classList.add("ocultarVentana");
 }
 
-btnCerrarEditarInquilino.addEventListener(
-    "click",
-    cerrarEditarInquilino
-);
-
-btnCancelarEditarInquilino.addEventListener(
-    "click",
-    cerrarEditarInquilino
-);
+btnCerrarEditarInquilino.addEventListener("click", cerrarEditarInquilino);
+btnCancelarEditarInquilino.addEventListener("click", cerrarEditarInquilino);
 
 /*EDITAR INQUILINO*/
 formEditarInquilino.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
-    if(
-        editarNombreInquilino.value.trim() === "" ||
-        editarApellidoInquilino.value.trim() === "" ||
-        editarEmailInquilino.value.trim() === "" ||
-        editarAreaTelefonoInquilino.value.trim() === "" ||
-        editarTelefonoInquilino.value.trim() === ""
-    ){
-        mensajeEditarInquilino.textContent =
-            "Faltan completar campos";
-        mensajeEditarInquilino.className =
-            "mensajeError";
+    if(editarNombreInquilino.value.trim() === "" || editarApellidoInquilino.value.trim() === "" || editarEmailInquilino.value.trim() === "" || editarAreaTelefonoInquilino.value.trim() === "" || editarTelefonoInquilino.value.trim() === ""){
+        mensajeEditarInquilino.textContent = "Faltan completar campos";
+        mensajeEditarInquilino.className = "mensajeError";
         return;
     }
 
@@ -893,32 +653,18 @@ formEditarInquilino.addEventListener("submit", async function(evento){
         const respuesta = await res.json();
 
         if(!res.ok){
-            mensajeEditarInquilino.textContent =
-                respuesta.error ||
-                respuesta.mensaje ||
-                "No se pudo editar el inquilino";
-
-            mensajeEditarInquilino.className =
-                "mensajeError";
-
+            mensajeEditarInquilino.textContent = respuesta.error || respuesta.mensaje || "No se pudo editar el inquilino";
+            mensajeEditarInquilino.className = "mensajeError";
             return;
         }
 
         cerrarEditarInquilino();
-
         await cargarInquilinos();
-
-        mostrarExito(
-            "Inquilino actualizado correctamente"
-        );
+        mostrarExito("Inquilino actualizado correctamente");
     }catch(error){
         console.error(error);
-
-        mensajeEditarInquilino.textContent =
-            "No se pudo conectar con el servidor";
-
-        mensajeEditarInquilino.className =
-            "mensajeError";
+        mensajeEditarInquilino.textContent = "No se pudo conectar con el servidor";
+        mensajeEditarInquilino.className = "mensajeError";
     }finally{
         btnGuardarCambiosInquilino.disabled = false;
         ocultarCarga();
@@ -928,16 +674,12 @@ formEditarInquilino.addEventListener("submit", async function(evento){
 /*CANCELAR ELIMINACION*/
 btnCancelarEliminarInquilino.addEventListener("click", function(){
     idInquilinoEliminar.value = "";
-
-    ventanaEliminarInquilino.classList.add(
-        "ocultarVentana"
-    );
+    ventanaEliminarInquilino.classList.add("ocultarVentana");
 });
 
 /*ELIMINAR INQUILINO*/
 btnConfirmarEliminarInquilino.addEventListener("click", async function(){
-    const id_inquilino =
-        idInquilinoEliminar.value;
+    const id_inquilino = idInquilinoEliminar.value;
 
     try{
         mostrarCarga();
@@ -957,36 +699,21 @@ btnConfirmarEliminarInquilino.addEventListener("click", async function(){
             return;
         }
 
-        const respuesta = await res.json();
-
         if(!res.ok){
-            mostrarMensaje(
-                respuesta.error ||
-                respuesta.mensaje ||
-                "No se pudo eliminar el inquilino",
-                "error"
-            );
+            const respuesta = await res.json();
+            mostrarError(respuesta.error || respuesta.mensaje || "No se pudo eliminar el inquilino");
             return;
         }
 
-        ventanaEliminarInquilino.classList.add(
-            "ocultarVentana"
-        );
-
+        ventanaEliminarInquilino.classList.add("ocultarVentana");
         idInquilinoEliminar.value = "";
 
         await cargarInquilinos();
 
-        mostrarExito(
-            "Inquilino eliminado y propiedad disponible nuevamente"
-        );
+        mostrarExito("Inquilino eliminado y propiedad disponible nuevamente");
     }catch(error){
         console.error(error);
-
-        mostrarMensaje(
-            "No se pudo conectar con el servidor",
-            "error"
-        );
+        mostrarError("No se pudo conectar con el servidor");
     }finally{
         btnConfirmarEliminarInquilino.disabled = false;
         ocultarCarga();
@@ -1002,9 +729,7 @@ ventanaAgregarInquilino.addEventListener("click", function(evento){
 
 ventanaVerInquilino.addEventListener("click", function(evento){
     if(evento.target === ventanaVerInquilino){
-        ventanaVerInquilino.classList.add(
-            "ocultarVentana"
-        );
+        ventanaVerInquilino.classList.add("ocultarVentana");
     }
 });
 
@@ -1015,5 +740,4 @@ ventanaEditarInquilino.addEventListener("click", function(evento){
 });
 
 /*INICIAR*/
-cargarDatosInmobiliaria();
 cargarInquilinos();

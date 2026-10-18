@@ -13,8 +13,6 @@ function ocultarCarga(){
 }
 
 function mostrarExito(mensaje){
-    console.log("ABRO RESULTADO", Date.now());
-
     iconoResultado.textContent = "✓";
     tituloResultado.textContent = "Operación realizada";
     textoResultado.textContent = mensaje;
@@ -22,6 +20,17 @@ function mostrarExito(mensaje){
 
     setTimeout(function(){
         console.log("CIERRO RESULTADO POR TIMEOUT", Date.now());
+        ventanaResultado.classList.add("ocultarVentana");
+    }, 3000);
+}
+
+function mostrarError(mensaje){
+    iconoResultado.textContent = "×";
+    tituloResultado.textContent = "Ocurrió un error";
+    textoResultado.textContent = mensaje;
+    ventanaResultado.classList.remove("ocultarVentana");
+
+    setTimeout(function(){
         ventanaResultado.classList.add("ocultarVentana");
     }, 3000);
 }

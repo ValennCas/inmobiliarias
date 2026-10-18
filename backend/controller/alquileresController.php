@@ -43,7 +43,8 @@
                         $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
                         $this->responder(200, $this->servicio->modificarAlquiler($id, $cuerpo));
                     case "DELETE":
-                        $this->servicio->borrarAlquiler($id);
+                        $cuerpo = json_decode(file_get_contents("php://input"), true ) ?? [];
+                        $this->servicio->borrarAlquiler( $id, $cuerpo["estado_nuevo"] ?? null);
                         $this->responder(204);
                     default:
                         $this->responder(405, ["error" => "Metodo no permitido"]);

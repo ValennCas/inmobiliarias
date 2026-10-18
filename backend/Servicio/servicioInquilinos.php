@@ -20,6 +20,8 @@
                     throw new Exception("El campo $campo no puede superar los $largo caracteres", 400);
                 }
             }
+
+            
             if(!filter_var($datos["email"], FILTER_VALIDATE_EMAIL)){
                 throw new Exception("El email es invalido", 400);
             }

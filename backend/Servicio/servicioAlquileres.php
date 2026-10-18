@@ -96,9 +96,12 @@
             return $this->alquileres->buscarAlquiler($id);
         }
 
-        public function borrarAlquiler($id){
+        public function borrarAlquiler($id, $estado_nuevo){
             $this->existeAlquiler($id);
-            $this->alquileres->eliminarAlquiler($id, self::ESTADO_DISPONIBLE);
+            if($estado_nuevo !== "EN VENTA" && $estado_nuevo !== "EN ALQUILER" ){
+                throw new Exception("El estado seleccionado es invalido", 400);
+            }
+            $this->alquileres->eliminarAlquiler($id, $estado_nuevo);
         }
     }
 ?>
