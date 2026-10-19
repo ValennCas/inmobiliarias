@@ -1,7 +1,13 @@
 <?php
     $origen = $_SERVER["HTTP_ORIGIN"] ?? "";
 
-    $origenes_permitidos = ["http://127.0.0.1:5500", "http://localhost:5500"];
+    // Orígenes de desarrollo + los que se agreguen en CORS_ORIGINS (separados por coma).
+    // Si el front y el backend salen del mismo dominio (Render) no hace falta agregar nada.
+    require_once __DIR__ . '/entorno.php';
+    $origenes_permitidos = array_merge(
+        ["http://127.0.0.1:5500", "http://localhost:5500"],
+        array_filter(array_map("trim", explode(",", entorno("CORS_ORIGINS"))))
+    );
 
     if(in_array($origen, $origenes_permitidos, true)){
         header("Access-Control-Allow-Origin: $origen");
