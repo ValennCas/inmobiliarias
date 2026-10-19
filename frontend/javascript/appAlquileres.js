@@ -1,5 +1,5 @@
-const API_ALQUILER = "http://localhost/inmobiliarias/backend/controller/alquileresController.php";
-const URL_BACKEND = "http://localhost/inmobiliarias/backend/";
+const API_ALQUILER = BASE_BACKEND + "controller/alquileresController.php";
+const URL_BACKEND = BASE_BACKEND;
 
 /*
     MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA

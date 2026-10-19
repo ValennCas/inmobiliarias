@@ -1,4 +1,4 @@
-const API_INMOBILIARIA = "http://localhost/inmobiliarias/backend/controller/inmobiliariaController.php";
+const API_INMOBILIARIA = BASE_BACKEND + "controller/inmobiliariaController.php";
 
 const token = localStorage.getItem("token");
 const id_usuario = localStorage.getItem("id_usuario");

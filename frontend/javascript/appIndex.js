@@ -1,8 +1,8 @@
-const API_URL = "http://localhost/inmobiliarias/backend/controller/loginController.php";
-const API_PROPIEDADES_PUBLICAS = "http://localhost/inmobiliarias/backend/controller/propiedadesPublicasController.php";
-const API_INMOBILIARIAS_PUBLICAS = "http://localhost/inmobiliarias/backend/controller/inmobiliariaPublicaController.php";
-const API_RECUPERAR_CONTRASENIA = "http://localhost/inmobiliarias/backend/controller/recuperarContraseniaPublica.php";
-const URL_BACKEND = "http://localhost/inmobiliarias/backend/";
+const API_URL = BASE_BACKEND + "controller/loginController.php";
+const API_PROPIEDADES_PUBLICAS = BASE_BACKEND + "controller/propiedadesPublicasController.php";
+const API_INMOBILIARIAS_PUBLICAS = BASE_BACKEND + "controller/inmobiliariaPublicaController.php";
+const API_RECUPERAR_CONTRASENIA = BASE_BACKEND + "controller/recuperarContraseniaPublica.php";
+const URL_BACKEND = BASE_BACKEND;
 
 /*VARIABLES FORMULARIO LOGIN*/
 const btnLogin = document.querySelector(".btnLogin");

@@ -1,6 +1,6 @@
-const API_INMOBILIARIA = "http://localhost/inmobiliarias/backend/controller/inmobiliariaController.php";
-const API_PROPIEDAD = "http://localhost/inmobiliarias/backend/controller/propiedadesController.php";
-const URL_BACKEND = "http://localhost/inmobiliarias/backend/";
+const API_INMOBILIARIA = BASE_BACKEND + "controller/inmobiliariaController.php";
+const API_PROPIEDAD = BASE_BACKEND + "controller/propiedadesController.php";
+const URL_BACKEND = BASE_BACKEND;
 
 /*
     MIS DATOS, VER INMOBILIARIA Y EDITAR INMOBILIARIA

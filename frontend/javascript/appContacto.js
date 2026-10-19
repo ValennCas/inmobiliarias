@@ -1,4 +1,4 @@
-const API_CONTACTO = "http://localhost/inmobiliarias/backend/controller/contactoController.php";
+const API_CONTACTO = BASE_BACKEND + "controller/contactoController.php";
 
 /*DATOS DEL LINK (?id_propiedad=3&id_inmobiliaria=1)*/
 const parametros = new URLSearchParams(window.location.search);

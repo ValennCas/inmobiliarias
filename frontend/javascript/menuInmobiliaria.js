@@ -1,6 +1,6 @@
 (function(){
-    const API_INMOBILIARIA = "http://localhost/inmobiliarias/backend/controller/inmobiliariaController.php";
-    const API_USUARIO = "http://localhost/inmobiliarias/backend/controller/usuarioController.php";
+    const API_INMOBILIARIA = BASE_BACKEND + "controller/inmobiliariaController.php";
+    const API_USUARIO = BASE_BACKEND + "controller/usuarioController.php";
 
     /*DATOS SESION*/
     const token = localStorage.getItem("token");
