@@ -8,6 +8,7 @@
     const id_inmobiliaria = localStorage.getItem("id_inmobiliaria");
 
     /*VALIDAR SESION*/
+
     if(!token || !id_usuario || !id_inmobiliaria){
         window.location.replace("index.html");
         return;
@@ -436,7 +437,6 @@
                 }
 
                 const datos = await res.json();
-
                 if(!res.ok){
                     mensajeEditarUsuario.textContent = datos.error || datos.mensaje || "No se pudieron editar los datos";
                     mensajeEditarUsuario.className = "mensajeError";

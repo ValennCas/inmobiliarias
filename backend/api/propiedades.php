@@ -92,7 +92,7 @@
 
         // Todos los filtros son opcionales (null = no filtra). ciudad y provincia buscan por coincidencia parcial.
         public function filtrarPropiedades($filtros){
-            $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
+            $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.titulo, p.descripcion, p.precio,
                            p.id_estado_propiedad, e.estado,
                            d.id_direccion, d.provincia, d.ciudad, d.calle, d.altura,
                            ip.id_inmobiliaria
@@ -104,7 +104,7 @@
                     AND (:provincia IS NULL OR d.provincia LIKE :provincia2)
                     AND (:precio_min IS NULL OR p.precio >= :precio_min2)
                     AND (:precio_max IS NULL OR p.precio <= :precio_max2)
-                    AND (:id_estado_propiedad IS NULL OR p.id_estado_propiedad = :id_estado_propiedad2)
+                    AND (:estado IS NULL OR e.estado = :estado2)
                     AND (:id_inmobiliaria IS NULL OR ip.id_inmobiliaria = :id_inmobiliaria2)
                     ORDER BY p.id_propiedad DESC');
             $consulta->execute([
@@ -116,8 +116,8 @@
                 ":precio_min2" => $filtros["precio_min"],
                 ":precio_max" => $filtros["precio_max"],
                 ":precio_max2" => $filtros["precio_max"],
-                ":id_estado_propiedad" => $filtros["id_estado_propiedad"],
-                ":id_estado_propiedad2" => $filtros["id_estado_propiedad"],
+                ":estado" => $filtros["estado"],
+                ":estado2" => $filtros["estado"],
                 ":id_inmobiliaria" => $filtros["id_inmobiliaria"],
                 ":id_inmobiliaria2" => $filtros["id_inmobiliaria"]
             ]);

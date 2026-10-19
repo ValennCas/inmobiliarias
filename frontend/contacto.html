@@ -3,12 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contacto-Habita</title>
-    <link rel="stylesheet" href="css/estiloContacto.css">
+    <title>Contacto - Habita</title>
+    <link rel="icon" type="image/png" href="imagenesLogo/logoHabita.png">
+    <link rel="stylesheet" href="css/estiloContacto.css?v=3">
 </head>
 <body>
     <header class="barraSuperior">
-        <h1 class="nombreApp">Habita</h1>
+        <a href="index.html" class="marcaHabita">
+            <img src="imagenesLogo/logoHabita.png" alt="Logo Habita" class="logoHabita">
+            <h1 class="nombreApp">Habita</h1>
+        </a>
         <nav>
             <a class="btnVolver" href="index.html">Volver a las propiedades</a>
         </nav>
@@ -26,6 +30,14 @@
         <p id="mensajeEstado" class="mensajeEstado">Cargando propiedad...</p>
 
         <form id="formContacto" class="oculto" novalidate>
+            <label for="nombre">Nombre</label>
+            <input type="text" id="nombre" name="nombre" maxlength="50"
+                   placeholder="Dejanos tu nombre" required>
+
+            <label for="apellido">Apellido</label>
+            <input type="text" id="apellido" name="apellido" maxlength="50"
+                   placeholder="Dejanos tu apellido" required>
+
             <label for="contacto">Forma de contacto</label>
             <input type="text" id="contacto" name="contacto" maxlength="100"
                    placeholder="Tu email o tu teléfono" required>

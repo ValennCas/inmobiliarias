@@ -26,19 +26,22 @@
         public function atender(){
             $metodo = $_SERVER["REQUEST_METHOD"];
             $id_usuario = (int) ($_GET["id_usuario"] ?? 0);
-            
+
             try{
-                obtenerIdUsuarioAutenticado($this->seguridad, (int)$id_usuario);
+                if($id_usuario <= 0){
+                    $this->responder(400, ["error" => "El id del usuario es invalido"]);
+                }
+
+                obtenerIdUsuarioAutenticado($this->seguridad, $id_usuario);
+
                 switch($metodo){
                     case "GET":
-                        if($id_usuario !== null){
-                            $this->responder(200, $this->servicio->buscarUsuario($id_usuario));
-                        }
+                        $this->responder(200, $this->servicio->buscarUsuario($id_usuario));
+
                     case "PUT":
-                        if($id_usuario !== null){
-                            $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
-                            $this->responder(200, $this->servicio->actualizarUsuario($id_usuario, $cuerpo));
-                        }
+                        $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
+                        $this->responder(200, $this->servicio->actualizarUsuario($id_usuario, $cuerpo));
+
                     default:
                         $this->responder(405, ["error" => "Metodo no permitido"]);
                 }
@@ -47,7 +50,7 @@
                 $this->responder(500, ["error" => "Ocurrio un error, intente mas tarde!"]);
             }
             catch(Exception $error){
-                $this->responder($error->getCode(),["error" => $error->getMessage()]);
+                $this->responder($error->getCode(), ["error" => $error->getMessage()]);
             }
         }
     }

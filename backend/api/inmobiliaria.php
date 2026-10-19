@@ -60,6 +60,12 @@
             return $consulta->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function listarInmobiliaria(){
+            $consulta = $this->conexion->prepare('SELECT id_inmobiliaria, nombre FROM inmobiliaria ORDER BY nombre');
+            $consulta->execute();
+            return $consulta->fetchAll(PDO::FETCH_ASSOC);
+        }
+
         public function obtenerInmobiliariaUsuario($id_usuario){
             $consulta = $this->conexion->prepare('SELECT id_inmobiliaria FROM usuario WHERE id_usuario = :id_usuario');
             $consulta->execute([":id_usuario" => $id_usuario]);

@@ -1,7 +1,7 @@
 <?php
     // Endpoint publico (sin token), solo lectura.
     // Propiedades: http://localhost/inmobiliarias/backend/controller/propiedadesPublicasController.php
-    // Estados:     http://localhost/inmobiliarias/backend/controller/propiedadesPublicasController.php?estados=1
+    // Estados:     http://localhost/inmobiliarias/backend/controller/propiedadesPublicasController.php?estados="ENVENTA"
     require_once __DIR__ . '/../config/cors.php';
     require_once __DIR__ . '/../api/conexion.php';
     require_once __DIR__ . '/../api/propiedades.php';

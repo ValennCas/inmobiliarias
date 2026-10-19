@@ -32,10 +32,8 @@
             if($id_usuario === null || $id_usuario <= 0){
                 throw new Exception("El id del usuario es invalido", 400);
             }
-
             $this->validarDatos($obtener_datos);
             $id_inmobiliaria = $this->inmobiliaria->obtenerInmobiliariaUsuario($id_usuario);
-
             if($id_inmobiliaria === null){
                 throw new Exception("No se encontro una inmobiliaria asociada", 404);
             }
@@ -63,11 +61,14 @@
             if($id_inmobiliaria_usuario === null){
                 throw new Exception("No se encontro una inmobiliaria asociada", 404);
             }
-
             if($id_inmobiliaria !== null && $id_inmobiliaria_usuario != $id_inmobiliaria){
                 throw new Exception("No tiene permiso para consultar esta inmobiliaria", 403);
             }
             return $this->inmobiliaria->consultarInmobiliaria($id_inmobiliaria_usuario);
+        }
+
+        public function listarInmobiliaria(){
+            return $this->inmobiliaria->listarInmobiliaria();
         }
 
         private function validarDatos($datos){

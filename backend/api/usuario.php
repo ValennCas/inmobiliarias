@@ -15,6 +15,7 @@
         public function actualizarUsuario($id_usuario, $nombre_usuario, $apellido_usuario, $email){
             $usuario_editar = $this->conexion->prepare('UPDATE usuario SET email = :email, nombre_usuario = :nombre_usuario, apellido_usuario = :apellido_usuario WHERE id_usuario = :id_usuario');
             $usuario_editar->execute([":id_usuario" => $id_usuario, ":email" => $email, ":nombre_usuario" => $nombre_usuario, ":apellido_usuario" => $apellido_usuario]);
+            return $usuario_editar;
         }
     }
 ?>

@@ -61,7 +61,6 @@
 
         public function filtrarPropiedades($parametros){
             $filtros = [];
-
             foreach(["ciudad", "provincia"] as $campo){
                 $valor = trim($parametros[$campo] ?? "");
                 $filtros[$campo] = $valor === "" ? null : $valor;
@@ -78,15 +77,25 @@
                 throw new Exception("El precio minimo no puede ser mayor al maximo", 400);
             }
 
-            foreach(["id_estado_propiedad", "id_inmobiliaria"] as $campo){
+            foreach(["id_inmobiliaria"] as $campo){
                 $valor = $parametros[$campo] ?? "";
                 if($valor !== "" && !filter_var($valor, FILTER_VALIDATE_INT)){
                     throw new Exception("El filtro $campo es invalido", 400);
                 }
                 $filtros[$campo] = $valor === "" ? null : $valor;
             }
+            $estado = trim($parametros["estado"] ?? "");
+            if($estado !== "" && $estado !== "EN VENTA" && $estado !== "EN ALQUILER"){
+                throw new Exception("El estado es invalido", 400);
+            }
 
-            return $this->propiedades->filtrarPropiedades($filtros);
+            $filtros["estado"] = $estado === "" ? null : $estado;
+
+            $propiedades = $this->propiedades->filtrarPropiedades($filtros);
+            foreach($propiedades as &$propiedad){
+                $propiedad["fotos"] = $this->propiedades->obtenerFotos($propiedad["id_propiedad"]);
+            }
+            return $propiedades;
         }
 
         public function obtenerPropiedad($id){

@@ -14,16 +14,26 @@
             }
 
             $this->validarDatos($obtener_datos);
-            $id_usuario = $this->inmobiliaria->buscarUsuario($id_usuario);
 
-            if($id_usuario === null){
+            $usuarioEncontrado = $this->usuario->obtenerUsuario($id_usuario);
+
+            if($usuarioEncontrado === false){
                 throw new Exception("No se encontro una cuenta asociada", 404);
             }
+
             try{
-                $usuario = $this->usuario->actualizarUsuario($id_usuario, $obtener_datos["nombre_usuario"], $obtener_datos["apellido_usuario"], $obtener_datos["email"]);
+                $this->usuario->actualizarUsuario(
+                    $id_usuario,
+                    $obtener_datos["nombre_usuario"],
+                    $obtener_datos["apellido_usuario"],
+                    $obtener_datos["email"]
+                );
+
+                $usuarioActualizado = $this->usuario->obtenerUsuario($id_usuario);
+
                 return [
                     "mensaje" => "Datos actualizados con exito",
-                    "usuario" => $usuario
+                    "usuario" => $usuarioActualizado
                 ];
             }
             catch(PDOException $error){
@@ -32,10 +42,17 @@
         }
 
         public function buscarUsuario($id_usuario){
-            if($id_usuario === null){
+            if($id_usuario === null || $id_usuario <= 0){
                 throw new Exception("El id del usuario es invalido", 400);
             }
-            return $usuario = $this->usuario->obtenerUsuario($id_usuario);
+
+            $usuario = $this->usuario->obtenerUsuario($id_usuario);
+
+            if($usuario === false){
+                throw new Exception("No se encontro una cuenta asociada", 404);
+            }
+
+            return $usuario;
         }
 
         private function validarDatos($datos){
