@@ -21,11 +21,8 @@
             if(!isset($datos["precio"]) || !is_numeric($datos["precio"]) || $datos["precio"] <= 0){
                 throw new Exception("El precio debe ser un numero mayor a 0", 400);
             }
-            if(!isset($datos["id_estado_propiedad"]) || !filter_var($datos["id_estado_propiedad"], FILTER_VALIDATE_INT)){
+            if(!isset($datos["estado"]) || trim($datos["estado"]) === ""){
                 throw new Exception("El estado de la propiedad es invalido", 400);
-            }
-            if(!$this->propiedades->estadoExiste($datos["id_estado_propiedad"])){
-                throw new Exception("El estado de la propiedad no existe", 400);
             }
         }
 
@@ -113,11 +110,25 @@
             }
 
             $this->validar($datos);
+            $estado = trim($datos["estado"]);
+
+            if($estado !== "EN VENTA" && $estado !== "EN ALQUILER"){
+                throw new Exception("El estado de la propiedad es invalido", 400);
+            }
+
+            $id_estado_propiedad = $this->propiedades->obtenerIdEstado($estado);
+            if($id_estado_propiedad === false){
+                throw new Exception("El estado de la propiedad no existe", 400);
+            }
+
+            $datos["id_estado_propiedad"] = $id_estado_propiedad;
+
             $this->validarFotos($fotos);
 
             $id_propiedad = $this->propiedades->insertarPropiedad($datos);
             $this->guardarFotos($id_propiedad, $fotos);
             $propiedad = $this->propiedades->buscarPropiedad($id_propiedad);
+
             return $this->propiedades->obtenerFotos($id_propiedad);
         }
 
@@ -125,7 +136,20 @@
             $this->existePropiedad($id);
             $this->validar($datos);
 
+            $estado = trim($datos["estado"]);
+            if($estado !== "EN VENTA" && $estado !== "EN ALQUILER" && $estado !== "VENDIDO"){
+                throw new Exception("El estado de la propiedad es invalido", 400);
+            }
+
+            $id_estado_propiedad = $this->propiedades->obtenerIdEstado($estado);
+
+            if($id_estado_propiedad === false){
+                throw new Exception("El estado de la propiedad no existe", 400);
+            }
+
+            $datos["id_estado_propiedad"] = $id_estado_propiedad;
             $this->propiedades->modificarPropiedad($id, $datos);
+
             return $this->propiedades->buscarPropiedad($id);
         }
 

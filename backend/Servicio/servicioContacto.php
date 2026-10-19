@@ -53,6 +53,8 @@
         public function enviarConsulta($datos){
             $this->validarId($datos["id_inmobiliaria"] ?? null, "id de la inmobiliaria");
             $this->validarId($datos["id_propiedad"] ?? null, "id de la propiedad");
+            $this->validarTexto($datos, "nombre", "nombre de quien consulta", 50);
+            $this->validarTexto($datos, "apellido", "apellido de quien consulta", 50);
             $this->validarTexto($datos, "contacto", "la forma de contacto", 100);
             $this->validarTexto($datos, "descripcion", "la descripcion", 1000);
 
@@ -63,7 +65,9 @@
             if(!filter_var($propiedad["email_inmobiliaria"], FILTER_VALIDATE_EMAIL)){
                 throw new Exception("La inmobiliaria no tiene un email de contacto cargado", 422);
             }
-
+            
+            $nombre = trim($datos["nombre"]);
+            $apellido = trim($datos["apellido"]);
             $contacto = trim($datos["contacto"]);
             $descripcion = trim($datos["descripcion"]);
             $direccion = $propiedad["calle"] . " " . $propiedad["altura"] . ", " . $propiedad["ciudad"] . ", " . $propiedad["provincia"];
@@ -72,6 +76,7 @@
                   . "<p><b>Propiedad:</b> " . htmlspecialchars($direccion) . " (codigo " . (int) $propiedad["id_propiedad"] . ")<br>"
                   . "<b>Descripcion:</b> " . htmlspecialchars($propiedad["descripcion"]) . "<br>"
                   . "<b>Precio:</b> $" . htmlspecialchars($propiedad["precio"]) . "</p>"
+                  . "<p><b>Nombre del interesado:</b> " . htmlspecialchars($nombre) . " " . htmlspecialchars($apellido) . "</p>"
                   . "<p><b>Forma de contacto de la persona interesada:</b> " . htmlspecialchars($contacto) . "</p>"
                   . "<p><b>Mensaje:</b><br>" . nl2br(htmlspecialchars($descripcion)) . "</p>";
 

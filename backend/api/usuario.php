@@ -17,5 +17,18 @@
             $usuario_editar->execute([":id_usuario" => $id_usuario, ":email" => $email, ":nombre_usuario" => $nombre_usuario, ":apellido_usuario" => $apellido_usuario]);
             return $usuario_editar;
         }
+
+        //Buscamos el usuario por el ID y obtenemos su contraseña
+        public function buscarPorId($id_usuario){
+            $consulta = $this->conexion->prepare("SELECT id_usuario, password FROM usuario WHERE id_usuario = :id_usuario");
+            $consulta->execute([":id_usuario" => $id_usuario]);
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+
+        //cambiamos la contraseña de la cuenta
+        public function cambiarContrasenia($id_usuario, $password){
+           $consulta = $this->conexion->prepare("UPDATE usuario SET password = :password WHERE id_usuario = :id_usuario");
+            $consulta->execute([":id_usuario" => $id_usuario, ":password" => $password]);
+        }
     }
 ?>

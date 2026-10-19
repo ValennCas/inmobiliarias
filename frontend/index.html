@@ -34,7 +34,10 @@
                 <input type="text" id="usuario" name="usuario" required>
 
                 <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" required>
+                <div class="campoPassword">
+                    <input type="password" id="password" name="password" required>
+                    <button type="button" class="btnMostrarPassword">🔒</button>
+                </div>
 
                 <p id="mensajeLogin"></p>
 
@@ -190,10 +193,16 @@
 
                 <form id="formNuevaContrasenia">
                     <label for="nuevaContrasenia">Nueva contraseña</label>
-                    <input type="password" id="nuevaContrasenia" name="nuevaContrasenia" required>
+                    <div class="campoPassword">
+                        <input type="password" id="nuevaContrasenia" name="nuevaContrasenia" required>
+                        <button type="button" class="btnMostrarPassword">🔒</button>
+                    </div>
 
                     <label for="repetirContrasenia">Repetir contraseña</label>
-                    <input type="password" id="repetirContrasenia" name="repetirContrasenia" required>
+                    <div class="campoPassword">
+                        <input type="password" id="repetirContrasenia" name="repetirContrasenia" required>
+                        <button type="button" class="btnMostrarPassword">🔒</button>
+                    </div>
 
                     <p id="mensajeNuevaContrasenia"></p>
 

@@ -359,6 +359,13 @@
         grid-column: span 2;
     }
 
+    /*FOTOS PREVIAS*/
+    #ventanaAgregarPropiedad .vistaPreviaFotos{
+        width: 100%;
+        grid-column: span 2;
+        grid-template-columns: repeat(5, 1fr);
+    }
+
     #mensajeEditarUsuario,
     #mensajeAgregarInquilino,
     #mensajeEditarInquilino,
@@ -380,11 +387,6 @@
 
     .fotoEditable{
         height: 150px;
-    }
-
-    /*FOTOS PREVIAS*/
-    .vistaPreviaFotos{
-        grid-template-columns: repeat(5, 1fr);
     }
 
     /*FOTO VER PROPIEDAD*/

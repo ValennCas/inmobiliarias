@@ -2,6 +2,8 @@ const API_CONTACTO = BASE_BACKEND + "controller/contactoController.php";
 
 /*DATOS DEL LINK (?id_propiedad=3&id_inmobiliaria=1)*/
 const parametros = new URLSearchParams(window.location.search);
+const campoNombre = document.querySelector("#nombre");
+const campoApellido = document.querySelector("#apellido");
 const id_propiedad = parametros.get("id_propiedad");
 const id_inmobiliaria = parametros.get("id_inmobiliaria");
 
@@ -38,11 +40,9 @@ async function cargarPropiedad(){
             return;
         }
 
-        document.querySelector("#resumenDireccion").textContent =
-            `${datos.calle} ${datos.altura}, ${datos.ciudad}, ${datos.provincia}`;
+        document.querySelector("#resumenDireccion").textContent = `${datos.calle} ${datos.altura}, ${datos.ciudad}, ${datos.provincia}`;
         document.querySelector("#resumenDescripcion").textContent = datos.descripcion;
-        document.querySelector("#resumenPrecio").textContent =
-            "$" + Number(datos.precio).toLocaleString("es-AR");
+        document.querySelector("#resumenPrecio").textContent = "$" + Number(datos.precio).toLocaleString("es-AR");
         document.querySelector("#resumenInmobiliaria").textContent = datos.nombre_inmobiliaria;
 
         mensajeEstado.classList.add("oculto");
@@ -64,10 +64,12 @@ campoDescripcion.addEventListener("input", function(){
 formContacto.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
+    const nombre = campoNombre.value.trim();
+    const apellido = campoApellido.value.trim();
     const contacto = campoContacto.value.trim();
     const descripcion = campoDescripcion.value.trim();
 
-    if(contacto === "" || descripcion === ""){
+    if(nombre === "" || apellido === "" || contacto === "" || descripcion === ""){
         mensajeContacto.textContent = "Faltan completar los campos";
         mensajeContacto.className = "mensajeError";
         return;
@@ -84,6 +86,8 @@ formContacto.addEventListener("submit", async function(evento){
             body: JSON.stringify({
                 id_inmobiliaria: Number(id_inmobiliaria),
                 id_propiedad: Number(id_propiedad),
+                nombre: nombre,
+                apellido: apellido,
                 contacto: contacto,
                 descripcion: descripcion
             })

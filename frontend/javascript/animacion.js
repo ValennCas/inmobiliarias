@@ -19,7 +19,6 @@ function mostrarExito(mensaje){
     ventanaResultado.classList.remove("ocultarVentana");
 
     setTimeout(function(){
-        console.log("CIERRO RESULTADO POR TIMEOUT", Date.now());
         ventanaResultado.classList.add("ocultarVentana");
     }, 3000);
 }

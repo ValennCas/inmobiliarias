@@ -12,6 +12,18 @@
             return $consulta->fetch(PDO::FETCH_ASSOC) !== false;
         }
 
+        //Buscamos el id del estado por su nombre (en venta, en alquiler, vendido, alquilado)
+        public function obtenerIdEstado($estado){
+            $consulta = $this->conexion->prepare('SELECT id_estado_propiedad FROM estado_propiedad WHERE estado = :estado');
+            $consulta->execute([":estado" => $estado]);
+            $resultado = $consulta->fetch(PDO::FETCH_ASSOC);
+
+            if($resultado === false){
+                return false;
+            }
+            return $resultado["id_estado_propiedad"];
+        }
+
         public function inmobiliariaExiste($id_inmobiliaria){
             $consulta = $this->conexion->prepare('SELECT id_inmobiliaria FROM inmobiliaria WHERE id_inmobiliaria = :id');
             $consulta->execute([":id" => $id_inmobiliaria]);

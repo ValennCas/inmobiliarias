@@ -5,7 +5,8 @@
 #formEditarMisDatos,
 #formAgregarInquilino,
 #formEditarInquilino,
-#formCambiarEstado{
+#formCambiarEstado,
+#formCambiarContrasenia{
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -18,7 +19,8 @@
 #formEditarMisDatos label,
 #formAgregarInquilino label,
 #formEditarInquilino label,
-#formCambiarEstado label{
+#formCambiarEstado label,
+#formCambiarContrasenia label{
     font-size: 14px;
     font-weight: bold;
     color: #333;
@@ -37,7 +39,8 @@
 #formAgregarInquilino input,
 #formAgregarInquilino select,
 #formEditarInquilino input,
-#formCambiarEstado select{
+#formCambiarEstado select,
+#formCambiarContrasenia input{
     width: 100%;
     padding: 12px;
     border: 1px solid #C9D5D0;
@@ -67,7 +70,8 @@
 #formAgregarInquilino input:focus,
 #formAgregarInquilino select:focus,
 #formEditarInquilino input:focus,
-#formCambiarEstado select:focus{
+#formCambiarEstado select:focus,
+#formCambiarContrasenia input:focus{
     outline: none;
     border-color: #6F8F95;
     box-shadow: 0 0 4px rgba(111, 143, 149, 0.25);
@@ -131,7 +135,8 @@ input[type="number"]::-webkit-outer-spin-button{
 #btnGuardarEditarUsuario,
 #btnGuardarInquilino,
 #btnGuardarCambiosInquilino,
-#btnGuardarEstado{
+#btnGuardarEstado,
+#btnGuardarNuevaContrasenia{
     padding: 11px 16px;
     border: none;
     border-radius: 6px;
@@ -147,7 +152,8 @@ input[type="number"]::-webkit-outer-spin-button{
 #btnGuardarEditarUsuario:hover,
 #btnGuardarInquilino:hover,
 #btnGuardarCambiosInquilino:hover,
-#btnGuardarEstado:hover{
+#btnGuardarEstado:hover,
+#btnGuardarNuevaContrasenia:hover{
     background-color: #789685;
 }
 
@@ -158,7 +164,8 @@ input[type="number"]::-webkit-outer-spin-button{
 #btnCancelarEditarUsuario,
 #btnCancelarAgregarInquilino,
 #btnCancelarEditarInquilino,
-#btnCancelarCambiarEstado{
+#btnCancelarCambiarEstado,
+#btnCancelarCambiarContrasenia{
     padding: 11px 16px;
     border: none;
     border-radius: 6px;
@@ -174,6 +181,37 @@ input[type="number"]::-webkit-outer-spin-button{
 #btnCancelarEditarUsuario:hover,
 #btnCancelarAgregarInquilino:hover,
 #btnCancelarEditarInquilino:hover,
-#btnCancelarCambiarEstado:hover{
+#btnCancelarCambiarEstado:hover,
+#btnCancelarCambiarContrasenia:hover{
     background-color: #D5E0DC;
+}
+
+/*VER TEXTO EN LAS CONTRASEÑAS PARTE PRIVADA*/
+.campoPassword{
+    position: relative;
+    width: 100%;
+}
+
+.campoPassword input{
+    width: 100%;
+    padding-right: 45px;
+}
+
+.campoPassword .btnMostrarPassword{
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 17px;
+    line-height: 1;
 }

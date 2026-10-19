@@ -17,6 +17,7 @@
 
         private function responder($codigo, $cuerpo = null){
             http_response_code($codigo);
+
             if($cuerpo !== null){
                 echo json_encode($cuerpo, JSON_UNESCAPED_UNICODE);
             }
@@ -42,8 +43,7 @@
                         $this->responder(200, $this->servicio->listarPropiedades($_GET["id_inmobiliaria"] ?? null));
                     case "POST":
                         if(isset($_GET["accion"]) && $_GET["accion"] === "fotos"){
-                            $cuerpo = json_decode(file_get_contents("php://input"), true) ?? [];
-                            $this->responder(201, $this->servicio->crearPropiedad($cuerpo, $fotos));
+                            $this->responder(201, $this->servicio->agregarFotos($id, $fotos));
                         }
                         $cuerpo = $_POST;
                         $this->responder(201, $this->servicio->crearPropiedad($cuerpo, $fotos));

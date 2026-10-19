@@ -43,7 +43,6 @@ const emailInmobiliaria = document.querySelector("#emailInmobiliaria");
 const btnPropiedades = document.querySelector("#btnPropiedades");
 const btnAlquileres = document.querySelector("#btnAlquileres");
 const btnInquilinos = document.querySelector("#btnInquilinos");
-const btnCambiarContrasenia = document.querySelector("#btnCambiarContrasenia");
 const btnVolverInmobiliarias = document.querySelector("#btnVolverInmobiliarias");
 const btnCerrarSesion = document.querySelector("#btnCerrarSesion");
 
@@ -54,7 +53,6 @@ const btnInquilinosMobile = document.querySelector("#btnInquilinosMobile");
 const btnVolverMobile = document.querySelector("#btnVolverMobile");
 const btnMenuMobile = document.querySelector("#btnMenuMobile");
 const submenuMobile = document.querySelector("#submenuMobile");
-const btnCambiarContraseniaMobile = document.querySelector("#btnCambiarContraseniaMobile");
 const btnCerrarSesionMobile = document.querySelector("#btnCerrarSesionMobile");
 
 /*PROPIEDADES*/
@@ -212,14 +210,6 @@ btnInquilinos.addEventListener("click", function(){
 
 btnInquilinosMobile.addEventListener("click", function(){
     window.location.href = "inquilino.html";
-});
-
-btnCambiarContrasenia.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
-});
-
-btnCambiarContraseniaMobile.addEventListener("click", function(){
-    window.location.href = "cambiarContrasenia.html";
 });
 
 /*
@@ -445,9 +435,7 @@ function mostrarPropiedades(datos){
                 <p>${propiedad.estado || ""}</p>
 
                 <p>
-                    ${propiedad.precio
-                        ? "$" + propiedad.precio
-                        : ""}
+                    ${propiedad.precio ? (propiedad.estado === "EN VENTA" || propiedad.estado === "VENDIDO" ? "USD " : "$ ") + propiedad.precio : ""}
                 </p>
 
                 <p>
@@ -531,8 +519,7 @@ formAgregarPropiedad.addEventListener("submit", async function(evento){
     const datos = new FormData();
     datos.append("id_inmobiliaria", id_inmobiliaria);
     datos.append("titulo", titulo.value.trim());
-    datos.append("id_estado_propiedad", estadoPropiedad.value);
-    datos.append("id_estado_propiedad", estadoPropiedad.value);
+    datos.append("estado", estadoPropiedad.value);
     datos.append("precio", precio.value);
     datos.append("provincia", provincia.options[provincia.selectedIndex].text);
     datos.append("ciudad", ciudad.value);
@@ -613,7 +600,7 @@ async function verPropiedad(id_propiedad){
 
         verTituloPropiedad.textContent = propiedad.titulo || "Propiedad";
         verOperacion.textContent = propiedad.estado || "";
-        verPrecio.textContent = propiedad.precio ? `$${propiedad.precio}` : "";
+        verPrecio.textContent = propiedad.precio ? `${propiedad.estado === "EN VENTA" || propiedad.estado === "VENDIDO" ? "USD " : "$ "}${propiedad.precio}` : "";
         verDireccion.textContent = `${propiedad.calle || ""} ${propiedad.altura || ""}`;
         verCiudad.textContent = propiedad.ciudad || "";
         verProvincia.textContent = propiedad.provincia || "";
@@ -684,6 +671,7 @@ btnCerrarVer.addEventListener("click", function(){
 async function cargarPropiedadEditar(id_propiedad){
     try{
         mostrarCarga();
+        
         const res = await fetch(
             `${API_PROPIEDAD}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}&id_propiedad=${id_propiedad}`,
             {
@@ -697,9 +685,7 @@ async function cargarPropiedadEditar(id_propiedad){
         if(!validarSesionRespuesta(res)){
             return;
         }
-
         const datos = await res.json();
-
         if(!res.ok){
             mostrarMensaje(
                 "No se pudo cargar la propiedad",
@@ -713,11 +699,25 @@ async function cargarPropiedadEditar(id_propiedad){
 
         editarIdPropiedad.value = propiedad.id_propiedad;
         editarTitulo.value = propiedad.titulo || "";
-        editarEstadoPropiedad.value = propiedad.id_estado_propiedad || "";
+        editarEstadoPropiedad.value = propiedad.estado || "";
         editarPrecio.value = propiedad.precio || "";
         editarCalle.value = propiedad.calle || "";
         editarAltura.value = propiedad.altura || "";
         editarDescripcion.value = propiedad.descripcion || "";
+
+        /*CARGAR PROVINCIA ACTUAL*/
+        await cargarProvincias(editarProvincia, editarCiudad);
+
+        for(const opcion of editarProvincia.options){
+            if(opcion.textContent === propiedad.provincia){
+                editarProvincia.value = opcion.value;
+                break;
+            }
+        }
+
+        /*CARGAR CIUDAD ACTUAL*/
+        await cargarCiudades(editarProvincia.value, editarCiudad);
+        editarCiudad.value = propiedad.ciudad || "";
 
         mostrarFotosActuales(propiedad.fotos || datos.fotos || []);
         ventanaEditarPropiedad.classList.remove("ocultarVentana");
@@ -847,16 +847,16 @@ formEditarPropiedad.addEventListener("submit", async function(evento){
 
     const datos = {
         titulo: editarTitulo.value.trim(),
-        id_estado_propiedad: editarEstadoPropiedad.value,
+        estado: editarEstadoPropiedad.value,
         precio: editarPrecio.value,
-        provincia: editarProvincia.options[
-            editarProvincia.selectedIndex
-        ].text,
+        provincia: editarProvincia.options[editarProvincia.selectedIndex].text,
         ciudad: editarCiudad.value,
         calle: editarCalle.value.trim(),
         altura: editarAltura.value,
         descripcion: editarDescripcion.value.trim()
     };
+
+    console.log(datos);
 
     const nuevasFotos = Array.from(editarFotos.files);
     const cantidadFinal = cantidadFotosActuales - fotosEliminar.length + nuevasFotos.length;

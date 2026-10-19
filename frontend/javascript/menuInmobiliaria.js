@@ -86,6 +86,144 @@
     const editarEmailUsuario = document.querySelector("#editarEmailUsuario");
     const mensajeEditarUsuario = document.querySelector("#mensajeEditarUsuario");
 
+    /*CAMBIAR CONTRASENIA*/
+    const ventanaCambiarContrasenia = document.createElement("section");
+    ventanaCambiarContrasenia.id = "ventanaCambiarContrasenia";
+    ventanaCambiarContrasenia.className = "ventanaFlotante ocultarVentana";
+
+    ventanaCambiarContrasenia.innerHTML = `
+        <div class="contenidoVentana">
+            <button type="button" class="cerrarVentana" id="btnCerrarCambiarContrasenia">×</button>
+
+            <h2>Cambiar contraseña</h2>
+
+            <form id="formCambiarContrasenia">
+                <label for="passwordActual">Contraseña actual</label>
+                <div class="campoPassword">
+                    <input type="password" id="passwordActual" maxlength="100" required>
+                    <button type="button" class="btnMostrarPassword">🔒</button>
+                </div>
+
+                <label for="passwordNueva">Nueva contraseña</label>
+                <div class="campoPassword">
+                    <input type="password" id="passwordNueva" minlength="6" maxlength="100" required>
+                    <button type="button" class="btnMostrarPassword">🔒</button>
+                </div>
+
+                <label for="repetirPasswordNueva">Repetir nueva contraseña</label>
+                <div class="campoPassword">
+                    <input type="password" id="repetirPasswordNueva" minlength="6" maxlength="100" required>
+                    <button type="button" class="btnMostrarPassword">🔒</button>
+                </div>
+
+                <p id="mensajeCambiarContrasenia"></p>
+
+                <div class="botonesFormulario">
+                    <button type="submit" id="btnGuardarNuevaContrasenia">Cambiar contraseña</button>
+                    <button type="button" id="btnCancelarCambiarContrasenia">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    `;
+
+    document.body.appendChild(ventanaCambiarContrasenia);
+
+    /*VARIABLES */ 
+    const btnCerrarCambiarContrasenia = document.querySelector("#btnCerrarCambiarContrasenia");
+    const btnCancelarCambiarContrasenia = document.querySelector("#btnCancelarCambiarContrasenia");
+    const formCambiarContrasenia = document.querySelector("#formCambiarContrasenia");
+    const passwordActual = document.querySelector("#passwordActual");
+    const passwordNueva = document.querySelector("#passwordNueva");
+    const repetirPasswordNueva = document.querySelector("#repetirPasswordNueva");
+    const mensajeCambiarContrasenia = document.querySelector("#mensajeCambiarContrasenia");
+    const btnGuardarNuevaContrasenia = document.querySelector("#btnGuardarNuevaContrasenia");
+
+    /*ABRIR CAMBIAR CONTRASENIA*/
+    function abrirCambiarContrasenia(){
+        formCambiarContrasenia.reset();
+        mensajeCambiarContrasenia.textContent = "";
+        ventanaCambiarContrasenia.classList.remove("ocultarVentana");
+    }
+
+    ventanaCambiarContrasenia.querySelectorAll(".btnMostrarPassword").forEach(function(boton){
+        boton.addEventListener("click", function(){
+            const input = boton.previousElementSibling;
+
+            if(input.type === "password"){
+                input.type = "text";
+                boton.textContent = "🔓";
+            }else{
+                input.type = "password";
+                boton.textContent = "🔒";
+            }
+        });
+    });
+
+    /*CAMBIAR CONTRASENIA*/
+    if(formCambiarContrasenia){
+        formCambiarContrasenia.addEventListener("submit", async function(evento){
+            evento.preventDefault();
+
+            if(passwordActual.value.trim() === "" || passwordNueva.value.trim() === "" || repetirPasswordNueva.value.trim() === ""){
+                mensajeCambiarContrasenia.textContent = "Faltan completar campos";
+                mensajeCambiarContrasenia.className = "mensajeError";
+                return;
+            }
+
+            const datos = {
+                passwordActual: passwordActual.value,
+                passwordNueva: passwordNueva.value,
+                repetirPasswordNueva: repetirPasswordNueva.value
+            };
+
+            try{
+                mostrarCarga();
+                btnGuardarNuevaContrasenia.disabled = true;
+
+                const res = await fetch(API_CAMBIAR_CONTRA_LOGGEADO, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: JSON.stringify(datos)
+                });
+
+                if(!validarSesionMenu(res)){
+                    return;
+                }
+
+                const respuesta = await res.json();
+
+                if(!res.ok){
+                    mensajeCambiarContrasenia.textContent = respuesta.error || respuesta.mensaje || "No se pudo cambiar la contraseña";
+                    mensajeCambiarContrasenia.className = "mensajeError";
+                    return;
+                }
+
+                cerrarCambiarContrasenia();
+                mostrarExito("Contraseña actualizada correctamente");
+            }catch(error){
+                console.error(error);
+                mensajeCambiarContrasenia.textContent = "No se pudo conectar con el servidor";
+                mensajeCambiarContrasenia.className = "mensajeError";
+            }finally{
+                btnGuardarNuevaContrasenia.disabled = false;
+                ocultarCarga();
+            }
+        });
+    }
+    /*CERRAR CAMBIAR CONTRASENIA*/
+    function cerrarCambiarContrasenia(){
+        formCambiarContrasenia.reset();
+        mensajeCambiarContrasenia.textContent = "";
+        ventanaCambiarContrasenia.classList.add("ocultarVentana");
+    }
+
+    if(btnCancelarCambiarContrasenia){
+        btnCancelarCambiarContrasenia.addEventListener("click", cerrarCambiarContrasenia);
+    }
+
     /*VALIDAR RESPUESTA DE SESION*/
     function validarSesionMenu(res){
         if(res.status === 401){
@@ -93,7 +231,6 @@
             window.location.replace("index.html");
             return false;
         }
-
         return true;
     }
 
@@ -483,9 +620,7 @@
     }
 
     if(btnCambiarContrasenia){
-        btnCambiarContrasenia.addEventListener("click", function(){
-            window.location.href = "cambiarContrasenia.html";
-        });
+        btnCambiarContrasenia.addEventListener("click", abrirCambiarContrasenia);
     }
 
     /*NAVEGACION MOBILE*/
@@ -515,7 +650,10 @@
 
     if(btnCambiarContraseniaMobile){
         btnCambiarContraseniaMobile.addEventListener("click", function(){
-            window.location.href = "cambiarContrasenia.html";
+            if(submenuMobile){
+                submenuMobile.classList.add("oculto");
+            }
+            abrirCambiarContrasenia();
         });
     }
 
@@ -523,6 +661,20 @@
     if(btnMenuMobile){
         btnMenuMobile.addEventListener("click", function(){
             submenuMobile.classList.toggle("oculto");
+        });
+    }
+
+    /*CERRAR CAMBIAR CONTRASEÑA*/
+    if(btnCerrarCambiarContrasenia){
+        btnCerrarCambiarContrasenia.addEventListener("click", cerrarCambiarContrasenia);
+    }
+
+    /*CERRAR VENTANA DE CONTRASEÑA TOCANDO AFUERA*/
+    if(ventanaCambiarContrasenia){
+        ventanaCambiarContrasenia.addEventListener("click", function(evento){
+            if(evento.target === ventanaCambiarContrasenia){
+                cerrarCambiarContrasenia();
+            }
         });
     }
 
@@ -636,6 +788,7 @@
             cargarCiudades(editarProvinciaInmobiliaria.value, editarCiudadInmobiliaria);
         });
     }
+    
     /*INICIAR*/
     cargarDatosInmobiliariaMenu();
 

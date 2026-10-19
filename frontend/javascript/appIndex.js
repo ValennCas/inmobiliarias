@@ -75,11 +75,24 @@ const btnCancelarNuevaContrasenia = document.querySelector("#btnCancelarNuevaCon
 
 let usuarioRecuperacion = "";
 let tokenRecuperacion = "";
-
 let propiedadesPublicas = [];
 let propiedadSeleccionada = null;
 let imagenesPropiedad = [];
 let indiceImagen = 0;
+
+document.querySelectorAll(".btnMostrarPassword").forEach(function(boton){
+    boton.addEventListener("click", function(){
+        const input = boton.previousElementSibling;
+
+        if(input.type === "password"){
+            input.type = "text";
+            boton.textContent = "🔓";
+        }else{
+            input.type = "password";
+            boton.textContent = "🔒";
+        }
+    });
+});
 
 cargarProvincias(filtroProvincia, filtroCiudad);
 filtroProvincia.addEventListener("change", function(){
@@ -212,7 +225,9 @@ async function cargarPropiedades(){
             propiedades = [datos];
         }
 
-        propiedadesPublicas = propiedades;
+        propiedadesPublicas = propiedades.filter(function(propiedad){
+            return propiedad.estado === "EN VENTA" || propiedad.estado === "EN ALQUILER";
+        });
         mostrarPropiedades(propiedadesPublicas);
     }catch(error){
         console.error(error);
@@ -259,7 +274,7 @@ function mostrarPropiedades(propiedades){
             <div class="contenidoPropiedad">
                 <h3>${propiedad.titulo || "Propiedad"}</h3>
                 <p>${propiedad.estado || ""}</p>
-                <p> ${propiedad.precio ? "$" + Number(propiedad.precio).toLocaleString("es-AR") : ""}</p>
+                <p>${propiedad.precio ? (propiedad.estado === "EN VENTA" ? "USD " : "$ ") + Number(propiedad.precio).toLocaleString("es-AR") : ""}</p>
                 <p>${propiedad.calle || ""} ${propiedad.altura || ""}</p>
                 <div class="accionesPropiedad">
                     <button type="button" class="btnVerPropiedad" data-id="${propiedad.id_propiedad}">Ver</button>
@@ -303,7 +318,7 @@ function abrirPropiedad(id_propiedad){
 
     verTituloPropiedad.textContent = propiedadSeleccionada.titulo || "Propiedad";
     verOperacion.textContent = propiedadSeleccionada.estado || "";
-    verPrecio.textContent = propiedadSeleccionada.precio ? "$" + Number(propiedadSeleccionada.precio).toLocaleString("es-AR") : "";
+    verPrecio.textContent = propiedadSeleccionada.precio ? (propiedadSeleccionada.estado === "EN VENTA" ? "USD " : "$ ") + Number(propiedadSeleccionada.precio).toLocaleString("es-AR") : "";
     verDireccion.textContent = `${propiedadSeleccionada.calle || ""} ${propiedadSeleccionada.altura || ""}`;
     verCiudad.textContent = propiedadSeleccionada.ciudad || "";
     verProvincia.textContent = propiedadSeleccionada.provincia || "";
@@ -536,14 +551,14 @@ formBuscarUsuario.addEventListener("submit", async function(evento){
 
     try{
         btnBuscarUsuario.disabled = true;
-        mensajeBuscarUsuario.textContent = "";
+        btnBuscarUsuario.innerHTML = '<span class="spinner"></span> Enviando...';
 
         const res = await fetch(API_RECUPERAR_CONTRASENIA, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                accion: "solicitarCodigo",
-                usuario: usuario
+                accion: "solicitar",
+                email: usuario
             })
         });
 
@@ -565,6 +580,7 @@ formBuscarUsuario.addEventListener("submit", async function(evento){
         mensajeBuscarUsuario.className = "mensajeError";
     }finally{
         btnBuscarUsuario.disabled = false;
+        btnBuscarUsuario.textContent = "Continuar";
     }
 });
 
@@ -594,9 +610,9 @@ formCodigo.addEventListener("submit", async function(evento){
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                accion: "verificarCodigo",
+                accion: "verificar",
                 usuario: usuarioRecuperacion,
-                codigo: codigo
+                token: codigo
             })
         });
 
@@ -608,7 +624,7 @@ formCodigo.addEventListener("submit", async function(evento){
             return;
         }
 
-        tokenRecuperacion = datos.token_recuperacion;
+        tokenRecuperacion = codigo;
 
         pasoCodigo.classList.add("oculto");
         pasoNuevaContrasenia.classList.remove("oculto");
@@ -666,9 +682,10 @@ formNuevaContrasenia.addEventListener("submit", async function(evento){
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
-                accion: "cambiarContrasenia",
-                token_recuperacion: tokenRecuperacion,
-                password: password
+                accion: "cambiar",
+                token: tokenRecuperacion,
+                password: password,
+                repetirPassword: repetirPassword
             })
         });
 
