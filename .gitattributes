@@ -1,0 +1,2 @@
+# Los scripts de shell tienen que quedar con saltos de linea de Linux para que funcionen dentro de Docker
+*.sh text eol=lf

@@ -1,0 +1,6 @@
+.git
+.vscode
+documentacion
+backend/.env.local
+backend/config/config.php
+backend/avisos.log

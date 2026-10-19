@@ -1,0 +1,31 @@
+# Plano para Render (New > Blueprint). Las claves marcadas "sync: false" se cargan a mano en el panel, no se guardan en el repositorio.
+services:
+  - type: web
+    name: habita-inmobiliarias
+    runtime: docker
+    plan: free
+    healthCheckPath: /frontend/index.html
+    envVars:
+      - key: APP_TIMEZONE
+        value: America/Argentina/Buenos_Aires
+      - key: MAIL_NOMBRE
+        value: Habita
+      - key: DB_SSL
+        value: "true"
+      # Certificado de Aiven: se sube en Render como Secret File con el nombre ca.pem
+      - key: DB_SSL_CA
+        value: /etc/secrets/ca.pem
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        sync: false
+      - key: DB_NAME
+        sync: false
+      - key: DB_USER
+        sync: false
+      - key: DB_PASS
+        sync: false
+      - key: MAIL_DSN
+        sync: false
+      - key: MAIL_REMITENTE
+        sync: false
