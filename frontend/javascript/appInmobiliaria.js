@@ -183,10 +183,6 @@ btnCerrarSesionMobile.addEventListener("click", function(){
     window.location.replace("index.html");
 });
 
-btnMenuMobile.addEventListener("click", function(){
-    submenuMobile.classList.toggle("oculto");
-});
-
 /*NAVEGACION*/
 btnPropiedades.addEventListener("click", function(){
     window.location.href = "inmobiliaria.html";
