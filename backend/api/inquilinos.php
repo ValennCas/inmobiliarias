@@ -62,11 +62,11 @@
                                                         INNER JOIN alquiler a
                                                             ON a.id_inmobiliaria_propiedad = ip.id_inmobiliaria_propiedad
                                                         INNER JOIN estado_propiedad ep
-                                                            ON ep.estado = "EN ALQUILER"
+                                                            ON ep.estado = :estado_disponible
                                                         SET p.id_estado_propiedad = ep.id_estado_propiedad
                                                         WHERE a.id_inquilino = :id_inquilino');
 
-                $actualizar->execute([":id_inquilino" => $id_inquilino]);
+                $actualizar->execute([":estado_disponible" => "EN ALQUILER", ":id_inquilino" => $id_inquilino]);
                 /*ELIMINAR EL ALQUILER*/
                 $eliminarAlquiler = $this->conexion->prepare('DELETE FROM alquiler
                                                             WHERE id_inquilino = :id_inquilino');

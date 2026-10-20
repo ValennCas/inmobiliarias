@@ -70,10 +70,11 @@
                                                 INNER JOIN propiedad p ON p.id_propiedad = ip.id_propiedad
                                                 INNER JOIN direccion d ON d.id_direccion = p.id_direccion
                                                 INNER JOIN estado_propiedad ep ON ep.id_estado_propiedad = p.id_estado_propiedad
-                                                WHERE ep.estado = "ALQUILADO"
+                                                WHERE ep.estado = :estado_alquilado
                                                 AND (:id_inquilino IS NULL OR a.id_inquilino = :id_inquilino2)
                                                 AND (:id_inmobiliaria IS NULL OR ip.id_inmobiliaria = :id_inmobiliaria2)');
             $consulta->execute([
+                ":estado_alquilado" => "ALQUILADO",
                 ":id_inquilino" => $id_inquilino,
                 ":id_inquilino2" => $id_inquilino,
                 ":id_inmobiliaria" => $id_inmobiliaria,
