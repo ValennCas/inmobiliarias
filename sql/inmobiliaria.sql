@@ -81,6 +81,8 @@ CREATE TABLE `propiedad_foto` (
   `id_propiedad` int(11) NOT NULL,
   `ruta_foto` varchar(500) NOT NULL,
   `orden` int(11) NOT NULL DEFAULT 1,
+  `contenido` mediumblob DEFAULT NULL,
+  `tipo` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id_foto`),
   KEY `id_propiedad` (`id_propiedad`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

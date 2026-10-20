@@ -191,30 +191,44 @@
                 return;
             }
 
-            $carpeta = __DIR__ . "/../cargasImagenes/fotosPropiedades/" . $id_propiedad . "/";
-            if(!is_dir($carpeta)){
-                mkdir($carpeta, 0777, true);
-            }
-
+            // Las fotos se guardan en la base de datos y no en el disco (ya que el disco de Render es temporal)
             $cantidad_actual = $this->propiedades->contarFotos($id_propiedad);
             for($i = 0; $i < count($fotos["name"]); $i++){
+                if($fotos["error"][$i] === UPLOAD_ERR_INI_SIZE || $fotos["error"][$i] === UPLOAD_ERR_FORM_SIZE){
+                    throw new Exception("Una imagen supera el tamaño maximo permitido por el servidor", 400);
+                }
                 if($fotos["error"][$i] !== UPLOAD_ERR_OK){
                     continue;
                 }
-                $extension = strtolower(pathinfo($fotos["name"][$i], PATHINFO_EXTENSION));
-                if(!in_array($extension, ["jpg", "jpeg", "png", "webp"], true)){
+
+                // Se mira el contenido real del archivo, no solo la extension
+                $info = @getimagesize($fotos["tmp_name"][$i]);
+                if($info === false || !in_array($info["mime"], ["image/jpeg", "image/png", "image/webp"], true)){
                     throw new Exception("Formato de imagen no permitido", 400);
                 }
-                $nombre = uniqid("foto_") . "." . $extension;
-                $ruta_completa = $carpeta . $nombre;
-                if(!move_uploaded_file($fotos["tmp_name"][$i], $ruta_completa)){
-                    throw new Exception("No se pudo guardar una imagen", 500);
+                $contenido = file_get_contents($fotos["tmp_name"][$i]);
+                if($contenido === false){
+                    throw new Exception("No se pudo leer una imagen", 500);
                 }
-                $ruta_bd = "cargasImagenes/fotosPropiedades/" . $id_propiedad . "/" . $nombre;
                 $orden = $cantidad_actual + $i + 1;
 
-                $this->propiedades->insertarFoto($id_propiedad, $ruta_bd, $orden);
+                $this->propiedades->insertarFotoEnBase($id_propiedad, $contenido, $info["mime"], $orden);
             }
+        }
+
+        /*DEVOLVER EL CONTENIDO DE UNA FOTO GUARDADA EN LA BASE*/
+        public function obtenerContenidoFoto($id_foto){
+            if($id_foto === null || !filter_var($id_foto, FILTER_VALIDATE_INT)){
+                throw new Exception("El id de la foto es invalido", 400);
+            }
+            $foto = $this->propiedades->buscarContenidoFoto($id_foto);
+            if($foto === false || $foto["contenido"] === null){
+                throw new Exception("No existe esa foto", 404);
+            }
+            return [
+                "tipo" => $foto["tipo"],
+                "contenido" => is_resource($foto["contenido"]) ? stream_get_contents($foto["contenido"]) : $foto["contenido"]
+            ];
         }
 
         public function agregarFotos($id, $fotos){

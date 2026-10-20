@@ -6,6 +6,7 @@ RUN docker-php-ext-install pdo pdo_mysql && a2enmod headers
 
 # Configuracion de produccion de PHP: no muestra errores en pantalla (ensuciarian el JSON), los manda al log
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+COPY docker/php.ini $PHP_INI_DIR/conf.d/habita.ini
 
 # Reglas de Apache (archivos bloqueados, raiz del sitio, fotos sin PHP)
 COPY docker/apache.conf /etc/apache2/conf-available/habita.conf

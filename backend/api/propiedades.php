@@ -220,6 +220,42 @@
             ]);
         }
 
+        /*INSERTAR UNA FOTO GUARDANDO LA IMAGEN EN LA BASE*/
+        public function insertarFotoEnBase($id_propiedad, $contenido, $tipo, $orden){
+            $this->conexion->beginTransaction();
+            try{
+                // ruta_foto no admite NULL: se inserta vacia y se completa con el id que le toco a la foto
+                $consulta = $this->conexion->prepare('INSERT INTO propiedad_foto(id_propiedad, ruta_foto, orden, contenido, tipo)
+                                                    VALUES(:id_propiedad, :ruta_foto, :orden, :contenido, :tipo)');
+                $consulta->bindValue(":id_propiedad", $id_propiedad);
+                $consulta->bindValue(":ruta_foto", "");
+                $consulta->bindValue(":orden", $orden);
+                $consulta->bindValue(":contenido", $contenido, PDO::PARAM_LOB);
+                $consulta->bindValue(":tipo", $tipo);
+                $consulta->execute();
+
+                $id_foto = (int) $this->conexion->lastInsertId();
+                $ruta = "controller/fotoController.php?id_foto=" . $id_foto;
+
+                $actualizar = $this->conexion->prepare('UPDATE propiedad_foto SET ruta_foto = :ruta_foto WHERE id_foto = :id_foto');
+                $actualizar->execute([":ruta_foto" => $ruta, ":id_foto" => $id_foto]);
+
+                $this->conexion->commit();
+                return $ruta;
+            }
+            catch(PDOException $error){
+                $this->conexion->rollBack();
+                throw $error;
+            }
+        }
+
+        /*OBTENER EL CONTENIDO DE UNA FOTO GUARDADA EN LA BASE*/
+        public function buscarContenidoFoto($id_foto){
+            $consulta = $this->conexion->prepare('SELECT tipo, contenido FROM propiedad_foto WHERE id_foto = :id_foto');
+            $consulta->execute([":id_foto" => $id_foto]);
+            return $consulta->fetch(PDO::FETCH_ASSOC);
+        }
+
         /*OBTENER FOTOS DE UNA PROPIEDAD*/
         public function obtenerFotos($id_propiedad){
             $consulta = $this->conexion->prepare('SELECT id_foto, ruta_foto, orden
