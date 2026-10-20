@@ -20,6 +20,15 @@
             entorno("DB_PASS", ""),
             $opciones
         );
+
+        // Los vencimientos que PHP guarda (los codigos para cambiar la contraseña)
+        // se comparan contra NOW() de la base, que en servicios en linea esta en UTC, y vencen antes de tiempo
+        $zona = entorno("APP_TIMEZONE", "America/Argentina/Buenos_Aires");
+        if(!in_array($zona, DateTimeZone::listIdentifiers(), true)){
+            $zona = "America/Argentina/Buenos_Aires";
+        }
+        date_default_timezone_set($zona);
+        $conexion->exec("SET time_zone = '" . (new DateTime("now"))->format("P") . "'");
     }
     catch(PDOException $error){
         error_log("No se pudo conectar a la base: " . $error->getMessage()
