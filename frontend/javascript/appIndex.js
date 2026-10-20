@@ -1,7 +1,7 @@
 const API_URL = BASE_BACKEND + "controller/loginController.php";
 const API_PROPIEDADES_PUBLICAS = BASE_BACKEND + "controller/propiedadesPublicasController.php";
 const API_INMOBILIARIAS_PUBLICAS = BASE_BACKEND + "controller/inmobiliariaPublicaController.php";
-const API_RECUPERAR_CONTRASENIA = BASE_BACKEND + "controller/recuperarContraseniaPublica.php";
+const API_RECUPERAR_CONTRASENIA = BASE_BACKEND + "controller/recuperarContraseniaPublicaController.php";
 const URL_BACKEND = BASE_BACKEND;
 
 /*VARIABLES FORMULARIO LOGIN*/
