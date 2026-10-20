@@ -2,12 +2,14 @@
     class Contactos{
         private PDO $conexion;
 
+        // Guarda la conexion a la base de datos para usarla en las consultas
         public function __construct(PDO $conexion){
             $this->conexion = $conexion;
         }
 
         // Devuelve la propiedad con su direccion y los datos de la inmobiliaria (incluido su email),
         // o false si esa propiedad no pertenece a esa inmobiliaria
+        // Busca la propiedad con su direccion y los datos de contacto de la inmobiliaria indicada
         public function buscarPropiedadConInmobiliaria($id_inmobiliaria, $id_propiedad){
             $consulta = $this->conexion->prepare('SELECT p.id_propiedad, p.descripcion, p.precio,
                            d.provincia, d.ciudad, d.calle, d.altura,

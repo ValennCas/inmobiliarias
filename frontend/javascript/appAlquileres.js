@@ -1,11 +1,8 @@
 const API_ALQUILER = BASE_BACKEND + "controller/alquileresController.php";
 const URL_BACKEND = BASE_BACKEND;
 
-/*
-    MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA
-    SE MANEJAN DESDE:
-    menuInmobiliaria.js
-*/
+/*MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA
+  SE MANEJAN DESDE: menuInmobiliaria.js*/
 
 /*DATOS DE SESION*/
 const token = localStorage.getItem("token");
@@ -17,7 +14,7 @@ if(!token || !id_usuario || !id_inmobiliaria){
     window.location.replace("index.html");
 }
 
-/*VALIDAR SI SE VOLVIO CON LAS FLECHAS*/
+/*VALIDAR SI SE VOLVIO CON LAS FLECHAS HACIA ATRAS, EN ESE CASO HAY QUE INICIAR SESION NUEVAMENTE*/
 window.addEventListener("pageshow", function(evento){
     const navegacion = performance.getEntriesByType("navigation")[0];
 
@@ -104,13 +101,13 @@ function formatearPrecio(precio){
     return Number(precio).toLocaleString("es-AR");
 }
 
-/*MOSTRAR CUANDO NO HAY ALQUILERES*/
+/*MOSTRAR MENSAJE CUANDO NO HAY ALQUILERES*/
 function mostrarSinAlquileres(){
     listaAlquileres.innerHTML = "";
     sinAlquileres.classList.remove("oculto");
 }
 
-/*MOSTRAR ERROR EN LISTADO*/
+/*MOSTRAR MENSAJE DE ERROR EN EL LISTADO*/
 function mostrarErrorAlquileres(mensaje){
     listaAlquileres.innerHTML = "";
     sinAlquileres.classList.remove("oculto");
@@ -120,6 +117,7 @@ function mostrarErrorAlquileres(mensaje){
 /*CARGAR ALQUILERES*/
 async function cargarAlquileres(){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -139,18 +137,21 @@ async function cargarAlquileres(){
         const datos = await res.json();
 
         if(res.status === 404){
+            // Muestra el mensaje cuando no hay alquileres
             mostrarSinAlquileres();
             return;
         }
-
         if(!res.ok){
+            // Muestra un error al cargar los alquileres
             mostrarErrorAlquileres(datos.error || datos.mensaje || "No se pudieron cargar los alquileres");
             return;
         }
 
+        // Muestra los alquileres cargados
         mostrarAlquileres(datos);
     }catch(error){
         console.error(error);
+        // Muestra un error al cargar los alquileres
         mostrarErrorAlquileres("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
@@ -163,6 +164,7 @@ function mostrarAlquileres(datos){
 
     let alquileres = [];
 
+    // Revisamos si los datos llegaron como un array, dentro de datos.alquileres como un solo alquiler o como un objeto con id_alquiler
     if(Array.isArray(datos)){
         alquileres = datos;
     }else if(Array.isArray(datos.alquileres)){
@@ -174,12 +176,15 @@ function mostrarAlquileres(datos){
     }
 
     if(alquileres.length === 0){
+        // Muestra el mensaje cuando no hay alquileres
         mostrarSinAlquileres();
         return;
     }
 
     sinAlquileres.classList.add("oculto");
 
+    // Recorremos todos los alquileres, creamos una tarjeta para cada uno, mostramos su foto o un mensaje si no tiene, 
+    // cargamos sus datos y fechas, agregamos los botones y despues asignamos los eventos
     alquileres.forEach(function(alquiler){
         const tarjeta = document.createElement("article");
         tarjeta.classList.add("tarjetaAlquiler");
@@ -232,12 +237,14 @@ function agregarEventosAlquileres(){
     const botonesCambiarEstado = document.querySelectorAll(".btnCambiarEstadoAlquiler");
 
     botonesVer.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             verAlquiler(boton.dataset.id);
         });
     });
 
     botonesCambiarEstado.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             abrirCambiarEstado(boton.dataset.idAlquiler, boton.dataset.idPropiedad);
         });
@@ -247,6 +254,7 @@ function agregarEventosAlquileres(){
 /*VISUALIZAR ALQUILER*/
 async function verAlquiler(id_alquiler){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -266,12 +274,14 @@ async function verAlquiler(id_alquiler){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra un mensaje de error
             mostrarError(datos.error || datos.mensaje || "No se pudo cargar el alquiler");
             return;
         }
 
         const alquiler = datos.alquiler || datos;
 
+        // Cargamos los datos del alquiler y del inquilino, mostramos la imagen si existe y abrimos la ventana de detalle
         verTituloAlquiler.textContent = alquiler.titulo || "Alquiler";
         verDireccionAlquiler.textContent = `${alquiler.calle || ""} ${alquiler.altura || ""}`;
         verCiudadAlquiler.textContent = alquiler.ciudad || "";
@@ -297,6 +307,7 @@ async function verAlquiler(id_alquiler){
         ventanaVerAlquiler.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje de error
         mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
@@ -326,7 +337,9 @@ function cerrarCambiarEstado(){
     ventanaCambiarEstado.classList.add("ocultarVentana");
 }
 
+// Maneja el click de btn cerrar cambiar estado
 btnCerrarCambiarEstado.addEventListener("click", cerrarCambiarEstado);
+// Maneja el click de btn cancelar cambiar estado
 btnCancelarCambiarEstado.addEventListener("click", cerrarCambiarEstado);
 
 /*CERRAR VENTANAS TOCANDO AFUERA*/
@@ -336,6 +349,7 @@ ventanaVerAlquiler.addEventListener("click", function(evento){
     }
 });
 
+// Maneja el click de ventana cambiar estado
 ventanaCambiarEstado.addEventListener("click", function(evento){
     if(evento.target === ventanaCambiarEstado){
         cerrarCambiarEstado();
@@ -357,6 +371,7 @@ formCambiarEstado.addEventListener("submit", async function(evento){
     };
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarEstado.disabled = true;
 
@@ -386,6 +401,7 @@ formCambiarEstado.addEventListener("submit", async function(evento){
 
         cerrarCambiarEstado();
         await cargarAlquileres();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Estado de la propiedad actualizado correctamente");
     }catch(error){
         console.error(error);

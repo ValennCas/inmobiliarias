@@ -2,10 +2,12 @@
     class Alquileres{
         private PDO $conexion;
 
+        // Guarda la conexion a la base de datos para usarla en las consultas
         public function __construct(PDO $conexion){
             $this->conexion = $conexion;
         }
 
+        // Busca el id del inquilino y devuelve si existe en la base de datos
         public function inquilinoExiste($id_inquilino){
             $consulta = $this->conexion->prepare('SELECT id_inquilino FROM inquilino WHERE id_inquilino = :id');
             $consulta->execute([":id" => $id_inquilino]);
@@ -13,6 +15,7 @@
         }
 
         // Devuelve la fila de inmobiliaria_propiedad con el estado actual de la propiedad, o false si no estan vinculadas
+        // Busca la relacion entre la inmobiliaria y la propiedad junto con su estado actual
         public function buscarVinculo($id_inmobiliaria, $id_propiedad){
             $consulta = $this->conexion->prepare('SELECT ip.id_inmobiliaria_propiedad, e.estado
                                                 FROM inmobiliaria_propiedad ip
@@ -24,7 +27,9 @@
         }
 
         // Crea el alquiler y cambia el estado de la propiedad en una sola transaccion
+        // Guarda el alquiler y cambia el estado de la propiedad dentro de la misma transaccion
         public function insertarAlquiler($datos, $id_inmobiliaria_propiedad, $estado_nuevo){
+            // Inicia una transaccion para guardar juntos los cambios de esta operacion
             $this->conexion->beginTransaction();
             try{
                 $alquiler = $this->conexion->prepare('INSERT INTO alquiler(id_inmobiliaria_propiedad, id_inquilino, precio, fecha_inicio, fecha_fin)
@@ -44,16 +49,19 @@
                                                     WHERE ip.id_inmobiliaria_propiedad = :id_inmobiliaria_propiedad');
                 $estado->execute([":estado" => $estado_nuevo, ":id_inmobiliaria_propiedad" => $id_inmobiliaria_propiedad]);
 
+                // Confirma los cambios de la transaccion
                 $this->conexion->commit();
                 return $id_alquiler;
             }
             catch(PDOException $error){
+                // Deshace los cambios de la transaccion antes de devolver el error
                 $this->conexion->rollBack();
                 throw $error;
             }
         }
 
         // Los filtros son opcionales: id_inquilino e id_inmobiliaria
+        // Lista los alquileres de propiedades en estado ALQUILADO con filtros opcionales de inquilino e inmobiliaria
         public function listarAlquileres($id_inquilino = null, $id_inmobiliaria = null){
             $consulta = $this->conexion->prepare('SELECT a.id_alquiler, a.precio, a.fecha_inicio, a.fecha_fin,
                                                         a.id_inquilino, i.nombre AS nombre_inquilino, i.apellido AS apellido_inquilino,
@@ -83,6 +91,7 @@
             return $consulta->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        // Busca el alquiler por su id con los datos del inquilino, la propiedad y su primera foto
         public function buscarAlquiler($id_alquiler){
             $consulta = $this->conexion->prepare('SELECT a.id_alquiler, a.precio, a.fecha_inicio, a.fecha_fin,
                                                         a.id_inquilino, i.nombre AS nombre_inquilino, i.apellido AS apellido_inquilino,
@@ -107,6 +116,7 @@
         }
 
         // Solo se pueden cambiar precio y fechas; la propiedad y el inquilino no cambian
+        // Actualiza el precio y las fechas del alquiler indicado
         public function modificarAlquiler($id_alquiler, $datos){
             $modificar = $this->conexion->prepare('UPDATE alquiler
                                                 SET precio = :precio, fecha_inicio = :fecha_inicio, fecha_fin = :fecha_fin
@@ -120,9 +130,12 @@
         }
 
         // Borra el alquiler, elimina el inquilino y deja la propiedad en el estado indicado
+        // Cambia el estado de la propiedad y borra el alquiler y su inquilino en una misma transaccion
         public function eliminarAlquiler($id_alquiler, $estado_nuevo){
+            // Inicia una transaccion para guardar juntos los cambios de esta operacion
             $this->conexion->beginTransaction();
             try{
+                // Busca el inquilino del alquiler antes de borrar los registros relacionados
                 $consultaInquilino = $this->conexion->prepare('SELECT id_inquilino
                                                             FROM alquiler
                                                             WHERE id_alquiler = :id_alquiler');
@@ -150,20 +163,25 @@
                     ":estado" => $estado_nuevo,
                     ":id_alquiler" => $id_alquiler
                 ]);
+                // Prepara el borrado de los alquileres que corresponden a esta operacion
                 $eliminarAlquiler = $this->conexion->prepare('DELETE FROM alquiler
                                                             WHERE id_alquiler = :id_alquiler');
                 $eliminarAlquiler->execute([
                     ":id_alquiler" => $id_alquiler
                 ]);
+                // Prepara el borrado del inquilino una vez eliminados los alquileres correspondientes
                 $eliminarInquilino = $this->conexion->prepare('DELETE FROM inquilino
                                                             WHERE id_inquilino = :id_inquilino');
                 $eliminarInquilino->execute([
                     ":id_inquilino" => $id_inquilino
                 ]);
+                // Confirma los cambios de la transaccion
                 $this->conexion->commit();
             }
             catch(Exception $error){
+                // Comprueba que haya una transaccion activa antes de intentar deshacerla
                 if($this->conexion->inTransaction()){
+                    // Deshace los cambios de la transaccion antes de devolver el error
                     $this->conexion->rollBack();
                 }
                 throw $error;

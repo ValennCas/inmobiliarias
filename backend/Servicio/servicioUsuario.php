@@ -1,13 +1,16 @@
 <?php
+    // Carga los archivos que necesita este servicio
     require_once __DIR__ . '/../api/usuario.php';
 
     class ServicioUsuario{
         private Usuario $usuario;
 
+        // Prepara el acceso a los datos que necesita este servicio
         public function __construct(Usuario $usuario){
             $this->usuario = $usuario;
         }
 
+        // Valida los datos, comprueba que la cuenta exista y devuelve el usuario actualizado
         public function actualizarUsuario($id_usuario, $obtener_datos){
             if($id_usuario === null || $id_usuario <= 0){
                 throw new Exception("El id del usuario es invalido", 400);
@@ -41,6 +44,7 @@
             }
         }
 
+        // Valida el id y devuelve los datos del usuario si la cuenta existe
         public function buscarUsuario($id_usuario){
             if($id_usuario === null || $id_usuario <= 0){
                 throw new Exception("El id del usuario es invalido", 400);
@@ -55,6 +59,7 @@
             return $usuario;
         }
 
+        // Comprueba la contrasenia actual y valida la nueva antes de guardar su hash
         public function cambiarContrasenia($id_usuario, $datos){
             $passwordActual = $datos["passwordActual"] ?? "";
             $passwordNueva = $datos["passwordNueva"] ?? "";
@@ -70,10 +75,12 @@
                 throw new Exception("Usuario no encontrado", 404);
             }
 
+            // Comprueba que la contrasenia actual coincida con la guardada
             if(!password_verify($passwordActual, $usuario["password"])){
                 throw new Exception("La contraseña actual es incorrecta", 400);
             }
 
+            // Comprueba que las dos copias de la nueva contrasenia coincidan
             if($passwordNueva !== $repetirPasswordNueva){
                 throw new Exception("Las contraseñas nuevas no coinciden", 400);
             }
@@ -82,16 +89,19 @@
                 throw new Exception("La nueva contraseña debe tener al menos 6 caracteres", 400);
             }
 
+            // Impide usar otra vez la contrasenia actual
             if(password_verify($passwordNueva, $usuario["password"])){
                 throw new Exception("La nueva contraseña debe ser diferente a la actual", 400);
             }
 
+            // Genera el hash de la nueva contrasenia antes de guardarla
             $passwordHash = password_hash($passwordNueva, PASSWORD_DEFAULT);
             $this->usuario->cambiarContrasenia($id_usuario, $passwordHash);
 
             return ["mensaje" => "Contraseña actualizada correctamente"];
         }
 
+        // Comprueba que el nombre, el apellido y el email esten completos
         private function validarDatos($datos){
             foreach(["nombre_usuario", "apellido_usuario", "email"] as $campo){
                 if(!isset($datos[$campo]) || trim((string) $datos[$campo]) === ""){

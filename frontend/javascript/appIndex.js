@@ -80,7 +80,9 @@ let propiedadSeleccionada = null;
 let imagenesPropiedad = [];
 let indiceImagen = 0;
 
+// Recorre los elementos para agregar su comportamiento de visualizar o no la contraseña segun corresponda
 document.querySelectorAll(".btnMostrarPassword").forEach(function(boton){
+    // Maneja el click de boton
     boton.addEventListener("click", function(){
         const input = boton.previousElementSibling;
 
@@ -94,7 +96,10 @@ document.querySelectorAll(".btnMostrarPassword").forEach(function(boton){
     });
 });
 
+// Carga las provincias disponibles
 cargarProvincias(filtroProvincia, filtroCiudad);
+
+// Maneja el cambio de filtro provincia y carga las ciudades de la provincia seleccionada
 filtroProvincia.addEventListener("change", function(){
     cargarCiudades(filtroProvincia.value, filtroCiudad);
 });
@@ -119,6 +124,7 @@ btnLimpiar.addEventListener("click", function(){
     filtroInmobiliaria.value = "";
     filtroProvincia.value = "";
     filtroCiudad.value = "";
+    // Muestra las propiedades cargadas
     mostrarPropiedades(propiedadesPublicas);
 });
 
@@ -212,10 +218,12 @@ async function cargarPropiedades(){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra el mensaje cuando no hay propiedades
             mostrarSinPropiedades();
             return;
         }
 
+        //Revisamos de que forma llegaron los datos de las  propiedades y armamos un array para trabajar siempre de la misma manera
         let propiedades = [];
         if(Array.isArray(datos)){
             propiedades = datos;
@@ -228,9 +236,11 @@ async function cargarPropiedades(){
         propiedadesPublicas = propiedades.filter(function(propiedad){
             return propiedad.estado === "EN VENTA" || propiedad.estado === "EN ALQUILER";
         });
+        // Muestra las propiedades cargadas
         mostrarPropiedades(propiedadesPublicas);
     }catch(error){
         console.error(error);
+        // Muestra el mensaje cuando no hay propiedades
         mostrarSinPropiedades();
     }
 }
@@ -249,6 +259,7 @@ function mostrarPropiedades(propiedades){
     listaPropiedades.innerHTML = "";
 
     if(propiedades.length === 0){
+        // Muestra el mensaje cuando no hay propiedades
         mostrarSinPropiedades();
         return;
     }
@@ -294,12 +305,14 @@ function agregarEventosPropiedades(){
     const botonesContactar = document.querySelectorAll(".btnContactar");
 
     botonesVer.forEach(function(boton){
+        // Maneja el click de boton ver la propiedad
         boton.addEventListener("click", function(){
             abrirPropiedad(boton.dataset.id);
         });
     });
 
     botonesContactar.forEach(function(boton){
+        // Maneja el click de boton ir a contacto
         boton.addEventListener("click", function(){
             irContacto(boton.dataset.id, boton.dataset.inmobiliaria);
         });
@@ -327,11 +340,12 @@ function abrirPropiedad(id_propiedad){
     imagenesPropiedad = propiedadSeleccionada.fotos || [];
     indiceImagen = 0;
 
+    // Muestra la imagen actual del carrusel
     mostrarImagenCarrusel();
     ventanaVerPropiedad.classList.remove("ocultarVentana");
 }
 
-/*CARRUSEL*/
+/*PARA ACOMODAR LAS IMAGNES EN FORMA DE CARRUSEL*/
 function mostrarImagenCarrusel(){
     if(imagenesPropiedad.length === 0){
         fotoPropiedad.src = "img/sin-imagen.jpg";
@@ -353,6 +367,7 @@ function mostrarImagenCarrusel(){
     }
 }
 
+// Maneja el click de btn foto anterior
 btnFotoAnterior.addEventListener("click", function(){
     indiceImagen--;
 
@@ -360,9 +375,11 @@ btnFotoAnterior.addEventListener("click", function(){
         indiceImagen = imagenesPropiedad.length - 1;
     }
 
+    // Muestra la imagen actual del carrusel
     mostrarImagenCarrusel();
 });
 
+// Maneja el click de btn foto siguiente
 btnFotoSiguiente.addEventListener("click", function(){
     indiceImagen++;
 
@@ -370,6 +387,7 @@ btnFotoSiguiente.addEventListener("click", function(){
         indiceImagen = 0;
     }
 
+    // Muestra la imagen actual del carrusel
     mostrarImagenCarrusel();
 });
 
@@ -381,8 +399,10 @@ function cerrarVerPropiedad(){
     ventanaVerPropiedad.classList.add("ocultarVentana");
 }
 
+// Maneja el click de btn cerrar ver propiedad
 btnCerrarVerPropiedad.addEventListener("click", cerrarVerPropiedad);
 
+// Maneja el click de ventana ver propiedad
 ventanaVerPropiedad.addEventListener("click", function(evento){
     if(evento.target === ventanaVerPropiedad){
         cerrarVerPropiedad();
@@ -394,14 +414,15 @@ function irContacto(id_propiedad, id_inmobiliaria){
     window.location.href = `contacto.html?id_propiedad=${id_propiedad}&id_inmobiliaria=${id_inmobiliaria}`;
 }
 
+// Maneja el click de btn contactar por la propiedad con la inmobiliaria
 btnContactarPropiedad.addEventListener("click", function(){
     if(!propiedadSeleccionada){
         return;
     }
-
     irContacto(propiedadSeleccionada.id_propiedad, propiedadSeleccionada.id_inmobiliaria);
 });
 
+// Carga las inmobiliarias del usuario
 async function cargarInmobiliarias(){
     try{
         const res = await fetch(API_INMOBILIARIAS_PUBLICAS);
@@ -520,11 +541,16 @@ function cerrarRecuperarContrasenia(){
     tokenRecuperacion = "";
 }
 
+// Maneja el click de btn cerrar recuperar
 btnCerrarRecuperar.addEventListener("click", cerrarRecuperarContrasenia);
+// Maneja el click de btn cancelar recuperar
 btnCancelarRecuperar.addEventListener("click", cerrarRecuperarContrasenia);
+// Maneja el click de btn cancelar codigo
 btnCancelarCodigo.addEventListener("click", cerrarRecuperarContrasenia);
+// Maneja el click de btn cancelar nueva contrasenia
 btnCancelarNuevaContrasenia.addEventListener("click", cerrarRecuperarContrasenia);
 
+// Maneja el click de ventana recuperar contrasenia
 ventanaRecuperarContrasenia.addEventListener("click", function(evento){
     if(evento.target === ventanaRecuperarContrasenia){
         cerrarRecuperarContrasenia();
@@ -584,7 +610,9 @@ formBuscarUsuario.addEventListener("submit", async function(evento){
     }
 });
 
-/*VERIFICAR CODIGO*/
+/*VERIFICAR CODIGO
+Validamos que el codigo ingresado tenga 4 numeros y lo enviamos al backend para comprobar que corresponda al usuario antes de permitir 
+cambiar la contrasenia*/
 formCodigo.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
@@ -637,7 +665,9 @@ formCodigo.addEventListener("submit", async function(evento){
     }
 });
 
-/*CAMBIAR CONTRASENIA*/
+/*CAMBIAR CONTRASENIA
+Validamos la nueva contrasenia y su confirmacion, comprobamos que la recuperacion haya sido verificada y enviamos el cambio al backend 
+usando el token de recuperacion*/
 formNuevaContrasenia.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
@@ -716,6 +746,7 @@ formNuevaContrasenia.addEventListener("submit", async function(evento){
 
 /*INICIAR*/
 cargarInmobiliarias();
+// Carga las propiedades disponibles
 cargarPropiedades();
 
 

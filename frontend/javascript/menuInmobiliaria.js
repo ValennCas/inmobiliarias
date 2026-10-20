@@ -1,3 +1,4 @@
+// Agrupa las funciones y eventos del menu
 (function(){
     const API_INMOBILIARIA = BASE_BACKEND + "controller/inmobiliariaController.php";
     const API_USUARIO = BASE_BACKEND + "controller/usuarioController.php";
@@ -145,7 +146,9 @@
         ventanaCambiarContrasenia.classList.remove("ocultarVentana");
     }
 
+    // Recorre los elementos para agregar su comportamiento
     ventanaCambiarContrasenia.querySelectorAll(".btnMostrarPassword").forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             const input = boton.previousElementSibling;
 
@@ -161,6 +164,7 @@
 
     /*CAMBIAR CONTRASENIA*/
     if(formCambiarContrasenia){
+        // Maneja el envio de form cambiar contrasenia
         formCambiarContrasenia.addEventListener("submit", async function(evento){
             evento.preventDefault();
 
@@ -177,6 +181,7 @@
             };
 
             try{
+                // Muestra la pantalla de carga
                 mostrarCarga();
                 btnGuardarNuevaContrasenia.disabled = true;
 
@@ -202,6 +207,7 @@
                 }
 
                 cerrarCambiarContrasenia();
+                // Muestra el mensaje de operacion exitosa
                 mostrarExito("Contraseña actualizada correctamente");
             }catch(error){
                 console.error(error);
@@ -221,6 +227,7 @@
     }
 
     if(btnCancelarCambiarContrasenia){
+        // Maneja el click de btn cancelar cambiar contrasenia
         btnCancelarCambiarContrasenia.addEventListener("click", cerrarCambiarContrasenia);
     }
 
@@ -290,6 +297,7 @@
     /*VER DATOS INMOBILIARIA*/
     async function abrirVerInmobiliaria(){
         try{
+            // Muestra la pantalla de carga
             mostrarCarga();
 
             const res = await fetch(
@@ -309,6 +317,7 @@
             const datos = await res.json();
 
             if(!res.ok){
+                // Muestra un mensaje de error
                 mostrarError(datos.error || datos.mensaje || "No se pudieron cargar los datos de la inmobiliaria");
                 return;
             }
@@ -327,6 +336,7 @@
             ventanaVerInmobiliaria.classList.remove("ocultarVentana");
         }catch(error){
             console.error(error);
+            // Muestra un mensaje de error
             mostrarError("No se pudo conectar con el servidor");
         }finally{
             ocultarCarga();
@@ -341,6 +351,7 @@
     /*ABRIR EDITAR INMOBILIARIA*/
     async function abrirEditarInmobiliaria(){
         try{
+            // Muestra la pantalla de carga
             mostrarCarga();
 
             const res = await fetch(
@@ -360,6 +371,7 @@
             const datos = await res.json();
 
             if(!res.ok){
+                // Muestra un mensaje de error
                 mostrarError(datos.error || datos.mensaje || "No se pudieron cargar los datos de la inmobiliaria");
                 return;
             }
@@ -388,6 +400,7 @@
             ventanaEditarInmobiliaria.classList.remove("ocultarVentana");
         }catch(error){
             console.error(error);
+            // Muestra un mensaje de error
             mostrarError("No se pudo conectar con el servidor");
         }finally{
             ocultarCarga();
@@ -402,6 +415,7 @@
 
     /*GUARDAR EDICION INMOBILIARIA*/
     if(formEditarInmobiliaria){
+        // Maneja el envio de form editar inmobiliaria
         formEditarInmobiliaria.addEventListener("submit", async function(evento){
             evento.preventDefault();
 
@@ -432,6 +446,7 @@
             };
 
             try{
+                // Muestra la pantalla de carga
                 mostrarCarga();
 
                 const res = await fetch(
@@ -461,6 +476,7 @@
                 cerrarEditarInmobiliaria();
                 await cargarDatosInmobiliariaMenu();
 
+                // Muestra el mensaje de operacion exitosa
                 mostrarExito("Datos de la inmobiliaria actualizados correctamente");
             }catch(error){
                 console.error(error);
@@ -475,6 +491,7 @@
     /*ABRIR MIS DATOS*/
     async function abrirMisDatos(){
         try{
+            // Muestra la pantalla de carga
             mostrarCarga();
 
             const res = await fetch(
@@ -494,6 +511,7 @@
             const datos = await res.json();
 
             if(!res.ok){
+                // Muestra un mensaje de error
                 mostrarError(datos.error || datos.mensaje || "No se pudieron cargar los datos de la cuenta");
                 return;
             }
@@ -505,6 +523,7 @@
             ventanaMisDatos.classList.remove("ocultarVentana");
         }catch(error){
             console.error(error);
+            // Muestra un mensaje de error
             mostrarError("No se pudo conectar con el servidor");
         }finally{
             ocultarCarga();
@@ -535,6 +554,7 @@
 
     /*GUARDAR MIS DATOS*/
     if(formEditarMisDatos){
+        // Maneja el envio de form editar mis datos
         formEditarMisDatos.addEventListener("submit", async function(evento){
             evento.preventDefault();
 
@@ -555,6 +575,7 @@
             };
 
             try{
+                // Muestra la pantalla de carga
                 mostrarCarga();
 
                 const res = await fetch(
@@ -583,6 +604,7 @@
                 cerrarEditarMisDatos();
                 await abrirMisDatos();
 
+                // Muestra el mensaje de operacion exitosa
                 mostrarExito("Datos de la cuenta actualizados correctamente");
             }catch(error){
                 console.error(error);
@@ -596,59 +618,69 @@
 
     /*NAVEGACION*/
     if(btnPropiedades){
+        // Maneja el click de btn propiedades
         btnPropiedades.addEventListener("click", function(){
             window.location.href = "inmobiliaria.html";
         });
     }
 
     if(btnAlquileres){
+        // Maneja el click de btn alquileres
         btnAlquileres.addEventListener("click", function(){
             window.location.href = "alquileres.html";
         });
     }
 
     if(btnInquilinos){
+        // Maneja el click de btn inquilinos
         btnInquilinos.addEventListener("click", function(){
             window.location.href = "inquilino.html";
         });
     }
 
     if(btnVolverInmobiliarias){
+        // Maneja el click de btn volver inmobiliarias
         btnVolverInmobiliarias.addEventListener("click", function(){
             window.location.href = "inicioInmobiliaria.html";
         });
     }
 
     if(btnCambiarContrasenia){
+        // Maneja el click de btn cambiar contrasenia
         btnCambiarContrasenia.addEventListener("click", abrirCambiarContrasenia);
     }
 
     /*NAVEGACION MOBILE*/
     if(btnPropiedadesMobile){
+        // Maneja el click de btn propiedades mobile
         btnPropiedadesMobile.addEventListener("click", function(){
             window.location.href = "inmobiliaria.html";
         });
     }
 
     if(btnAlquileresMobile){
+        // Maneja el click de btn alquileres mobile
         btnAlquileresMobile.addEventListener("click", function(){
             window.location.href = "alquileres.html";
         });
     }
 
     if(btnInquilinosMobile){
+        // Maneja el click de btn inquilinos mobile
         btnInquilinosMobile.addEventListener("click", function(){
             window.location.href = "inquilino.html";
         });
     }
 
     if(btnVolverMobile){
+        // Maneja el click de btn volver mobile
         btnVolverMobile.addEventListener("click", function(){
             window.location.href = "inicioInmobiliaria.html";
         });
     }
 
     if(btnCambiarContraseniaMobile){
+        // Maneja el click de btn cambiar contrasenia mobile
         btnCambiarContraseniaMobile.addEventListener("click", function(){
             if(submenuMobile){
                 submenuMobile.classList.add("oculto");
@@ -659,6 +691,7 @@
 
     /*MENU MOBILE*/
     if(btnMenuMobile){
+        // Maneja el click de btn menu mobile
         btnMenuMobile.addEventListener("click", function(){
             submenuMobile.classList.toggle("oculto");
         });
@@ -666,11 +699,13 @@
 
     /*CERRAR CAMBIAR CONTRASEÑA*/
     if(btnCerrarCambiarContrasenia){
+        // Maneja el click de btn cerrar cambiar contrasenia
         btnCerrarCambiarContrasenia.addEventListener("click", cerrarCambiarContrasenia);
     }
 
     /*CERRAR VENTANA DE CONTRASEÑA TOCANDO AFUERA*/
     if(ventanaCambiarContrasenia){
+        // Maneja el click de ventana cambiar contrasenia
         ventanaCambiarContrasenia.addEventListener("click", function(evento){
             if(evento.target === ventanaCambiarContrasenia){
                 cerrarCambiarContrasenia();
@@ -685,28 +720,34 @@
     }
 
     if(btnCerrarSesion){
+        // Maneja el click de btn cerrar sesion
         btnCerrarSesion.addEventListener("click", cerrarSesion);
     }
 
     if(btnCerrarSesionMobile){
+        // Maneja el click de btn cerrar sesion mobile
         btnCerrarSesionMobile.addEventListener("click", cerrarSesion);
     }
 
     /*EVENTOS VER INMOBILIARIA*/
     if(btnVerInmobiliaria){
+        // Maneja el click de btn ver inmobiliaria
         btnVerInmobiliaria.addEventListener("click", abrirVerInmobiliaria);
     }
 
     if(btnCerrarVerInmobiliaria){
+        // Maneja el click de btn cerrar ver inmobiliaria
         btnCerrarVerInmobiliaria.addEventListener("click", cerrarVerInmobiliaria);
     }
 
     /*EVENTOS EDITAR INMOBILIARIA*/
     if(btnEditarInmobiliaria){
+        // Maneja el click de btn editar inmobiliaria
         btnEditarInmobiliaria.addEventListener("click", abrirEditarInmobiliaria);
     }
 
     if(btnEditarInmobiliariaMobile){
+        // Maneja el click de btn editar inmobiliaria mobile
         btnEditarInmobiliariaMobile.addEventListener("click", function(){
             if(submenuMobile){
                 submenuMobile.classList.add("oculto");
@@ -717,18 +758,22 @@
     }
 
     if(btnCerrarEditarInmobiliaria){
+        // Maneja el click de btn cerrar editar inmobiliaria
         btnCerrarEditarInmobiliaria.addEventListener("click", cerrarEditarInmobiliaria);
     }
     if(btnCancelarEditarInmobiliaria){
+        // Maneja el click de btn cancelar editar inmobiliaria
         btnCancelarEditarInmobiliaria.addEventListener("click", cerrarEditarInmobiliaria);
     }
 
     /*EVENTOS MIS DATOS*/
     if(btnMisDatos){
+        // Maneja el click de btn mis datos
         btnMisDatos.addEventListener("click", abrirMisDatos);
     }
 
     if(btnMisDatosMobile){
+        // Maneja el click de btn mis datos mobile
         btnMisDatosMobile.addEventListener("click", function(){
             if(submenuMobile){
                 submenuMobile.classList.add("oculto");
@@ -738,19 +783,24 @@
     }
 
     if(btnCerrarMisDatos){
+        // Maneja el click de btn cerrar mis datos
         btnCerrarMisDatos.addEventListener("click", cerrarMisDatos);
     }
     if(btnEditarMisDatos){
+        // Maneja el click de btn editar mis datos
         btnEditarMisDatos.addEventListener("click", abrirEditarMisDatos);
     }
     if(btnCerrarEditarMisDatos){
+        // Maneja el click de btn cerrar editar mis datos
         btnCerrarEditarMisDatos.addEventListener("click", cerrarEditarMisDatos);
     }
     if(btnCancelarEditarUsuario){
+        // Maneja el click de btn cancelar editar usuario
         btnCancelarEditarUsuario.addEventListener("click", cerrarEditarMisDatos);
     }
     /*CERRAR VENTANAS TOCANDO AFUERA*/
     if(ventanaVerInmobiliaria){
+        // Maneja el click de ventana ver inmobiliaria
         ventanaVerInmobiliaria.addEventListener("click", function(evento){
             if(evento.target === ventanaVerInmobiliaria){
                 cerrarVerInmobiliaria();
@@ -759,6 +809,7 @@
     }
 
     if(ventanaEditarInmobiliaria){
+        // Maneja el click de ventana editar inmobiliaria
         ventanaEditarInmobiliaria.addEventListener("click", function(evento){
             if(evento.target === ventanaEditarInmobiliaria){
                 cerrarEditarInmobiliaria();
@@ -767,6 +818,7 @@
     }
 
     if(ventanaMisDatos){
+        // Maneja el click de ventana mis datos
         ventanaMisDatos.addEventListener("click", function(evento){
             if(evento.target === ventanaMisDatos){
                 cerrarMisDatos();
@@ -774,6 +826,7 @@
         });
     }
     if(ventanaEditarMisDatos){
+        // Maneja el click de ventana editar mis datos
         ventanaEditarMisDatos.addEventListener("click", function(evento){
             if(evento.target === ventanaEditarMisDatos){
                 cerrarEditarMisDatos();
@@ -782,9 +835,12 @@
     }
     /*CARGAR PROVINCIAS EDICION INMOBILIARIA*/
     if(editarProvinciaInmobiliaria && editarCiudadInmobiliaria){
+        // Carga las provincias disponibles
         cargarProvincias(editarProvinciaInmobiliaria, editarCiudadInmobiliaria);
 
+        // Maneja el cambio de editar provincia inmobiliaria
         editarProvinciaInmobiliaria.addEventListener("change", function(){
+            // Carga las ciudades de la provincia seleccionada
             cargarCiudades(editarProvinciaInmobiliaria.value, editarCiudadInmobiliaria);
         });
     }

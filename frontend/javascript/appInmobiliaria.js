@@ -36,7 +36,7 @@ window.addEventListener("pageshow", function(evento){
     }
 });
 
-/*ELEMENTOS MENU*/
+/*ELEMENTOS DEL MENU*/
 const nombreInmobiliaria = document.querySelector("#nombreInmobiliaria");
 const emailInmobiliaria = document.querySelector("#emailInmobiliaria");
 
@@ -46,7 +46,7 @@ const btnInquilinos = document.querySelector("#btnInquilinos");
 const btnVolverInmobiliarias = document.querySelector("#btnVolverInmobiliarias");
 const btnCerrarSesion = document.querySelector("#btnCerrarSesion");
 
-/*MENU CELULAR*/
+/*MENU DEL CELULAR*/
 const btnPropiedadesMobile = document.querySelector("#btnPropiedadesMobile");
 const btnAlquileresMobile = document.querySelector("#btnAlquileresMobile");
 const btnInquilinosMobile = document.querySelector("#btnInquilinosMobile");
@@ -55,12 +55,12 @@ const btnMenuMobile = document.querySelector("#btnMenuMobile");
 const submenuMobile = document.querySelector("#submenuMobile");
 const btnCerrarSesionMobile = document.querySelector("#btnCerrarSesionMobile");
 
-/*PROPIEDADES*/
+/*ELEMENTOS PARA LISTAR PROPIEDADES*/
 const btnAgregarPropiedad = document.querySelector("#btnAgregarPropiedad");
 const listaPropiedades = document.querySelector("#listaPropiedades");
 const sinPropiedades = document.querySelector("#sinPropiedades");
 
-/*AGREGAR*/
+/*AGREGAR PROPIEDADES*/
 const ventanaAgregarPropiedad = document.querySelector("#ventanaAgregarPropiedad");
 const btnCerrarAgregar = document.querySelector("#btnCerrarAgregar");
 const btnCancelarAgregar = document.querySelector("#btnCancelarAgregar");
@@ -159,7 +159,6 @@ function validarSesionRespuesta(res){
         window.location.replace("index.html");
         return false;
     }
-
     return true;
 }
 
@@ -168,6 +167,7 @@ btnVolverInmobiliarias.addEventListener("click", function(){
     window.location.href = "inicioInmobiliaria.html";
 });
 
+// Maneja el click de btn cerrar sesion
 btnCerrarSesion.addEventListener("click", function(){
     localStorage.clear();
     window.location.replace("index.html");
@@ -178,6 +178,7 @@ btnVolverMobile.addEventListener("click", function(){
     window.location.href = "inicioInmobiliaria.html";
 });
 
+// Maneja el click de btn cerrar sesion mobile
 btnCerrarSesionMobile.addEventListener("click", function(){
     localStorage.clear();
     window.location.replace("index.html");
@@ -188,22 +189,27 @@ btnPropiedades.addEventListener("click", function(){
     window.location.href = "inmobiliaria.html";
 });
 
+// Maneja el click de btn propiedades mobile
 btnPropiedadesMobile.addEventListener("click", function(){
     window.location.href = "inmobiliaria.html";
 });
 
+// Maneja el click de btn alquileres
 btnAlquileres.addEventListener("click", function(){
     window.location.href = "alquileres.html";
 });
 
+// Maneja el click de btn alquileres mobile
 btnAlquileresMobile.addEventListener("click", function(){
     window.location.href = "alquileres.html";
 });
 
+// Maneja el click de btn inquilinos
 btnInquilinos.addEventListener("click", function(){
     window.location.href = "inquilino.html";
 });
 
+// Maneja el click de btn inquilinos mobile
 btnInquilinosMobile.addEventListener("click", function(){
     window.location.href = "inquilino.html";
 });
@@ -222,11 +228,9 @@ btnInquilinosMobile.addEventListener("click", function(){
 /*CARGAR PROVINCIAS*/
 cargarProvincias(provincia, ciudad);
 
+// Maneja el cambio de provincia
 provincia.addEventListener("change", function(){
-    cargarCiudades(
-        provincia.value,
-        ciudad
-    );
+    cargarCiudades(provincia.value, ciudad);
 });
 
 cargarProvincias(
@@ -234,6 +238,7 @@ cargarProvincias(
     editarCiudad
 );
 
+// Maneja el cambio de editar provincia
 editarProvincia.addEventListener("change", function(){
     cargarCiudades(
         editarProvincia.value,
@@ -316,6 +321,7 @@ fotos.addEventListener("change", function(){
 /*LISTAR PROPIEDADES*/
 async function cargarPropiedades(){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -337,17 +343,21 @@ async function cargarPropiedades(){
         listaPropiedades.innerHTML = "";
 
         if(res.status === 404){
+            // Muestra el mensaje cuando no hay propiedades
             mostrarSinPropiedades();
             return;
         }
 
         if(!res.ok){
+            // Muestra un error al cargar las propiedades
             mostrarErrorPropiedades( datos.error || datos.mensaje || "No se pudieron cargar las propiedades.");
             return;
         }
+        // Muestra las propiedades cargadas
         mostrarPropiedades(datos);
     }catch(error){
         console.error(error);
+        // Muestra un error al cargar las propiedades
         mostrarErrorPropiedades("No se pudo conectar con el servidor.");
     }finally{
         ocultarCarga();
@@ -380,9 +390,7 @@ function mostrarSinPropiedades(){
 /*MOSTRAR MSJ DE ERROR*/
 function mostrarErrorPropiedades(mensaje){
     sinPropiedades.classList.remove("oculto");
-
     sinPropiedades.innerHTML =`<p class="mensajeError">${mensaje}</p>`;
-
     listaPropiedades.innerHTML = "";
 }
 
@@ -403,6 +411,7 @@ function mostrarPropiedades(datos){
     }
 
     if(propiedades.length === 0){
+        // Muestra el mensaje cuando no hay propiedades
         mostrarSinPropiedades();
         return;
     }
@@ -413,32 +422,24 @@ function mostrarPropiedades(datos){
             document.createElement("article");
 
         tarjeta.classList.add("tarjetaPropiedad");
-
         const disponibilidad = obtenerDisponibilidad( propiedad.estado);
-
         const primeraFoto = propiedad.fotos && propiedad.fotos.length > 0 ? URL_BACKEND + propiedad.fotos[0].ruta_foto : "img/sin-imagen.jpg";
 
         tarjeta.innerHTML = `
             <div class="estadoPropiedad ${disponibilidad.clase}">
                 ${disponibilidad.texto}
             </div>
-
             <img src="${primeraFoto}" alt="${propiedad.titulo || "Propiedad"}" class="imagenPropiedad">
-
             <div class="contenidoPropiedad">
                 <h3>${propiedad.titulo || "Propiedad"}</h3>
-
                 <p>${propiedad.estado || ""}</p>
-
                 <p>
                     ${propiedad.precio ? (propiedad.estado === "EN VENTA" || propiedad.estado === "VENDIDO" ? "USD " : "$ ") + propiedad.precio : ""}
                 </p>
-
                 <p>
                     ${propiedad.calle || ""}
                     ${propiedad.altura || ""}
                 </p>
-
                 <div class="accionesPropiedad">
                     <button type="button" class="btnVerPropiedad" data-id="${propiedad.id_propiedad}">Ver</button>
                     <button type="button" class="btnEditarPropiedad" data-id="${propiedad.id_propiedad}">Editar</button>
@@ -446,7 +447,6 @@ function mostrarPropiedades(datos){
                 </div>
             </div>
         `;
-
         listaPropiedades.appendChild(tarjeta);
     });
     agregarEventosPropiedades();
@@ -455,7 +455,6 @@ function mostrarPropiedades(datos){
 /*EVENTOS TARJETAS*/
 function agregarEventosPropiedades(){
     const botonesVer = document.querySelectorAll(".btnVerPropiedad");
-
     const botonesEditar =document.querySelectorAll(".btnEditarPropiedad");
     const botonesEliminar = document.querySelectorAll(".btnEliminarPropiedad");
 
@@ -463,9 +462,7 @@ function agregarEventosPropiedades(){
         boton.addEventListener(
             "click",
             function(){
-                verPropiedad(
-                    boton.dataset.id
-                );
+                verPropiedad(boton.dataset.id);
             }
         );
     });
@@ -474,9 +471,7 @@ function agregarEventosPropiedades(){
         boton.addEventListener(
             "click",
             function(){
-                cargarPropiedadEditar(
-                    boton.dataset.id
-                );
+                cargarPropiedadEditar(boton.dataset.id);
             }
         );
     });
@@ -528,6 +523,7 @@ formAgregarPropiedad.addEventListener("submit", async function(evento){
     });
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarPropiedad.disabled =true;
         const res = await fetch(
@@ -556,6 +552,7 @@ formAgregarPropiedad.addEventListener("submit", async function(evento){
         vistaPreviaFotos.innerHTML = "";
         ventanaAgregarPropiedad.classList.add("ocultarVentana");
         await cargarPropiedades();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Propiedad agregada correctamente");
     }catch(error){
         console.error(error);
@@ -570,6 +567,7 @@ formAgregarPropiedad.addEventListener("submit", async function(evento){
 /*VER PROPIEDAD*/
 async function verPropiedad(id_propiedad){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         const res = await fetch(
             `${API_PROPIEDAD}?id_usuario=${id_usuario}&id_inmobiliaria=${id_inmobiliaria}&id_propiedad=${id_propiedad}`,
@@ -588,6 +586,7 @@ async function verPropiedad(id_propiedad){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra un mensaje al usuario
             mostrarMensaje("No se pudo cargar la propiedad", "error");
             return;
         }
@@ -604,10 +603,12 @@ async function verPropiedad(id_propiedad){
 
         imagenesPropiedad = propiedad.fotos || datos.fotos || [];
         indiceImagen = 0;
+        // Muestra la imagen actual del carrusel
         mostrarImagenCarrusel();
         ventanaVerPropiedad.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje al usuario
         mostrarMensaje("No se pudo conectar con el servidor", "error");
     }finally{
         ocultarCarga();
@@ -634,6 +635,7 @@ function mostrarImagenCarrusel(){
     contadorFotos.textContent = `${indiceImagen + 1} de ${imagenesPropiedad.length}`;
 }
 
+// Maneja el click de btn foto anterior
 btnFotoAnterior.addEventListener("click", function(){
     if(imagenesPropiedad.length === 0){
         return;
@@ -643,9 +645,11 @@ btnFotoAnterior.addEventListener("click", function(){
     if(indiceImagen < 0){
         indiceImagen = imagenesPropiedad.length - 1;
     }
+    // Muestra la imagen actual del carrusel
     mostrarImagenCarrusel();
 });
 
+// Maneja el click de btn foto siguiente
 btnFotoSiguiente.addEventListener("click", function(){
     if(imagenesPropiedad.length === 0){
         return;
@@ -656,9 +660,11 @@ btnFotoSiguiente.addEventListener("click", function(){
     if(indiceImagen >= imagenesPropiedad.length){
         indiceImagen = 0;
     }
+    // Muestra la imagen actual del carrusel
     mostrarImagenCarrusel();
 });
 
+// Maneja el click de btn cerrar ver
 btnCerrarVer.addEventListener("click", function(){
     ventanaVerPropiedad.classList.add("ocultarVentana");
 });
@@ -666,6 +672,7 @@ btnCerrarVer.addEventListener("click", function(){
 /*CARGAR EDITAR*/
 async function cargarPropiedadEditar(id_propiedad){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         
         const res = await fetch(
@@ -715,10 +722,12 @@ async function cargarPropiedadEditar(id_propiedad){
         await cargarCiudades(editarProvincia.value, editarCiudad);
         editarCiudad.value = propiedad.ciudad || "";
 
+        // Muestra las fotos actuales de la propiedad
         mostrarFotosActuales(propiedad.fotos || datos.fotos || []);
         ventanaEditarPropiedad.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje al usuario
         mostrarMensaje("No se pudo conectar con el servidor", "error");
     }finally{
         ocultarCarga();
@@ -743,6 +752,7 @@ function mostrarFotosActuales(imagenes){
         botonEliminar.textContent = "🗑";
 
         botonEliminar.title ="Eliminar foto";
+        // Maneja el click de boton eliminar
         botonEliminar.addEventListener("click", function(){
                 if(fotosEliminar.includes( imagen.id_foto)){
                     fotosEliminar = fotosEliminar.filter(id =>id !==imagen.id_foto);
@@ -789,11 +799,13 @@ btnCancelarEliminar.addEventListener("click", function(){
     ventanaEliminarPropiedad.classList.add( "ocultarVentana");
 });
 
+// Maneja el click de btn confirmar eliminar
 btnConfirmarEliminar.addEventListener("click", async function(){
     const id_propiedad =
         idPropiedadEliminar.value;
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -825,6 +837,7 @@ btnConfirmarEliminar.addEventListener("click", async function(){
         ventanaEliminarPropiedad.classList.add("ocultarVentana");
         idPropiedadEliminar.value = "";
         await cargarPropiedades();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Propiedad eliminada correctamente");
     }catch(error){
         console.error(error);
@@ -864,6 +877,7 @@ formEditarPropiedad.addEventListener("submit", async function(evento){
     }
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarCambiosPropiedad.disabled = true;
         const res = await fetch(
@@ -952,6 +966,7 @@ formEditarPropiedad.addEventListener("submit", async function(evento){
         }
         cerrarEditar();
         await cargarPropiedades();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Propiedad actualizada correctamente");
     }catch(error){
         console.error(error);

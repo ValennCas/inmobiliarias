@@ -17,6 +17,7 @@ const contador = document.querySelector("#contador");
 const mensajeContacto = document.querySelector("#mensajeContacto");
 const btnEnviarContacto = document.querySelector("#btnEnviarContacto");
 
+// Muestra error estado
 function mostrarErrorEstado(texto){
     mensajeEstado.textContent = texto;
     mensajeEstado.className = "mensajeEstado mensajeError";
@@ -25,6 +26,7 @@ function mostrarErrorEstado(texto){
 /*CARGAR LA PROPIEDAD Y SU INMOBILIARIA*/
 async function cargarPropiedad(){
     if(!id_propiedad || !id_inmobiliaria){
+        // Muestra error estado
         mostrarErrorEstado("El enlace no es válido. Volvé a las propiedades y elegí una.");
         return;
     }
@@ -36,6 +38,7 @@ async function cargarPropiedad(){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra error estado
             mostrarErrorEstado(datos.error || "No se pudo cargar la propiedad.");
             return;
         }
@@ -51,16 +54,17 @@ async function cargarPropiedad(){
     }
     catch(error){
         console.error(error);
+        // Muestra error estado
         mostrarErrorEstado("No se pudo conectar con el servidor. Intentá más tarde.");
     }
 }
 
-/*CONTADOR DE CARACTERES*/
+/*Contador de caracteres para mostrar cuantos caracteres escribio el usuario y cuantos puede escribir como maximo*/
 campoDescripcion.addEventListener("input", function(){
     contador.textContent = `${campoDescripcion.value.length} / ${campoDescripcion.maxLength}`;
 });
 
-/*ENVIAR CONSULTA*/
+/*ENVIAR CONSULTA POR EMAIL*/
 formContacto.addEventListener("submit", async function(evento){
     evento.preventDefault();
 
@@ -117,4 +121,5 @@ formContacto.addEventListener("submit", async function(evento){
     }
 });
 
+// Carga los datos de la propiedad
 cargarPropiedad();

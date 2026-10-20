@@ -1,5 +1,6 @@
 const API_GEOREF = "https://apis.datos.gob.ar/georef/api";
 
+// Carga las provincias disponibles si falla muestra un error
 async function cargarProvincias(selectProvincia, selectCiudad){
     try{
         selectProvincia.innerHTML = `<option value="">Cargando provincias...</option>`;
@@ -31,6 +32,7 @@ async function cargarProvincias(selectProvincia, selectCiudad){
     }
 }
 
+// Carga las ciudades de la provincia seleccionada si falla muestra un error
 async function cargarCiudades(idProvincia, selectCiudad){
     if(idProvincia === ""){
         selectCiudad.innerHTML = `<option value="">Seleccionar ciudad</option>`;

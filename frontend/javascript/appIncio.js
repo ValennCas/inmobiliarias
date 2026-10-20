@@ -8,6 +8,7 @@ if(!token || !id_usuario){
     window.location.replace("index.html");
 }
 
+// Valida la sesion al volver a la pagina
 window.addEventListener("pageshow", function(evento){
     const navegacion = performance.getEntriesByType("navigation")[0];
     if(evento.persisted || navegacion?.type === "back_forward"){
@@ -39,8 +40,11 @@ const mensajeInmobiliaria = document.querySelector("#mensajeInmobiliaria");
 const listaInmobiliarias = document.querySelector("#listaInmobiliarias");
 const cargandoPantalla = document.querySelector("#cargandoPantalla");
 
+// Carga las provincias disponibles
 cargarProvincias(provinciaSelect, ciudadSelect);
+// Maneja el cambio de provincia select
 provinciaSelect.addEventListener("change", function(){
+    // Carga las ciudades de la provincia seleccionada
     cargarCiudades(provinciaSelect.value, ciudadSelect);
 });
 
@@ -67,10 +71,12 @@ function abrirFormularioInmobiliaria(){
 }
 
 if(btnCrearInmobiliaria){
+    // Maneja el click de btn crear inmobiliaria
     btnCrearInmobiliaria.addEventListener("click", abrirFormularioInmobiliaria);
 }
 
 if(btnAgregarInmobiliaria){
+    // Maneja el click de btn agregar inmobiliaria
     btnAgregarInmobiliaria.addEventListener("click", abrirFormularioInmobiliaria);
 }
 
@@ -92,6 +98,7 @@ inmobiliariaVentana.addEventListener("click", function(evento){
 /*CARGAR INMOBILIARIAS*/
 async function cargarInmobiliarias(){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         const res = await fetch(
             `${API_INMOBILIARIA}?id_usuario=${id_usuario}`,
@@ -112,6 +119,7 @@ async function cargarInmobiliarias(){
         }
 
         if(res.status === 404){
+            // Muestra el mensaje cuando no hay inmobiliarias
             mostrarSinInmobiliarias();
             return;
         }
@@ -124,6 +132,7 @@ async function cargarInmobiliarias(){
             `;
             return;
         }
+        // Muestra las inmobiliarias cargadas
         mostrarInmobiliarias(datos);
     }catch(error){
         console.error(error);
@@ -160,6 +169,7 @@ function mostrarInmobiliarias(datos){
     }
 
     if(inmobiliarias.length === 0){
+        // Muestra el mensaje cuando no hay inmobiliarias
         mostrarSinInmobiliarias();
         return;
     }
@@ -195,6 +205,7 @@ function mostrarInmobiliarias(datos){
 function agregarEventosInmobiliarias(){
     const botones = document.querySelectorAll(".btnIngresarInmobiliaria");
     botones.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             const id_inmobiliaria = boton.dataset.id;
             localStorage.setItem("id_inmobiliaria", id_inmobiliaria);
@@ -253,6 +264,7 @@ formInmobiliaria.addEventListener("submit", async function(evento){
     };
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarInmobiliaria.disabled = true;
         mensajeInmobiliaria.textContent = "";

@@ -1,14 +1,17 @@
 <?php
+    // Carga los archivos que necesita este servicio
     require_once __DIR__ . '/../api/recuperarContrasenia.php';
     require_once __DIR__ . '/servicios.php';
 
     class ServicioRecuperarContrasenia{
         private RecuperarContrasenia $recuperarContrasenia;
 
+        // Prepara el acceso a los datos que necesita este servicio
         public function __construct(RecuperarContrasenia $recuperarContrasenia){
             $this->recuperarContrasenia = $recuperarContrasenia;
         }
 
+        // Busca al usuario por su email y le envia un codigo de cuatro numeros para recuperar la contrasenia
         public function solicitarTokenRecuperacion($datos){
             $email = trim($datos["email"] ?? "");
             if($email === ""){
@@ -36,6 +39,7 @@
 
             $this->recuperarContrasenia->guardarToken($usuario["id_usuario"], $token, $fecha_expiracion);
 
+            // Arma el correo con el codigo de recuperacion y su tiempo de validez
             $html = "<p>Hola " . htmlspecialchars($usuario["nombre_usuario"]) . ",</p>"
                   . "<p>Recibimos una solicitud para recuperar tu contraseña de Habita.</p>"
                   . "<p>Tu codigo de recuperacion es:</p>"
@@ -45,6 +49,7 @@
 
             $enviado = enviarCorreo($usuario["email"], "Codigo para recuperar tu contraseña", $html);
 
+            // Si el correo no se pudo enviar, informa el error
             if(!$enviado){
                 $this->recuperarContrasenia->eliminarTokensUsuario($usuario["id_usuario"]);
                 throw new Exception("No se pudo enviar el correo de recuperacion.", 500);
@@ -53,6 +58,7 @@
             return ["mensaje" => "Se envio un codigo de recuperacion a tu correo."];
         }
 
+        // Comprueba el formato del codigo y busca si sigue disponible despues de limpiar los vencidos
         public function verificarTokenContra($datos){
             $token = trim((string)($datos["token"] ?? ""));
 
@@ -77,6 +83,7 @@
             return ["mensaje" => "Codigo verificado correctamente."];
         }
 
+        // Valida el codigo y la nueva contrasenia, guarda su hash y elimina el codigo usado
         public function cambiarContrasenia($datos){
             $token = trim((string)($datos["token"] ?? ""));
             $contrasenia = $datos["password"] ?? "";
@@ -105,8 +112,10 @@
             if($recuperacion === false){
                 throw new Exception("El codigo es incorrecto o esta vencido.", 400);
             }
+            // Genera el hash de la nueva contrasenia antes de guardarla
             $contraseniaHash = password_hash($contrasenia, PASSWORD_DEFAULT);
             $this->recuperarContrasenia->cambiarContrasenia($recuperacion["id_usuario"], $contraseniaHash);
+            // Borra el codigo usado para que no vuelva a servir para otro cambio
             $this->recuperarContrasenia->eliminarToken($recuperacion["id_recuperacion"]);
 
             return ["mensaje" => "La contraseña fue modificada correctamente."];

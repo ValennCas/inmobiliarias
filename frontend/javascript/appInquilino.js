@@ -4,8 +4,7 @@ const API_ALQUILER = BASE_BACKEND + "controller/alquileresController.php";
 
 /*
     MENU, DATOS DE INMOBILIARIA, MIS DATOS Y EDITAR INMOBILIARIA
-    SE MANEJAN DESDE:
-    menuInmobiliaria.js
+    SE MANEJAN DESDE: menuInmobiliaria.js
 */
 
 /*DATOS DE SESION*/
@@ -157,6 +156,7 @@ function mostrarErrorInquilinos(mensaje){
 /*CARGAR INQUILINOS*/
 async function cargarInquilinos(){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -176,18 +176,22 @@ async function cargarInquilinos(){
         const datos = await res.json();
 
         if(res.status === 404){
+            // Muestra el mensaje cuando no hay inquilinos
             mostrarSinInquilinos();
             return;
         }
 
         if(!res.ok){
+            // Muestra un error al cargar los inquilinos
             mostrarErrorInquilinos(datos.error || datos.mensaje || "No se pudieron cargar los inquilinos");
             return;
         }
 
+        // Muestra los inquilinos cargados
         mostrarInquilinos(datos);
     }catch(error){
         console.error(error);
+        // Muestra un error al cargar los inquilinos
         mostrarErrorInquilinos("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
@@ -211,6 +215,7 @@ function mostrarInquilinos(datos){
     }
 
     if(inquilinos.length === 0){
+        // Muestra el mensaje cuando no hay inquilinos
         mostrarSinInquilinos();
         return;
     }
@@ -249,18 +254,22 @@ function agregarEventosInquilinos(){
     const botonesEliminar = document.querySelectorAll(".btnEliminarInquilino");
 
     botonesVer.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             verInquilino(boton.dataset.id);
         });
     });
 
     botonesEditar.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
+            // Carga inquilino editar
             cargarInquilinoEditar(boton.dataset.id);
         });
     });
 
     botonesEliminar.forEach(function(boton){
+        // Maneja el click de boton
         boton.addEventListener("click", function(){
             idInquilinoEliminar.value = boton.dataset.id;
             ventanaEliminarInquilino.classList.remove("ocultarVentana");
@@ -273,6 +282,7 @@ async function cargarPropiedadesDisponibles(){
     propiedadInquilino.innerHTML = `<option value="">Seleccionar propiedad</option>`;
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -349,7 +359,9 @@ function cerrarAgregarInquilino(){
     ventanaAgregarInquilino.classList.add("ocultarVentana");
 }
 
+// Maneja el click de btn cerrar agregar inquilino
 btnCerrarAgregarInquilino.addEventListener("click", cerrarAgregarInquilino);
+// Maneja el click de btn cancelar agregar inquilino
 btnCancelarAgregarInquilino.addEventListener("click", cerrarAgregarInquilino);
 
 /*CREAR INQUILINO Y ALQUILER*/
@@ -377,6 +389,7 @@ formAgregarInquilino.addEventListener("submit", async function(evento){
     };
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarInquilino.disabled = true;
 
@@ -445,6 +458,7 @@ formAgregarInquilino.addEventListener("submit", async function(evento){
 
         cerrarAgregarInquilino();
         await cargarInquilinos();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Inquilino y alquiler registrados correctamente");
     }catch(error){
         console.error(error);
@@ -459,6 +473,7 @@ formAgregarInquilino.addEventListener("submit", async function(evento){
 /*VER INQUILINO*/
 async function verInquilino(id_inquilino){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         /*DATOS DEL INQUILINO*/
@@ -479,6 +494,7 @@ async function verInquilino(id_inquilino){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra un mensaje de error
             mostrarError(datos.error || datos.mensaje || "No se pudo cargar el inquilino");
             return;
         }
@@ -503,6 +519,7 @@ async function verInquilino(id_inquilino){
         const datosAlquiler = await resAlquiler.json();
 
         if(!resAlquiler.ok){
+            // Muestra un mensaje de error
             mostrarError(datosAlquiler.error || datosAlquiler.mensaje || "No se pudo cargar el alquiler");
             return;
         }
@@ -545,6 +562,7 @@ async function verInquilino(id_inquilino){
         ventanaVerInquilino.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje de error
         mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
@@ -559,6 +577,7 @@ btnCerrarVerInquilino.addEventListener("click", function(){
 /*CARGAR INQUILINO PARA EDITAR*/
 async function cargarInquilinoEditar(id_inquilino){
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
 
         const res = await fetch(
@@ -578,6 +597,7 @@ async function cargarInquilinoEditar(id_inquilino){
         const datos = await res.json();
 
         if(!res.ok){
+            // Muestra un mensaje de error
             mostrarError(datos.error || datos.mensaje || "No se pudo cargar el inquilino");
             return;
         }
@@ -595,6 +615,7 @@ async function cargarInquilinoEditar(id_inquilino){
         ventanaEditarInquilino.classList.remove("ocultarVentana");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje de error
         mostrarError("No se pudo conectar con el servidor");
     }finally{
         ocultarCarga();
@@ -609,7 +630,9 @@ function cerrarEditarInquilino(){
     ventanaEditarInquilino.classList.add("ocultarVentana");
 }
 
+// Maneja el click de btn cerrar editar inquilino
 btnCerrarEditarInquilino.addEventListener("click", cerrarEditarInquilino);
+// Maneja el click de btn cancelar editar inquilino
 btnCancelarEditarInquilino.addEventListener("click", cerrarEditarInquilino);
 
 /*EDITAR INQUILINO*/
@@ -631,6 +654,7 @@ formEditarInquilino.addEventListener("submit", async function(evento){
     };
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnGuardarCambiosInquilino.disabled = true;
 
@@ -660,6 +684,7 @@ formEditarInquilino.addEventListener("submit", async function(evento){
 
         cerrarEditarInquilino();
         await cargarInquilinos();
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Inquilino actualizado correctamente");
     }catch(error){
         console.error(error);
@@ -682,6 +707,7 @@ btnConfirmarEliminarInquilino.addEventListener("click", async function(){
     const id_inquilino = idInquilinoEliminar.value;
 
     try{
+        // Muestra la pantalla de carga
         mostrarCarga();
         btnConfirmarEliminarInquilino.disabled = true;
 
@@ -701,6 +727,7 @@ btnConfirmarEliminarInquilino.addEventListener("click", async function(){
 
         if(!res.ok){
             const respuesta = await res.json();
+            // Muestra un mensaje de error
             mostrarError(respuesta.error || respuesta.mensaje || "No se pudo eliminar el inquilino");
             return;
         }
@@ -710,9 +737,11 @@ btnConfirmarEliminarInquilino.addEventListener("click", async function(){
 
         await cargarInquilinos();
 
+        // Muestra el mensaje de operacion exitosa
         mostrarExito("Inquilino eliminado y propiedad disponible nuevamente");
     }catch(error){
         console.error(error);
+        // Muestra un mensaje de error
         mostrarError("No se pudo conectar con el servidor");
     }finally{
         btnConfirmarEliminarInquilino.disabled = false;
@@ -727,12 +756,14 @@ ventanaAgregarInquilino.addEventListener("click", function(evento){
     }
 });
 
+// Maneja el click de ventana ver inquilino
 ventanaVerInquilino.addEventListener("click", function(evento){
     if(evento.target === ventanaVerInquilino){
         ventanaVerInquilino.classList.add("ocultarVentana");
     }
 });
 
+// Maneja el click de ventana editar inquilino
 ventanaEditarInquilino.addEventListener("click", function(evento){
     if(evento.target === ventanaEditarInquilino){
         cerrarEditarInquilino();

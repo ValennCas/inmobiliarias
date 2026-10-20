@@ -1,15 +1,18 @@
 <?php
+    // Carga los archivos que necesita este servicio
     require_once __DIR__ . '/../api/contactos.php';
     require_once __DIR__ . '/servicios.php';
 
-    // Reglas de negocio. Ante un problema lanza Exception con el codigo HTTP como codigo de la excepcion.
+    // Reglas de negocio ante un problema lanza Exception con el codigo HTTP como codigo de la excepcion.
     class ServicioContacto{
         private Contactos $contactos;
 
+        // Prepara el acceso a los datos que necesita este servicio
         public function __construct(Contactos $contactos){
             $this->contactos = $contactos;
         }
 
+        // Comprueba que el id recibido no sea nulo y pase la validacion de numero entero
         private function validarId($id, $nombre){
             if($id === null || !filter_var($id, FILTER_VALIDATE_INT)){
                 throw new Exception("El $nombre es invalido", 400);
@@ -17,6 +20,7 @@
         }
 
         // Valida un texto obligatorio con largo maximo
+        // Comprueba que el texto este completo y no supere el largo permitido
         private function validarTexto($datos, $campo, $nombre, $maximo){
             if(!isset($datos[$campo]) || !is_string($datos[$campo]) || trim($datos[$campo]) === ""){
                 throw new Exception("Falta completar $nombre", 400);
@@ -27,6 +31,7 @@
         }
 
         // Datos para mostrar en el formulario (nunca incluye el email de la inmobiliaria)
+        // Busca los datos de la propiedad para el formulario sin devolver el email de la inmobiliaria
         public function datosFormulario($id_inmobiliaria, $id_propiedad){
             $this->validarId($id_inmobiliaria, "id de la inmobiliaria");
             $this->validarId($id_propiedad, "id de la propiedad");
@@ -50,6 +55,7 @@
         }
 
         // Le manda a la inmobiliaria la consulta de una persona interesada en una de sus propiedades
+        // Valida los datos de la consulta y arma el correo para la inmobiliaria de esa propiedad
         public function enviarConsulta($datos){
             $this->validarId($datos["id_inmobiliaria"] ?? null, "id de la inmobiliaria");
             $this->validarId($datos["id_propiedad"] ?? null, "id de la propiedad");
@@ -62,16 +68,19 @@
             if($propiedad === false){
                 throw new Exception("La propiedad no pertenece a esa inmobiliaria", 404);
             }
+            // Comprueba que la inmobiliaria tenga un email valido para recibir la consulta
             if(!filter_var($propiedad["email_inmobiliaria"], FILTER_VALIDATE_EMAIL)){
                 throw new Exception("La inmobiliaria no tiene un email de contacto cargado", 422);
             }
             
+            // Quita los espacios de los extremos y prepara la direccion para el correo
             $nombre = trim($datos["nombre"]);
             $apellido = trim($datos["apellido"]);
             $contacto = trim($datos["contacto"]);
             $descripcion = trim($datos["descripcion"]);
             $direccion = $propiedad["calle"] . " " . $propiedad["altura"] . ", " . $propiedad["ciudad"] . ", " . $propiedad["provincia"];
 
+            // Arma el correo escapando los datos para que se muestren como texto dentro del HTML
             $html = "<p>Hola " . htmlspecialchars($propiedad["nombre_inmobiliaria"]) . ", recibiste una consulta por una de tus propiedades.</p>"
                   . "<p><b>Propiedad:</b> " . htmlspecialchars($direccion) . " (codigo " . (int) $propiedad["id_propiedad"] . ")<br>"
                   . "<b>Descripcion:</b> " . htmlspecialchars($propiedad["descripcion"]) . "<br>"
@@ -82,6 +91,7 @@
 
             // si la persona dejo un email, la inmobiliaria puede contestarle directo con "Responder"
             $enviado = enviarCorreo($propiedad["email_inmobiliaria"], "Consulta por la propiedad de " . $direccion, $html, $contacto);
+            // Si el correo no se pudo enviar, informa el error
             if(!$enviado){
                 throw new Exception("No se pudo enviar tu consulta, intenta nuevamente mas tarde", 500);
             }
